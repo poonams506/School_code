@@ -1,0 +1,20 @@
+.payment-collection-accordion {
+    .accordion-item {
+        margin-bottom: 10px;
+
+    }
+    .payment-collection-accordion-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 5px 10px;
+        background-color: #6dafd7;
+    }
+
+    .accordion-body {
+        padding:10px;
+        .table {
+            margin-bottom: 0;
+        }
+    }
+}

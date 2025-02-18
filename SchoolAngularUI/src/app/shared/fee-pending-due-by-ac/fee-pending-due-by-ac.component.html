@@ -1,0 +1,40 @@
+<div *ngIf="pendingDueDetails && pendingDueDetails.length > 0">
+    <div class="card mb-4 pending-due">
+        <div class="card-header">
+            <h4 class="card-title fw-bold mb-0" translate><span>Payment Pending Due</span></h4>
+          </div>
+          <div class="card-body table-body">
+              <!--table listing statrt-->
+              <div id="no-more-tables">
+                <table id="table_id" class="display table table-bordered mb-0">
+                        <thead>
+                            <th translate>Class</th>
+                            <th translate>Student Name</th>
+                            <th translate>Academic Year</th>
+                            <th translate>Due Amt</th>
+                            <th translate>Cheque Unclear Amt</th>
+                            <th translate>Payment Type</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of pendingDueDetails">
+                              <td translate *ngIf="item.paymentType != 'Previous O/s'">{{ item.gradeName}}</td>
+                              <td translate *ngIf="item.paymentType != 'Previous O/s'">{{ item.fullName}}</td>
+                              <td translate *ngIf="item.paymentType != 'Previous O/s'">{{ item.academicYearKey}}</td>
+                              <td translate *ngIf="item.paymentType != 'Previous O/s'">{{ item.dueAmount  | currency : "INR" }}</td>
+                              <td translate *ngIf="item.paymentType != 'Previous O/s'">{{ item.chequeUnclearAmount  | currency : "INR" }}</td>
+                              <td translate *ngIf="item.paymentType != 'Previous O/s'">{{ item.paymentType}}</td>
+
+                              <td translate *ngIf="item.paymentType == 'Previous O/s'">{{ 'N/A' }}</td>
+                              <td translate *ngIf="item.paymentType == 'Previous O/s'">{{ item.fullName}}</td>
+                              <td translate *ngIf="item.paymentType == 'Previous O/s'">{{ 'N/A'}}</td>
+                              <td translate *ngIf="item.paymentType == 'Previous O/s'">{{ item.dueAmount | currency : "INR" }}</td>
+                              <td translate *ngIf="item.paymentType == 'Previous O/s'">{{ 'N/A'}}</td>
+                              <td translate *ngIf="item.paymentType == 'Previous O/s'">{{ item.paymentType}}</td>
+                            </tr>
+                        </tbody>
+                       </table>
+                    </div>
+                    </div>
+            </div>
+    </div>
+

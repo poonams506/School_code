@@ -1,0 +1,67 @@
+<div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3  translate>EXAM_RESULT</h3>
+    </div>
+
+    <div>
+      <div class="row justify-content-center mb-2">
+        <div class="col-auto text-center" style="padding-bottom: 3px;">
+          <h4 ><strong>Class:</strong> {{ className }}</h4>
+        </div>
+        <div class="col-auto text-center" style="padding-bottom: 3px;">
+          <h4 ><strong>Subject Name:</strong> {{ subjectName }}</h4>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card mb-2">
+        <div class="card-body table-body">
+          <!--table listing statrt-->
+              <table id="table_id" class="display table table-bordered">
+                <thead>
+                  <tr class="text-center">
+                    <th translate style="width: 5%;">ROLL_NO</th>
+                    <th translate style="width: 20%;">STUDENT_NAME</th>
+                    <th *ngFor="let object of objectList">
+                      {{ object.objectName }} ({{ object.outOfMarks }})
+                    </th>
+                    <th translate>TOTAL</th>
+                    <th translate>%</th>
+                    <th translate>GRADE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let student of studentList">
+                    <td>{{ student.rollNumber }}</td>
+                    <td>{{ student.studentName }}</td>
+                    <td *ngFor="let object of student.objectList">
+                      <input type="number" 
+                      [(ngModel)]="object.actualMarks"
+                       class="form-control text-center"
+                      min="0" 
+                      max="999"
+                      maxlength="5"
+                      (keypress)="restrictInput($event)"
+                      (blur)="validateMarks(student, object)"
+                      [ngClass]="{'is-invalid': object.actualMarks! > object.outOfMarks!}"
+                      >
+                      <div *ngIf="object.actualMarks! > object.outOfMarks!" class="invalid-feedback">
+                        Invalid marks
+                      </div>
+                    </td>
+                    <td class="text-center">{{ calculateTotal(student.objectList)| number:'1.2-2'  }}</td>
+                    <td class="text-center">{{ calculatePercentage(student.objectList) | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ calculateGrade(student.objectList) }}</td>
+                  </tr>
+                </tbody>
+             </table>
+              <div class="text-center mt-2">
+                <button type="button"  (click)="saveExamResults()"
+                class="btn btn-primary" translate>
+                  SAVE
+                </button>
+                <button class="btn btn-light" (click)="close()" translate>CANCEL</button>
+            </div>
+          </div>
+        </div>
+      </div>

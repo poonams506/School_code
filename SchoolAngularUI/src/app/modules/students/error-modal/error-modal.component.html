@@ -1,0 +1,55 @@
+<div class="modal-header d-flex justify-content-between align-items-center">
+    <h4
+      class="modal-title"
+      id="modal-basic-title"
+      ngbAutofocus
+      translate
+    >
+      {{title}}
+    </h4>
+    <button class="btn btn-secondary action-btn ml-auto" (click)="close()" translate>
+      <span placement="top" ngbTooltip="{{'CLOSE' | translate}}">
+        <i class="bi bi-x"></i>
+      </span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form class="search-filter">
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <!-- <span translate>{{message}}</span> -->
+           <!-- <ul *ngFor="let item of validationErrors">
+            <li><span class="danger" translate>{{item}}</span></li>
+           </ul> -->
+           <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Cell</th>
+                    <th>Error Message</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let error of validationErrors">
+                    <tr>
+                        <td>{{ extractName(error) }}</td>
+                        <td>{{ extractPosition(error) }}</td>
+                        <td><span class="danger" translate>{{ extractErrorMessage(error)}}</span></td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <div class="form-group mb-0 pb-0 sticky-buttons">
+      <!-- <button class="btn btn-secondary" (click)="close()" translate>
+        Close
+      </button> -->
+    </div>
+  </div>
+  

@@ -1,0 +1,254 @@
+<!--success message-->
+<ngb-alert *ngIf="successMessage" type="success" (close)="(successMessage)">{{
+    successMessage
+  }}</ngb-alert>
+  <!--success message-->
+  
+  <div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>UPDATE_STUDENT_RESULT</h3>
+      <!-- <button class="btn btn-with-icon with-text btn-primary ms-auto" (click)="openLg(contentLg)" translate>ADD</button> -->
+  
+      <button
+        class="btn btn-with-icon btn-primary  ms-auto"
+        ngbTooltip="{{ 'IMPORT' | translate }}"
+        (click)="importData(importModal)"
+      >
+        <i class="bi bi-box-arrow-in-down"></i>
+      </button>
+      <button
+      class="btn btn-with-icon btn-icon-search btn-secondary d-md-none"
+      (click)="toggleSearch()"
+    >
+      <i class="bi bi-search"></i>
+    </button>
+    </div>
+
+    <div
+    class="card mb-4 d-md-block"
+    [ngClass]="searchFilter ? 'd-block' : 'd-none'"
+  >
+    <div class="card-header search-header">
+      <h4 class="float-left" translate>SEARCH</h4>
+    </div>
+    <div class="card-body search-body">
+      <!--table search filter start-->
+      <form class="search-filter">
+        <div class="row mb-2">
+          <div class="col-sm">
+            <div class="form-group">
+                <label for="divisionId" translate>STANDARD</label>
+                <select
+                class="form-control"
+              >
+                <option value="" translate>SELECT</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              </div>
+          </div>
+          <div class="col-sm">
+            <div class="form-group">
+                <label for="divisionId" translate>DIVISION</label>
+                <select
+                class="form-control"
+              >
+                <option value="" translate>SELECT</option>
+                <option value="1">A</option>
+                <option value="2">B</option>
+                <option value="3">C</option>
+                <option value="4">D</option>
+              </select>
+              </div>
+          </div>
+          <div class="col-sm text-right">
+            <div class="form-group search-btns-mobile-margin">
+              <label for="city" class="d-none d-md-block">&nbsp;</label>
+              <button type="submit" class="btn btn-light" translate>
+                RESET
+              </button>
+              <button type="submit" class="btn btn-primary" translate>
+                SEARCH
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+    <div class="card mb-4">
+      <div class="card-body table-body">
+        <!--table listing statrt-->
+        <div id="no-more-tables">
+          <div class="search-in-table mb-3">
+            <div class="show-entries mb-0">
+              <span translate>SHOW_ENTRIES</span>
+              <select class="form-select" style="width: auto" name="pageSize">
+                <option [ngValue]="2">2</option>
+                <option [ngValue]="4">4</option>
+                <option [ngValue]="6">6</option>
+              </select>
+            </div>
+            <div class="ms-auto d-flex align-items-center">
+              <div class="pass-fail-btns2 d-none d-md-flex align-items-center w-100">
+                <button class="btn btn-success" translate> MARK_PASS</button>
+                <button class="btn btn-danger" translate> MARK_FAIL</button>
+              </div>
+              <div class="input-group input-group-with-btn">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="{{ 'SEARCH' | translate }}"
+                />
+                <div class="input-group-append">
+                  <button class="btn btn-secondary" type="button">
+                    <i class="bi bi-search"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <table id="table_id" class="display table table-bordered">
+            <thead>
+              <tr class="select-all-tr">
+                <th style="width: 10%" class="select-all-tr-th">
+                  <div class="custom-control custom-checkbox d-flex align-items-center">
+                    <div class="w-100">
+                  <input type="checkbox" class="custom-control-input" id="check5">
+                  <label class="custom-control-label ms-1" for="check5" translate>SELECT_ALL</label>
+                </div>
+                  <div class="pass-fail-btns2  d-flex align-items-center d-md-none w-100">
+                    <button class="btn btn-success" translate> MARK_PASS</button>
+                    <button class="btn btn-danger" translate> MARK_FAIL</button>
+                  </div>
+              </div> </th>
+                <th translate>STUDENT_NAME</th>
+                <th translate>STATUS</th>
+                <th style="width: 20%" class="text-center" translate>ACTIONS</th>
+              </tr>
+              
+            </thead>
+            <tbody>
+              <tr>
+                <td [attr.data-title]="'SELECT' | translate">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="check5">
+                        <label class="custom-control-label" for="check5"></label>
+                    </div>
+                </td>
+                <td [attr.data-title]="'STUDENT_NAME' | translate">Jonathan Williams Doe</td>
+                <td [attr.data-title]="'STATUS' | translate">Lorem</td>
+                <td data-title="Actions" class="action text-center actions-td pass-fail-btns">
+                    <button class="btn btn-success" translate><i class="bi bi-hand-thumbs-up"></i> PASS</button>
+                    <button class="btn btn-danger" translate><i class="bi bi-hand-thumbs-down"></i> FAIL</button>
+                </td>
+              </tr>
+              <tr>
+                <td [attr.data-title]="'SELECT' | translate">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="check5">
+                        <label class="custom-control-label" for="check5"></label>
+                    </div>
+                </td>
+                <td [attr.data-title]="'STUDENT_NAME' | translate">Jonathan Williams Doe</td>
+                <td [attr.data-title]="'STATUS' | translate">Lorem</td>
+                <td data-title="Actions" class="action text-center actions-td pass-fail-btns">
+                    <button class="btn btn-success" translate><i class="bi bi-hand-thumbs-up"></i> PASS</button>
+                    <button class="btn btn-danger" translate><i class="bi bi-hand-thumbs-down"></i> FAIL</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- import data modal content -->
+  
+  <ng-template #importModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" translate>IMPORT</h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <form class="search-filter">
+        <div class="row mb-2">
+          <div class="col-sm">
+            <div class="text-right mb-3">
+              <a
+                href="/src/Financial-Sample.xlsx"
+                target="_blank"
+                class="btn btn-secondary"
+                download="Financial-Sample.xlsx"
+                translate
+                >DOWNLOAD_SAMPLE</a
+              >
+            </div>
+            <ngx-dropzone class="dropzone-modal" (change)="onSelect($event)">
+              <ngx-dropzone-label>
+                <h5 translate>UPLOAD_FILE_HERE_TO_IMPORT_DATA</h5>
+              </ngx-dropzone-label>
+              <ngx-dropzone-preview
+                *ngFor="let f of files"
+                [removable]="true"
+                (removed)="onRemove(f)"
+              >
+                <ngx-dropzone-label
+                  >{{ f.name }} ({{ f.type }})</ngx-dropzone-label
+                >
+              </ngx-dropzone-preview>
+            </ngx-dropzone>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-light"
+        (click)="modal.close('Close click')"
+        translate
+      >
+        CLOSE
+      </button>
+      <button type="submit" class="btn btn-primary" translate>IMPORT</button>
+    </div>
+  </ng-template>
+  
+  <!-- confirm modal -->
+  <ng-template #confirm let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        <i class="icon-select"></i> <span translate>COMFIRM</span>
+      </h4>
+    </div>
+    <div class="modal-body">
+      <p class="text-center" translate>ARE_YOU_SURE_YOU_WANT_TO_DELETE?</p>
+    </div>
+    <div class="modal-footer no-top-border">
+      <button
+        class="btn btn-primary"
+        (click)="changeSuccessMessage(); modal.close('Save click')"
+      >
+        OK
+      </button>
+      <button
+        class="btn btn-secondary"
+        (click)="modal.close('Save click')"
+        translate
+      >
+        CANCEL
+      </button>
+    </div>
+  </ng-template>
+  

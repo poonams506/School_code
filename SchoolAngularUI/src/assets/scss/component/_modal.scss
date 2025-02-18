@@ -1,0 +1,75 @@
+.modal {
+    .modal-dialog {
+        .modal-header {
+            .btn-close:focus {
+                outline: 0 !important;
+                box-shadow: none !important;
+                
+            }
+        }
+    }
+    .modal-fullscreen {
+        width: 90vw;
+        max-width: none;
+        height: 100%;
+        margin: 20px auto;
+        .modal-body {
+            background-color: #fff;
+        }
+        .modal-footer {
+            background-color: #fff;
+        }
+    }
+}
+.theme-modal {
+    &.modal-dialog {
+        position: fixed;
+        margin: auto;
+        width: 500px;
+        height: 100%;
+        border-radius: 0;
+        -webkit-transform: translate3d(0%, 0, 0);
+        -ms-transform: translate3d(0%, 0, 0);
+        -o-transform: translate3d(0%, 0, 0);
+        transform: translate3d(0%, 0, 0);
+
+        .modal-content {
+            height: 100%;
+            overflow-y: auto;
+            border-radius: 0;
+        }
+    }
+}
+
+.modal.fade .theme-modal.modal-dialog {
+    right: -320px;
+    -webkit-transition:
+        opacity 0.3s linear,
+        right 0.3s ease-out;
+    -moz-transition:
+        opacity 0.3s linear,
+        right 0.3s ease-out;
+    -o-transition:
+        opacity 0.3s linear,
+        right 0.3s ease-out;
+    transition:
+        opacity 0.3s linear,
+        right 0.3s ease-out;
+}
+
+.modal.fade.show .theme-modal.modal-dialog {
+    right: 20px;
+    border-radius: 0;
+}
+
+
+.ngx-awesome-popup-overlay.confirm-box-overlay .evolve-confirm-box {
+    max-width: 500px !important;
+}
+
+@media (min-width: 576px) {
+    .forgot-modal.modal-sm {
+        width: 400px !important;
+        --bs-modal-width: 400px !important;;
+    }
+}

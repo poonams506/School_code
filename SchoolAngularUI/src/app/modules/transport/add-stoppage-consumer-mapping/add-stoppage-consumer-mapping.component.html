@@ -1,0 +1,237 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title" 
+    ngbAutofocus translate> CONSUMER_ALLOCATION</h4>
+   
+
+</div>
+<div class="modal-body add-consumer-body">
+  <div class="row" *ngIf="overlapTransportConsumerError.length>0">
+      <div class="col-12">
+        <label translate>We have found selected consumer is allocated to below stoppage for selected dates, please correct the data and try again</label>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th translate>NAME</th>
+              <th translate>STOPPAGE</th>
+              <th translate style="width:15%">FROM_DATE</th>
+              <th translate style="width:15%">TO_DATE</th>
+              <th translate>PICKDROP_TYPE</th>
+              <th translate>PICK_DROP_PRICE</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let consumer of overlapTransportConsumerError">
+              <td>{{ consumer.userName }}</td>
+              <td>{{ consumer.stoppageName }}</td>
+              <td>{{ consumer.fromDate?.format('DD/MM/yyyy')}}</td>
+              <td>{{ consumer.toDate ?.format('DD/MM/yyyy')}}</td>
+              <td>{{ getPickDropTypeName(consumer.pickDropId) }}</td>
+              <td>{{ consumer.pickDropPrice }}</td>
+             
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-md-3">
+      <form [formGroup]="consumerSearchMappingForm" novalidate>
+        <div class="row">
+            
+              <div class="col-12">
+                <div class="form-group">
+                  <label translate>SELECT_ROLE </label>
+                  <select
+                    formControlName="currentRoleId"
+                    class="form-control"
+                   >
+                   <option *ngFor="let item of roleDropdownData" [value]="item.id" >
+                    {{item.value}}
+                   </option>
+                  </select>
+                </div>
+              </div>
+       </div>
+      </form>
+     
+      <div class="row">
+        <div class="col-12">
+          <ngx-treeview [config]="config" [items]="transportConsumers" 
+          (selectedChange)="onSelectionChanged($event)" (filterChange)="onFilterChange($event)">
+        </ngx-treeview>
+      </div>
+     </div>
+    </div>
+    <div class="col-12 col-md-9 consume-datepicker">
+      <form [formGroup]="consumerMappingForm" novalidate>
+        <div class="row" formArrayName="consumers">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th style="width: 20%;" translate>NAME</th>
+                <th style="width: 10%;" translate>FROM_DATE</th>
+                <th style="width: 10%;" translate>TO_DATE</th>
+                <th style="width: 10%;" translate>PICKDROP_TYPE</th>
+                <th style="width: 10%;" translate>PRICE</th>
+  
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let consumer of consumerMappings; let i = index;let last=last;let first=first" class="col-12"  [formGroupName]="i">
+                <td> 
+                  <div class="form-group">
+                  <input
+                    type="text"
+                    formControlName="userName"
+                    id="userName_{{i}}"
+                    class="form-control"
+                    placeholder="{{ 'NAME' | translate }}"
+                     [ngClass]="{
+                      'is-invalid': submitted && consumer.get('userName')?.errors
+                    }"
+                  />
+                  </div>
+                </td>
+                <td>
+
+                  <div class="form-group datepicker">
+    
+                  <input
+                    type="text"
+                    formControlName="ngbFromDate"
+                    class="form-control"
+                    placeholder="{{ 'FROM_DATE' | translate }}"
+                    ngbDatepicker
+                    [minDate]="{ year: 1901, month: 1, day: 1 }"
+                    [maxDate]="{ year: 2100, month: 1, day: 1 }"
+                    [readonly]="true"
+                    #fromDatepicker="ngbDatepicker"
+                    (click)="fromDatepicker.toggle()"
+                    [ngClass]="{
+                      'is-invalid': submitted && consumer.get('ngbFromDate')?.errors
+                    }"
+                  />
+                  <div class="calendar" (click)="fromDatepicker.toggle()">
+                    <i class="bi bi-calendar3"></i>
+                  </div>
+                  <div
+                  *ngIf="submitted && consumer.get('ngbFromDate')?.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="submitted && consumer.get('ngbFromDate')?.hasError('required')">
+                    <span translate>FROM_DATE</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+                  
+                </div>
+              </td>
+                <td>
+                  <div class="form-group datepicker">
+      
+                    <input
+                      type="text"
+                      formControlName="ngbToDate"
+                      class="form-control"
+                      placeholder="{{ 'TO_DATE' | translate }}"
+                      ngbDatepicker
+                      [minDate]="{ year: 1901, month: 1, day: 1 }"
+                      [maxDate]="{ year: 2100, month: 1, day: 1 }"
+                      [readonly]="true"
+                      #toDatepicker="ngbDatepicker"
+                      (click)="toDatepicker.toggle()"
+                      [ngClass]="{
+                        'is-invalid': submitted && consumer.get('ngbToDate')?.errors
+                      }"
+                    />
+                    <div class="calendar" (click)="toDatepicker.toggle()">
+                      <i class="bi bi-calendar3"></i>
+                    </div>
+                    <div
+                    *ngIf="submitted && consumer.get('ngbToDate')?.errors"
+                    class="invalid-feedback"
+                  >
+                  
+                    <div *ngIf="submitted && consumer.get('ngbToDate')?.hasError('required')">
+                      <span translate>TO_DATE</span>
+                      <span translate> IS_REQUIRED</span>
+                    </div>
+                    <div *ngIf="submitted && consumer.get('ngbToDate')?.hasError('dateRange')">
+                      <span translate>From Date should be less than To Date</span>
+                    </div>
+                  </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="form-group">
+                    <select 
+                     (change)="resetSelectList(f,'pickDropId')"
+                      formControlName="pickDropId"
+                      class="form-control"
+                      [ngClass]="{
+                        'is-invalid': submitted && consumer.get('pickDropId')?.errors
+                      }"
+                    >
+                      <option [value]="1">Pickup</option>
+                      <option [value]="2">Drop</option>
+                      <option [value]="3">Pickup-Drop</option>
+                    </select>
+                    <div
+                    *ngIf="submitted && consumer.get('pickDropId')?.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="submitted && consumer.get('pickDropId')?.hasError('required')">
+                      <span translate>PICKUPDROP</span>
+                      <span translate> IS_REQUIRED</span>
+                    </div>
+                  </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="form-group"> 
+                    <input  
+                      type="text"
+                      formControlName="pickDropPrice"
+                      id="pickDropPrice_{{i}}"
+                      class="form-control"
+                      placeholder="{{ 'PRICE' | translate }}"
+                      [ngClass]="{
+                        'is-invalid': submitted && consumer.get('pickDropPrice')?.errors
+                      }"
+                    />
+                    <div
+                      *ngIf="submitted && consumer.get('pickDropPrice')?.errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="submitted && consumer.get('pickDropPrice')?.hasError('required')">
+                        <span translate>PRICE</span>
+                        <span translate> IS_REQUIRED</span>
+                      </div>
+                    </div>
+                  </div>
+                 
+                </td>
+               
+              </tr>
+            </tbody>
+          </table>
+         
+        </div>
+      </form>
+    </div>
+  </div>
+   
+</div>
+<div class="modal-footer">
+  <div class="form-group mb-0">
+    <label *ngIf="errors.length>0" class="invalid-feedback">{{errors[0]}}</label>
+    <button type="button" class="btn btn-primary" (click)="saveStoppageConsumerMapping()"
+    translate
+    >SAVE</button>
+    <button class="btn btn-light" (click)="close()" translate
+    >CANCEL</button>
+
+  </div>
+  
+</div>

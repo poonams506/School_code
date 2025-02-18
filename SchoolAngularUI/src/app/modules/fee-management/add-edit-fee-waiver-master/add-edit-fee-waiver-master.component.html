@@ -1,0 +1,299 @@
+
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title" 
+    *ngIf="feeWavierTypeId==0"
+    ngbAutofocus translate> ADD_FEE_WAVIER</h4>
+    <h4 class="modal-title" id="modal-basic-title"
+    *ngIf="feeWavierTypeId>0"
+     ngbAutofocus translate> UPDATE_FEE_WAVIER</h4>
+     <button type="button" class="btn-close" aria-label="Close" (click)="close()"></button>
+
+</div>
+  <div class="modal-body">
+    <form
+        class="search-filter"
+        [formGroup]="waiverMasterForm"
+      >
+        <div class="row">
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label for="feeWavierTypeName" class="required" translate
+                >WAVIER_NAME <span>*</span></label
+              >
+              <input
+              id="feeWavierTypeName"
+                type="text"
+                formControlName="feeWavierTypeName"
+                class="form-control"
+                placeholder="{{ 'WAVIER_NAME' | translate }}"
+                [ngClass]="{
+                  'is-invalid': submitted && f['feeWavierTypeName'].errors
+                }"
+              />
+              <div
+                *ngIf="submitted && f['feeWavierTypeName'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['feeWavierTypeName'].errors['required']">
+                  <span translate>WAVIER_NAME</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label for="feeWavierDisplayName" class="required" translate
+                >FEE_WAVIER_DISPLAY_NAME <span>*</span></label
+              >
+              <input
+              id="feeWavierDisplayName"
+                type="text"
+                formControlName="feeWavierDisplayName"
+                class="form-control"
+                placeholder="{{ 'FEE_WAVIER_DISPLAY_NAME' | translate }}"
+                [ngClass]="{
+                  'is-invalid': submitted && f['feeWavierDisplayName'].errors
+                }"
+              />
+              <div
+                *ngIf="submitted && f['feeWavierDisplayName'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['feeWavierDisplayName'].errors['required']">
+                  <span translate>FEE_WAVIER_DISPLAY_NAME</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate> DESCRIPTION</label>
+              <textarea
+                type="text"
+                formControlName="description"
+                class="form-control"
+                placeholder="{{ 'DESCRIPTION' | translate }}"
+              >
+              </textarea>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-1 col-md-1 col-lg-1">
+            <div class="form-group">
+              <label for="isActive" translate>IS_ACTIVE</label>
+              <div
+                class="custom-control custom-checkbox d-flex align-items-center"
+              >
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="check4"
+                  formControlName="isActive"
+                />
+               
+              </div>
+            </div>
+          </div>
+
+
+          <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+            <div class="form-group">
+              <label class="required" translate
+                >NUMBER_OF_INSTALLMENT <span>*</span></label
+              >
+              <input
+                type="text"
+                formControlName="numberOfInstallments"
+                class="form-control"
+                placeholder="{{ 'NUMBER_OF_INSTALLMENT' | translate }}"
+                [ngClass]="{
+                  'is-invalid': submitted && f['numberOfInstallments'].errors
+                }"
+              />
+              <div
+                *ngIf="submitted && f['numberOfInstallments'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['numberOfInstallments'].errors['required']">
+                  <span translate>NUMBER_OF_INSTALLMENT</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+                <div *ngIf="f['numberOfInstallments'].errors['range']">
+                  <span translate>INSTALLMENT_BETWEEN_1_100</span>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+
+          
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label class="required" translate
+                >DISCOUNT <span>*</span> (%)</label
+              >
+              <input
+                type="text"
+                formControlName="discountInPercent"
+                class="form-control"
+                placeholder="{{ 'DISCOUNT' | translate }}"
+                [ngClass]="{
+                  'is-invalid': submitted && f['discountInPercent'].errors
+                }"
+              />
+              <div
+                *ngIf="submitted && f['discountInPercent'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['discountInPercent'].errors['required']">
+                  <span translate>DISCOUNT</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label class="required" translate
+                >Late Fee Per Day <span>*</span> (%)</label
+              >
+              <input
+                type="text"
+                formControlName="latePerDayFeeInPercent"
+                class="form-control"
+                placeholder="{{ 'Late Fee Per Day ' | translate }}"
+                [ngClass]="{
+                  'is-invalid': submitted && f['latePerDayFeeInPercent'].errors
+                }"
+              />
+              <div
+                *ngIf="submitted && f['latePerDayFeeInPercent'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['latePerDayFeeInPercent'].errors['required']">
+                  <span translate>Late Per Day Fee</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          
+          
+          <div class="container-fluid mt-2" formArrayName="feeWavierTypesInstallmentsDetailsTypes">
+            <div class="row" *ngFor="let installment of feeWavierTypesInstallments; let i = index;let last=last;let first=first" [formGroupName]="i" > 
+              <div class="col-4">
+                <div class="form-group datepicker">
+                    <label class="required" translate>Installment No.<span>*</span></label>
+                 
+                    <input disabled class="form-control" type="text" value="{{i+1}}">
+                   
+                  </div>
+              </div>
+              
+              <div class="col-4">
+                <div class="form-group datepicker">
+                    <label class="required" translate>Discount End Date<span *ngIf="f['discountInPercent'].value && f['discountInPercent'].value != 0">
+                      *
+                    </span></label>
+                 
+                    <input
+                      type="text"
+                      formControlName="ngbDiscountEndDate"
+                      class="form-control"
+                      placeholder="{{ 'Discount End Date' | translate }}"
+                      [ngClass]="{ 'is-invalid': submitted && installment.get('ngbDiscountEndDate')?.errors }"
+                      ngbDatepicker [minDate]="{year: 1901, month: 1, day: 1}" [maxDate]="{year: 2100, month: 1, day: 1}" [readonly]="true"
+                      #discountEndDatepicker="ngbDatepicker"
+                      (click)="discountEndDatepicker.toggle()"
+                      />
+                      <div class="calendar-x" (click)="installment.get('ngbDiscountEndDate')?.setValue(null)">
+                        <i class="bi bi-x"></i>
+                       </div>
+                      <div class="calendar"  (click)="discountEndDatepicker.toggle()">
+                       <i class="bi bi-calendar3"></i>
+                      </div>
+                   
+                 
+                      <div
+                      *ngIf="submitted && installment.get('ngbDiscountEndDate')?.errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="installment.get('ngbDiscountEndDate')?.hasError('required')">
+                        <span translate>Discount End Date</span>
+                        <span translate> IS_REQUIRED</span>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+
+              <div class="col-4">
+                <div class="form-group datepicker">
+                    <label class="required" translate>Late Fee Start Date<span *ngIf="f['latePerDayFeeInPercent'].value && f['latePerDayFeeInPercent'].value != 0">
+                      *
+                    </span></label>
+                 
+                    <input
+                      type="text"
+                      formControlName="ngbLateFeeStartDate"
+                      class="form-control"
+                      placeholder="{{ 'Late Fee Start Date' | translate }}"
+                      [ngClass]="{ 'is-invalid': submitted && installment.get('ngbLateFeeStartDate')?.errors }"
+                      ngbDatepicker [minDate]="{year: 1901, month: 1, day: 1}" [maxDate]="{year: 2100, month: 1, day: 1}" [readonly]="true"
+                      #lateFeeStartDatepicker="ngbDatepicker"
+                      (click)="lateFeeStartDatepicker.toggle()"
+                      />
+                      <div class="calendar-x" (click)="installment.get('ngbLateFeeStartDate')?.setValue(null)">
+                        <i class="bi bi-x"></i>
+                       </div>
+                      <div class="calendar"  (click)="lateFeeStartDatepicker.toggle()">
+                       <i class="bi bi-calendar3"></i>
+                      </div>
+                   
+                 
+                    <div
+                      *ngIf="submitted && installment.get('ngbLateFeeStartDate')?.errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="installment.get('ngbLateFeeStartDate')?.hasError('required')">
+                        <span translate>Late Fee Start Date</span>
+                        <span translate> IS_REQUIRED</span>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+    
+            </div>
+          </div>
+        
+    
+          
+          
+          <br />
+          <div class="col-12 col-md-12 col-lg-12">
+            <span *ngIf="errorMessage" class="text-danger text-center">{{errorMessage}}</span>
+          </div>
+         
+        </div>
+       
+      </form>
+  </div>
+  <div class="modal-footer">
+    <div class="form-group  mb-0 pb-0">
+    
+      <button type="button" class="btn btn-primary" (click)="saveFeeWavier()"
+      translate
+      >SAVE</button>
+      <button class="btn btn-light" (click)="close()" translate
+      >CANCEL</button>
+  
+    </div>
+    
+  </div>
+  

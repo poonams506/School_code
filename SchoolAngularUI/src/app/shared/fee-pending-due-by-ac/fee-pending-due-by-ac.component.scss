@@ -1,0 +1,28 @@
+.pending-due {
+    border: 1px solid #f5c7c7;
+    .card-header {
+        background-color: #f5c7c7;
+        padding-bottom: 15px;
+        .card-title {
+            span {
+                animation: new 0.5s linear infinite;
+                display: block;
+            }
+            &::before {
+                background-color: red !important;
+            }
+        }
+    }
+}
+
+@keyframes new {
+    0% {
+        transform: scaleX(1);
+    }
+    50% {
+        transform: scaleX(0.95);
+    }
+    100% {
+        transform: scaleX(1);
+    }
+}

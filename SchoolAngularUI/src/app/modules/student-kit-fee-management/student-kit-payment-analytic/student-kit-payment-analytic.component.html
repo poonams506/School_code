@@ -1,0 +1,327 @@
+<div class="container-fluid">
+
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>STUDENT_KIT_PAYMENT_ANALYTIC</h3> 
+    </div>
+  
+    <div class="card mb-4">
+      <div class="card-body table-body">
+        <div id="no-more-tables" *ngIf="studentKitPaymentAnalyticsDto != null">
+          <div ngbAccordion #accordion="ngbAccordion" [closeOthers]="true">
+            <div ngbAccordionItem="first" #first="ngbAccordionItem" [collapsed]="false">
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <ng-template>
+                    <div class="main-wrap">
+                      <div class="inline-box" *ngIf="studentKitPaymentAnalyticsDto.studentKitPaymentAnalyticsSchool != null">
+                        <div class="box">
+                          <div class="title" translate>SCHOOL_NAME</div>
+                          <div class="content">{{studentKitPaymentAnalyticsDto.studentKitPaymentAnalyticsSchool.schoolName}}</div>
+                        </div>
+                        <div class="box">
+                          <div class="title" translate>TOTAL_FEE</div>
+                          <div class="content">{{studentKitPaymentAnalyticsDto.studentKitPaymentAnalyticsSchool.totalFee | currency : "INR"}}</div>
+                        </div>
+                        <div class="box">
+                          <div class="title" translate>DISCOUNTED_FEE</div>
+                          <div class="content">{{studentKitPaymentAnalyticsDto.studentKitPaymentAnalyticsSchool.discountedFee |currency : "INR"}}</div>
+                        </div>
+                        <div class="box">
+                          <div class="title" translate>EFFECTIVE_FEE</div>
+                          <div class="content">{{studentKitPaymentAnalyticsDto.studentKitPaymentAnalyticsSchool.effectiveFee |currency : "INR"}}</div>
+                        </div>
+                        <div class="box">
+                          <div class="title" translate>COLLECTION_TILL_DATE</div>
+                          <div class="content">{{studentKitPaymentAnalyticsDto.studentKitPaymentAnalyticsSchool.collectionTillDate|currency : "INR"}}</div>
+                        </div>
+                        <div class="box">
+                          <div class="title" translate>RECEIVABLE_FEE</div>
+                          <div class="content">{{studentKitPaymentAnalyticsDto.studentKitPaymentAnalyticsSchool.receivableFee |currency : "INR"}}</div>
+                        </div>
+                        <div class="box">
+                          <div class="title" translate>COLLECTION_IN_%</div>
+                          <div class="content">{{studentKitPaymentAnalyticsDto.studentKitPaymentAnalyticsSchool.collectionInPercentage}}</div>
+                        </div>
+                      </div>
+                      
+                      <div class="right">
+                        <button container="body" class="btn btn-export btn-primary"
+                          (click)="exportStudentKitPaymentAnalyticsSchoolwise()">
+                          <span placement="top" ngbTooltip="{{ 'EXPORT' | translate }}">
+                            <i class="bi bi-box-arrow-up"></i>
+                          </span>
+                        </button>
+                        <i (click)="accordion2.toggle('second');getStudentKitGradePaymentanalytics()" class="bi" [ngClass]="
+                            second.collapsed
+                              ? 'bi-plus-circle-fill'
+                              : 'bi-dash-circle-fill'
+                          "></i>
+                      </div>
+                    </div>
+                    <!-- grade class accordion -->
+                    <div ngbAccordion #accordion2="ngbAccordion" [closeOthers]="true">
+                      <div ngbAccordionItem="second" #second="ngbAccordionItem">
+                        <div ngbAccordionCollapse>
+                          <div ngbAccordionBody>
+                            <ng-template>
+                              <div class="main-wrap-2">
+                                <div class="inline-box" *ngIf="studentKitPaymentAnalyticsDto.studentKitPaymentAnalyticsGrade != null">
+                                  <div class="inline-header">
+                                    <div class="box">
+                                      <div class="title" translate>GRADE_NAME</div>
+                                    </div>
+                                    <div class="box">
+                                      <div class="title" translate>TOTAL_FEE</div>
+                                    </div>
+                                    <div class="box">
+                                      <div class="title" translate>DISCOUNTED_FEE</div>
+                                    </div>
+                                    <div class="box">
+                                      <div class="title" translate>EFFECTIVE_FEE</div>
+                                    </div>
+                                    <div class="box">
+                                      <div class="title" translate>
+                                        COLLECTION_TILL_DATE
+                                      </div>
+                                    </div>
+                                    <div class="box">
+                                      <div class="title" translate>RECEIVABLE_FEE</div>
+                                    </div>
+                                    <div class="box">
+                                      <div class="title" translate>COLLECTION_IN_%</div>
+                                    </div>
+  
+                                  </div>
+                                  <div class="w-100" *ngFor="let grade of studentKitPaymentAnalyticsDto.studentKitPaymentAnalyticsGrade">
+                                    <div class="inline-header">
+                                      <div class="box">
+                                        <div class="content">{{grade.gradeName}}</div>
+                                      </div>
+                                      <div class="box">
+                                        <div class="content">{{grade.totalFee |currency : "INR"}}</div>
+                                      </div>
+                                      <div class="box">
+                                        <div class="content">{{grade.discountedFee |currency : "INR"}}</div>
+                                      </div>
+                                      <div class="box">
+                                        <div class="content">{{grade.effectiveFee |currency : "INR"}}</div>
+                                      </div>
+                                      <div class="box">
+                                        <div class="content">{{grade.collectionTillDate |currency : "INR"}}</div>
+                                      </div>
+                                      <div class="box">
+                                        <div class="content">{{grade.receivableFee |currency : "INR"}}</div>
+                                      </div>
+                                      <div class="box">
+                                        <div class="content">{{grade.collectionInPercentage}} %</div>
+                                      </div>
+                                     
+                                      <div class="right">
+                                        <button container="body" class="btn btn-export  btn-primary"
+                                        (click)="exportStudentKitPaymentAnalyticsGradewise(grade.gradeId)">
+                                        <span placement="top" ngbTooltip="{{ 'EXPORT' | translate }}">
+                                          <i class="bi bi-box-arrow-up"></i>
+                                        </span>
+                                      </button>
+                                        <i (click)="accordion3.toggle('three');getStudentKitDivisionPaymentAnalytics(grade.gradeId)"
+                                          class="bi" [ngClass]="
+                                          three.collapsed
+                                            ? 'bi-plus-circle-fill'
+                                            : 'bi-dash-circle-fill'
+                                        "></i>
+                                      </div>
+  
+                                    </div>
+                                    <!-- accordion for class -->
+                                    <div ngbAccordion #accordion3="ngbAccordion" [closeOthers]="true">
+                                      <div ngbAccordionItem="three" #three="ngbAccordionItem">
+                                        <div ngbAccordionCollapse>
+                                          <div ngbAccordionBody>
+                                            <ng-template>
+                                              <div class="main-wrap-3">
+                                                <div class="inline-box"
+                                                  *ngIf="studentKitPaymentAnalyticsDto.studentKitPaymentAnalyticsDivision != null && studentKitPaymentAnalyticsDto.studentKitPaymentAnalyticsDivision.length > 0 && studentKitPaymentAnalyticsDto.studentKitPaymentAnalyticsDivision[0].gradeId == grade.gradeId">
+                                                  <div class="inline-header">
+                                                    <div class="box">
+                                                      <div class="title" translate>CLASS_NAME</div>
+                                                    </div>
+                                                    <div class="box">
+                                                      <div class="title" translate>TOTAL_FEE</div>
+                                                    </div>
+                                                    <div class="box">
+                                                      <div class="title" translate>DISCOUNTED_FEE</div>
+                                                    </div>
+                                                    <div class="box">
+                                                      <div class="title" translate>EFFECTIVE_FEE</div>
+                                                    </div>
+                                                    <div class="box">
+                                                      <div class="title" translate>
+                                                        COLLECTION_TILL_DATE
+                                                      </div>
+                                                    </div>
+                                                    <div class="box">
+                                                      <div class="title" translate>RECEIVABLE_FEE</div>
+                                                    </div>
+                                                    <div class="box" >
+                                                      <div class="title" translate>COLLECTION_IN_%</div>
+                                                    </div>
+                                                  </div>
+                                                  <div class="w-100"
+                                                    *ngFor="let division of studentKitPaymentAnalyticsDto.studentKitPaymentAnalyticsDivision">
+                                                    <div class="inline-header">
+                                                      <div class="box">
+                                                        <div class="content">{{grade.gradeName}}-{{division.divisionName}}
+                                                        </div>
+                                                      </div>
+                                                      <div class="box">
+                                                        <div class="content">{{division.totalFee |currency : "INR"}}</div>
+                                                      </div>
+                                                      <div class="box">
+                                                        <div class="content">{{division.discountedFee |currency : "INR"}}</div>
+                                                      </div>
+                                                      <div class="box">
+                                                        <div class="content">{{division.effectiveFee |currency : "INR"}}</div>
+                                                      </div>
+                                                      <div class="box">
+                                                        <div class="content">{{division.collectionTillDate |currency : "INR"}}</div>
+                                                      </div>
+                                                      <div class="box">
+                                                        <div class="content">{{division.receivableFee |currency : "INR"}}</div>
+                                                      </div>
+                                                      <div class="box">
+                                                        <div class="content">{{division.collectionInPercentage}} %</div>
+                                                      </div>
+                                                    
+                                                      <div class="right">
+                                                        <button container="body" class="btn btn-export  btn-primary"
+                                                        (click)="exportStudentKitPaymentAnalyticsDivisionwise(grade.gradeId, division.divisionId)">
+                                                        <span placement="top" ngbTooltip="{{ 'EXPORT' | translate }}">
+                                                          <i class="bi bi-box-arrow-up"></i>
+                                                        </span>
+                                                      </button>
+                                                        <i (click)="accordion4.toggle('four');getStudentKitStudentPaymentAnalytics(division.gradeId,division.divisionId)"
+                                                          class="bi" [ngClass]="
+                                                    four.collapsed
+                                                      ? 'bi-plus-circle-fill'
+                                                      : 'bi-dash-circle-fill'
+                                                  "></i>
+                                                      </div>
+                                                    </div>
+                                                    <!-- accordion for student -->
+  
+                                                    <div ngbAccordion #accordion4="ngbAccordion">
+                                                      <div ngbAccordionItem="four" #four="ngbAccordionItem">
+                                                        <div ngbAccordionCollapse>
+                                                          <div ngbAccordionBody>
+                                                            <ng-template>
+                                                              <div class="main-wrap-4">
+                                                                <div class="inline-box"
+                                                                  *ngIf="studentKitPaymentAnalyticsDto.studentKitPaymentAnalyticsStudent != null && studentKitPaymentAnalyticsDto.studentKitPaymentAnalyticsStudent.length > 0 && studentKitPaymentAnalyticsDto.studentKitPaymentAnalyticsStudent[0].divisionId == division.divisionId">
+                                                                  <div class="inline-header inline-header-title">
+                                                                    <div class="box">
+                                                                      <div class="title" translate>STUDENT_NAME</div>
+                                                                    </div>
+                                                                    <div class="box">
+                                                                      <div class="title" translate>TOTAL_FEE</div>
+                                                                    </div>
+                                                                    <div class="box">
+                                                                      <div class="title" translate>DISCOUNTED_FEE</div>
+                                                                    </div>
+                                                                    <div class="box">
+                                                                      <div class="title" translate>EFFECTIVE_FEE</div>
+                                                                    </div>
+                                                                    <div class="box">
+                                                                      <div class="title" translate>
+                                                                        COLLECTION_TILL_DATE
+                                                                      </div>
+                                                                    </div>
+                                                                    <div class="box">
+                                                                      <div class="title" translate>RECEIVABLE_FEE</div>
+                                                                    </div>
+                                                                    <div class="box">
+                                                                      <div class="title" translate>COLLECTION_IN_%</div>
+                                                                    </div>
+                                                                  </div>
+                                                                  <div class="inline-header"
+                                                                    *ngFor="let student of studentKitPaymentAnalyticsDto.studentKitPaymentAnalyticsStudent">
+                                                                    <div class="box">
+                                                                      <div class="content">{{student.studentName}}</div>
+                                                                    </div>
+                                                                    <div class="box">
+                                                                      <div class="content">{{student.totalFee |currency : "INR"}}</div>
+                                                                    </div>
+                                                                    <div class="box">
+                                                                      <div class="content">{{student.discountedFee |currency : "INR"}}</div>
+                                                                    </div>
+                                                                    <div class="box">
+                                                                      <div class="content">{{student.effectiveFee |currency : "INR"}}</div>
+                                                                    </div>
+                                                                    <div class="box">
+                                                                      <div class="content">{{student.collectionTillDate |currency : "INR"}}
+                                                                      </div>
+                                                                    </div>
+                                                                    <div class="box">
+                                                                      <div class="content">{{student.receivableFee |currency : "INR"}}</div>
+                                                                    </div>
+                                                                    <div class="box">
+                                                                      <div class="content">
+                                                                        {{student.collectionInPercentage}} %
+                                                                      </div>
+                                                                    </div>
+                                                                  </div>
+  
+                                                                </div>
+  
+                                                                <div class="right">
+                                                                  <!-- <i
+                                                        (click)="accordion1.toggle('third')"
+                                                        class="bi"
+                                                        [ngClass]="
+                                                          third.collapsed
+                                                            ? 'bi-plus-circle-fill'
+                                                            : 'bi-dash-circle-fill'
+                                                        "
+                                                      ></i> -->
+                                                                </div>
+                                                              </div>
+                                                            </ng-template>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+  
+  
+                                              </div>
+  
+  
+                                            </ng-template>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+  
+                              </div>
+  
+  
+                            </ng-template>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- grade class accordion end -->
+  
+  
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  </div>

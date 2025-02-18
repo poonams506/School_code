@@ -1,0 +1,88 @@
+
+
+<div class="container-fluid">
+  <div class="d-flex align-items-center page-heading-wrapper">
+    <h3 class="page-heading" translate>USER_ACCESS</h3>
+   
+  </div>
+
+
+  <div class="card mb-4">
+    <div class="card-body table-body" id="no-more-tables">
+      <ngb-accordion #acc="ngbAccordion"  class="user-access-accordion" 
+      (panelChange)="changePanelCalled($event)"
+      activeIds="activePanel" [closeOthers]="true">
+        <ngb-panel  *ngFor="let role of roleList; let i = index" 
+        [id]="role.roleId.toString()">
+            <ng-template ngbPanelTitle >
+                <span>{{role.roleName}}</span>
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <div class="tableFixHead">
+                <table id="table_id" class="display table">
+                    <thead>
+                      <tr>
+                        <th translate></th>
+                        <th translate *ngFor="let permission of permissionList">{{permission.permissionNameKey}}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let module of role.modules;let j = index" [ngClass]="{ 'highlight-row': module.menuUrl == null }">
+                        <td [attr.data-title]="'MODULE_NAME' | translate"> {{ module.moduleName }}</td>
+                        <td *ngFor="let permission of module.modulePermissions;let k = index" [attr.data-title]="permission.permissionNameKey??'' | translate">
+                            <div class="custom-control custom-checkbox">
+                            <input
+                              *ngIf="permission.permissionId==-1 && module.menuUrl != null"
+                              type="checkbox"
+                              [(ngModel)]="permission.isChecked"
+                              class="custom-control-input"
+                              id="permission_{{i}}_{{j}}_{{k}}"
+                              name="permission_{{i}}_{{j}}_{{k}}"
+                              (change)="toggleAllForModule(permission.isChecked,module)"
+                              />
+                              <div *ngIf="module.menuUrl == null && permission.permissionNameKey == 'Read'">
+                                <input
+                                *ngIf="permission.permissionId!=-1"
+                                type="checkbox"
+                                [(ngModel)]="permission.isChecked"
+                                (change)="toggleAllCheckbox(permission.isChecked,module)"
+                                class="custom-control-input"
+                                id="permission_{{i}}_{{j}}_{{k}}"
+                                name="permission_{{i}}_{{j}}_{{k}}"
+                                />
+                              </div>
+                              <div *ngIf="module.menuUrl != null">
+                                <input
+                                *ngIf="permission.permissionId!=-1"
+                                type="checkbox"
+                                [(ngModel)]="permission.isChecked"
+                                (change)="toggleAllCheckbox(permission.isChecked,module)"
+                                class="custom-control-input"
+                                id="permission_{{i}}_{{j}}_{{k}}"
+                                name="permission_{{i}}_{{j}}_{{k}}"
+                                />
+                              </div>
+                             
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  </div>
+                  <div class="col-sm text-end my-2 my-md-0">
+                    <button type="submit" class="btn btn-light btn-sm" translate>
+                        RESET
+                      </button>
+                      <button type="button" (click)="saveUserRoleAccess(role)" class="btn btn-primary btn-sm" translate>
+                        SAVE
+                      </button>
+                  </div>
+            </ng-template>
+        </ngb-panel>
+      
+    </ngb-accordion>
+    </div>
+  </div>
+</div>
+
+

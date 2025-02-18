@@ -1,0 +1,53 @@
+<div
+class="card mb-4 d-md-block">
+<div class="card-header search-header">
+  <h4 class="float-left" translate>PROMOTE_TO</h4>
+</div>
+<div class="card-body search-body">
+  <!--table search filter start-->
+  <form [formGroup]="promoteToForm1" (ngSubmit)="promoteToSubmit()" novalidate>
+    <div class="row mb-2">
+      <div class="col-sm">
+        <div class="form-group">
+          <label for="academicYear" translate>Select Class</label>
+
+          <select class="form-control" [ngClass]="{
+            'is-invalid': promoteSubmitted && f['classId'].errors
+          }" formControlName="classId">
+          <option [value]="null"><span translate>SELECT_CLASS</span></option>
+          <option *ngFor="let item of divisionGradeMapping" [value]="item.schoolGradeDivisionMatrixId">
+            {{ item.className }}
+          </option>
+        </select>
+        <div *ngIf="promoteSubmitted " class="invalid-feedback">
+          <div *ngIf="f['classId'] && f['classId'].errors && f['classId'].errors['required']">
+            <span translate>CLASS</span>
+            <span translate> IS_REQUIRED</span>
+          </div>
+        </div>
+          </div>
+      </div>
+      
+      <div class="col-sm">
+          <div class="form-group">
+              <label for="academicYear" translate>FUTURE_ACADEMIC_YEAR</label>
+              <select class="form-control">
+              <option selected value="{{nextAcademicYearId}}" translate>{{nextAcademicYearText}}</option>
+            </select>
+            </div>
+        </div>
+      <div class="col-sm text-right">
+        <div class="form-group search-btns-mobile-margin">
+          <label for="city" class="d-none d-md-block">&nbsp;</label>
+          <button type="button" (click)="close()" class="btn btn-light" translate>
+            CANCEL
+          </button>
+          <button type="submit" class="btn btn-primary" translate>
+            PROMOTE
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+</div>

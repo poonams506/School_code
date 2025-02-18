@@ -1,0 +1,110 @@
+* {
+    box-sizing: border-box;
+}
+
+/* Create three equal columns that floats next to each other */
+.column {
+    float: left;
+    width: 33.33%;
+    padding: 10px;
+    height: 130px;
+}
+
+.columnsIGN {
+    float: left;
+    width: 33.33%;
+    padding: 10px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.StandardInWhichStudying {
+    width: 483px;
+}
+
+.SinceWhenInWordsAndFigures {
+    width: 500px;
+}
+
+.print_helper {
+    display: block;
+    overflow: visible;
+    font-family: Menlo, "Deja Vu Sans Mono", "Bitstream Vera Sans Mono", Monaco, monospace;
+    white-space: pre;
+    white-space: pre-wrap;
+}
+
+table, td, th {
+    padding: 10px;
+    border: 1px solid black;
+}
+
+
+.wrapper-width {
+    width: 790px;
+    margin: 0 auto;
+}
+
+@media (max-width: 541px) {
+    .wrapper-width {
+        width: 100%;
+    }
+  }
+
+  .custom-heading {
+    color: rgb(132, 116, 116);
+    background-color: #f2f2f2 !important;
+  }
+  .sign-section {
+    display: flex;
+    font-size: 13px;
+    // justify-content: space-between;
+    margin-top: 20px;
+    padding: 10px;
+    
+  }
+  
+  .sign-box {
+    flex: 1;
+    text-align: center;
+    // margin: 20px 5px; /* Adjusted margin for spacing between boxes */
+    padding: 10px; /* Added padding for better box content spacing */
+    border: 1px solid black; /* Corrected the border syntax */
+    border-collapse: collapse;
+    position: relative; /* Position set for label alignment */
+    min-height: 100px; /* Added minimum height for better alignment */
+  }
+  
+  .sign-box label {
+    display: block;
+    position: absolute; /* Makes the label stay at the bottom */
+    bottom: 5px; /* Positioning the label at the bottom with some padding */
+    left: 50%;
+    transform: translateX(-50%); /* Center-aligns the label horizontally */
+    font-weight: bold;
+  }
+  
+  .sign-box input {
+    width: 150px;
+    padding: 4px;
+    margin-top: 10px;
+  }
+  
+  .report-card {
+    font-family: Arial, sans-serif;
+  }
+  
+  .main-table th, .main-table td, 
+  .overall-table td, 
+  .co-scholastic-table th, .co-scholastic-table td,
+  .discipline-table td {
+    border: 1px solid #000;
+    padding: 5px;
+    text-align: center;
+  }
+  

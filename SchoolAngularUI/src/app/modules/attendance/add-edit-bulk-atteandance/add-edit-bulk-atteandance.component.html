@@ -1,0 +1,124 @@
+<div class="container-fluid">
+  <div class="d-flex align-items-center page-heading-wrapper">
+    <h3 class="page-heading" translate>BULK_ATTENDANCE_STATUS</h3>
+  </div>
+  <br />
+
+  <div class="container">
+    <div class="row justify-content-center mb-3">
+      <div class="col-auto text-center">
+        <h4 class="m-0"><strong>Class:</strong> {{ className }}</h4>
+      </div>
+      <div class="col-auto text-center">
+        <h4 class="m-0"><strong>Month:</strong> {{ month }}</h4>
+      </div>
+    </div>
+  </div>
+
+  <div class="color-indicators text-center mb-3">
+    <ng-container *ngIf="hasWeeklyOff()">
+      <div class="indicator-wrapper">
+        <span class="indicator weeklyoff-indicator"></span>
+        <span class="indicator-label">Weekly Off</span>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="hasHolidays()">
+      <div class="indicator-wrapper">
+        <span class="indicator holiday-indicator"></span>
+        <span class="indicator-label">Holiday</span>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="hasVacations()">
+      <div class="indicator-wrapper">
+        <span class="indicator vacation-indicator"></span>
+        <span class="indicator-label">Vacation</span>
+      </div>
+    </ng-container>
+  </div>
+  
+  
+
+  <div class="card mb-4 shadow">
+    <div class="card-body table-body bold-card" style="width: 100%; overflow-x: auto;">
+      <div style="display: block; overflow-y: auto; max-height: 400px; border: 3px solid;">
+        <table id="attendanceTable" class="table table-hover" style="min-width: 100%;">
+          <thead class="sticky-header">
+            <tr class="text-center">
+              <th translate 
+                  class=" sticky-header" 
+                  style="width: 60px; position: sticky; left: 0px; z-index: 10; ">
+                ROLL_NO
+              </th>
+              <th translate 
+                  class=" sticky-header" 
+                  style="width: 200px; position: sticky; left: 60px; z-index: 10; ">
+                STUDENT_NAME
+              </th>
+              <th *ngFor="let date of dates" translate 
+                  [ngClass]="{
+                    'holiday-header': isHoliday(date.day), 
+                    'vacation-header': isVacation(date.day), 
+                    'weeklyoff-header': isWeeklyOff(date.day),
+                    'date-column': true
+                  }"
+                  style="width: 60px; position: sticky; top: 0px; z-index: 9; ">
+                {{ getAbbreviatedDayOfWeek(date) }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let student of studentListArray.controls; let i = index" 
+                [ngClass]="{'table-active': i % 2 === 0}">
+              <td class=" sticky-cell" 
+                  style="text-align: center; position: sticky; left: 0px; z-index: 9;">
+                {{ student.value.rollNumber }}
+              </td>
+              <td class=" sticky-cell"
+                  style="position: sticky; left: 60px; z-index: 9;">
+                {{ student.value.studentName }}
+              </td>
+              <td *ngFor="let date of dates; let j = index" 
+                  [ngClass]="{
+                    'holiday-column': isHoliday(date.day), 
+                    'vacation-column': isVacation(date.day), 
+                    'weeklyoff-column': isWeeklyOff(date.day),
+                    'bold-line': !isHoliday(date.day) && !isVacation(date.day) && !isWeeklyOff(date.day)
+                  }"
+                  style="border-left: 1px solid #ced4da;">
+                <div class="input-group">
+                  <input 
+                    type="text" 
+                    class="form-control text-center" 
+                    [(ngModel)]="student.value.bulkList[j].statusId" 
+                    maxlength="1" 
+                    (change)="handleStatusChange(i, j, $event)" 
+                    (keypress)="restrictInput($event)" 
+                    (input)="toUpperCase($event)" 
+                    (paste)="preventPaste($event)"  
+                    pattern="[APH]" 
+                    title="Enter A, P, or H for attendance status" 
+                    style=" border-radius: 0.25rem; transition: border-color 0.2s;"
+                  />
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- <div class="text-center mt-3">
+        <button type="button" (click)="saveAttendanceRecords()" class="btn btn-primary mx-2" translate>SAVE</button>
+        <button type="button" class="btn btn-light mx-2" (click)="close()" translate>CANCEL</button>
+      </div> -->
+      <div class="text-center mt-3">
+        <!-- <button type="button" (click)="saveAttendanceRecords()" [attr.disabled]="status === 'Completed' ? true : null" class="btn btn-primary mx-2" translate>SAVE</button>
+        <button type="button" (click)="markAsComplete()" [attr.disabled]="status === 'Completed' ? true : null" class="btn btn-success mx-2"  translate>MARK_AS_COMPLETE</button>
+        <button type="button" (click)="close()" class="btn btn-light mx-2" translate>CANCEL</button> -->
+        <button type="button" *ngIf="status !== 'Completed'" (click)="saveAttendanceRecords()" class="btn btn-primary mx-2" translate>SAVE</button>
+        <button type="button" *ngIf="status !== 'Completed'" (click)="markAsComplete()"  class="btn btn-success mx-2" translate>MARK_AS_COMPLETE</button>
+        <button type="button" (click)="close()" class="btn btn-light mx-2" translate>CANCEL</button>
+      
+      </div>
+    </div>
+  </div>
+</div>

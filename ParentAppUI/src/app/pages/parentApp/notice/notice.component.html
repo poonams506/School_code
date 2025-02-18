@@ -1,0 +1,67 @@
+<ion-content [fullscreen]="true" class="new">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ng-container >
+    <ion-list-header class="ion-list-header-small">
+      <ion-label><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></ion-label>
+      <ion-note color="tertiary" class="ion-note-small">
+        <ion-skeleton-text animated style="width: 40px"></ion-skeleton-text>
+      </ion-note>
+    </ion-list-header>
+
+    <!-- <ion-list class="list-custom animate__animated animate__fadeIn" lines="full">
+      <ion-item color="light" button detail="false" *ngFor="let i of [].constructor(12)">
+        <ion-avatar slot="start" class="ion-avatar-default-icon">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-avatar>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 75%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+        <ion-skeleton-text slot="end" animated style="width: 15%"></ion-skeleton-text>
+      </ion-item>
+    </ion-list> -->
+  </ng-container>
+  <div class="date-header mt-3">
+    <div class="form-control-wrapper d-flex align-items-center">
+      <label for="classSelect" class="me-2 black-text"><strong>Select month</strong></label>
+      <div class="custom-input-css without-label custom-width">
+        <ion-select class="custom-select-css" [(ngModel)]="selectedMonth" (ionChange)="onMonthChange($event)">
+          <ion-select-option *ngFor="let month of months" [value]="month.value">{{month.text}}</ion-select-option>
+        </ion-select>
+      </div>
+    </div>
+  </div> 
+  <ng-container *ngIf="content_loaded">
+    <ion-card class="rounded-0 mt-0" *ngIf="noticeList.length>0">
+      <ng-container *ngFor="let noticeGroup of noticeList">
+        <ion-list class="notice-card">
+          <ion-card-header class="px-0">
+            <ion-card-subtitle color="dark">{{noticeGroup[0].startDate.format('LL')}}</ion-card-subtitle>
+          </ion-card-header>
+
+          <ion-item lines="none" *ngFor="let notice of noticeGroup" class="admin align-items-center"
+            (click)="openNoticeDetail(notice)">
+            <ion-avatar slot="start">
+              <span>{{ notice.noticeTitle[0].toUpperCase() }}</span>
+            </ion-avatar>
+            <ion-label class="ms-2 black-text">{{ notice.noticeTitle }}</ion-label>
+            <ion-icon *ngIf="notice.isImportant" name="alert-circle" color="danger"></ion-icon>
+          </ion-item>
+        </ion-list>
+      </ng-container>
+
+    </ion-card>
+    <ion-card class="mt-5" *ngIf="noticeList.length==0">
+      <ion-card-header class="nrf-header">
+        <ion-card-subtitle color="dark">No Notices Found</ion-card-subtitle>
+      </ion-card-header>
+    </ion-card>
+  </ng-container>
+
+</ion-content>

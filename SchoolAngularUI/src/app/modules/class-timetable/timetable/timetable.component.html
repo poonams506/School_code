@@ -1,0 +1,524 @@
+<div class="container-fluid">
+  <div class="d-flex align-items-center page-heading-wrapper">
+    <h3 class="page-heading" translate>TIME_TABLE</h3>
+    <a routerLink="/timetable" class="back-arrow"><i class="bi bi-arrow-left-circle"></i></a>
+
+  </div>
+  <ng-container *ngIf="!(classTimeTableUrlDetail?.classId!>0)">
+    <form [formGroup]="addTimeTableForm" (ngSubmit)="createDynamicTimeTable()">
+
+          
+      <div class="card">
+        <div class="card-body card-body-form pt-2">
+          <div class="row">
+           
+    
+            <div class="col-12">
+             
+              <div class="row">
+                <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label class="required" translate
+                      >START_TIME <span>*</span></label
+                    >
+                    <ngb-timepicker [meridian]="true"   formControlName="ngbStartTime"></ngb-timepicker>
+                    <div
+                      *ngIf="submitted && f['ngbStartTime'].errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="f['ngbStartTime'].errors['required']">
+                        <span translate>START_TIME</span>
+                        <span translate> IS_REQUIRED</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </div>
+
+                <div class="row">
+
+                <div class="col-12 col-md-9">
+                  <div class="form-group">
+                    <label translate class="required">CLASS <span>*</span></label>
+                  
+                    <ng-select
+                    [ngClass]="{
+                      'is-invalid': submitted && f['classId'].errors
+                    }"
+          [items]="divisionGradeMapping"
+          [multiple]="true"
+          bindLabel='className'
+          [selectableGroup]="false"
+          [closeOnSelect]="false"
+          bindValue="schoolGradeDivisionMatrixId"
+          placeholder="{{'SELECT_CLASS'|translate}}"
+          (clear) = "checkSelectAll()"
+          (remove) = "checkSelectAll()"
+          formControlName="classId">
+          
+          <ng-template ng-option-tmp  let-item="item" let-item$="item$" let-index="index">
+            <input id="item-{{index}}" (change)="checkSelectAll()" type="checkbox" [ngModelOptions]="{standalone: true}" [ngModel]="item$.selected"/> {{item.className}}
+          </ng-template>
+          <ng-template ng-header-tmp>
+            <input type="checkbox" [ngModelOptions]="{standalone: true}" (change)="selectAllOption()" [(ngModel)]="selectAll"/> Select All
+          </ng-template>
+          </ng-select>
+                    <div
+                      *ngIf="submitted && f['classId'].errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="f['classId'].errors['required']">
+                        <span translate>CLASS</span>
+                        <span translate> IS_REQUIRED</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+               
+              </div>
+             
+                <div formArrayName="timeTableProducerArray">
+                  <div *ngFor="let timetable of timeTableProducers; let i = index;let last=last;let first=first"  class="row" [formGroupName]="i">
+                    <div  class="col-12 col-sm-3 col-md-3 col-lg-3">
+                      <div class="form-group">
+                        <label translate class="required"
+                          >SELECT_TYPE <span>*</span></label
+                        >
+                        <select
+                          formControlName="SelectedPeriodType"
+                          id="SelectedPeriodType_{{i}}"
+                          class="form-control"
+                          (change)="resetSelectList(timetable.get('SelectedPeriodType')!)"
+                          [ngClass]="{
+                            'is-invalid': submitted && timetable.get('SelectedPeriodType')?.errors
+                          }"
+                        >
+                        <option [value]="null">
+                          <span translate>SELECT_TYPE</span>
+                          </option>
+                        <option *ngFor="let item of periodTypeDropdownData" [value]="item.id" >
+                          {{item.value}}
+                        </option>
+                        </select>
+                        <div
+                          *ngIf="submitted && timetable.get('SelectedPeriodType')?.errors"
+                          class="invalid-feedback"
+                        >
+                          <div *ngIf="timetable.get('SelectedPeriodType')?.hasError('required')">
+                            <span translate>SELECT_TYPE</span>
+                            <span translate> IS_REQUIRED</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div  class="col-12 col-sm-3 col-md-3 col-lg-3">
+                      <div class="form-group">
+                        <label *ngIf="timetable.get('SelectedPeriodType')?.value!='2'" translate class="required"
+                          >NO_OF_PERIOD <span>*</span></label>
+                          <label *ngIf="timetable.get('SelectedPeriodType')?.value=='2'" translate class="required"
+                          >NO_OF_RECESS <span>*</span></label>
+                        <input
+                          type="number"
+                          
+                          formControlName="NoOfExistence"
+                          id="NoOfExistence_{{i}}"
+                          class="form-control"
+                          step="1"
+                          [ngClass]="{
+                            'is-invalid': submitted && timetable.get('NoOfExistence')?.errors
+                          }"
+                        />
+                       
+                        <div
+                          *ngIf="submitted && timetable.get('NoOfExistence')?.errors"
+                          class="invalid-feedback"
+                        >
+                          <div *ngIf="timetable.get('NoOfExistence')?.hasError('required')">
+                            <span translate>NO_OF_PERIOD</span>
+                            <span translate> IS_REQUIRED</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div  class="col-12 col-sm-3 col-md-3 col-lg-3">
+                      <div class="form-group">
+                        <label translate class="required"
+                          >DURATION <span>*</span></label
+                        >
+                        <input
+                          type="number"
+                          formControlName="TimeTaken"
+                          id="TimeTaken_{{i}}"
+                          class="form-control"
+                          [ngClass]="{
+                            'is-invalid': submitted && timetable.get('TimeTaken')?.errors
+                          }"
+                        />
+                       
+                        <div
+                          *ngIf="submitted && timetable.get('TimeTaken')?.errors"
+                          class="invalid-feedback"
+                        >
+                          <div *ngIf="timetable.get('TimeTaken')?.hasError('required')">
+                            <span translate>DURATION</span>
+                            <span translate> IS_REQUIRED</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  
+                    <div  class="col-12 col-sm-2 col-md-2 col-lg-2 pt-2">
+                      <button type="button" *ngIf="last" (click)="addTimetableProducer(timetable.get('SelectedPeriodType')?.value!)" 
+                      class="btn btn-secondary action-btn mt-4">
+                        <i
+                          class="bi bi-plus-lg"
+                          placement="top"
+                          ngbTooltip="Actions"
+                        ></i>
+                      </button>
+                      <button type="button" *ngIf="timeTableProducers.length>1" 
+                         (click)="removeTimetableProducer(i)"  class="btn btn-danger action-btn mt-4">
+                        <i
+                          class="bi bi-dash-lg"
+                          placement="top"
+                          ngbTooltip="Actions"
+                        ></i>
+                      </button>
+                    </div>
+                    
+                  </div>
+                </div>
+             
+                <div class="day-wrap">
+                  <label class="label-title mb-3 mt-3"  translate
+                  >DAYS</label>
+                  
+                  <div class="day-list">
+                  <div class="day">
+                    <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="Sunday"
+                    formControlName="Sunday"
+                    />
+                    <label class="custom-control-label ms-2" for="Sunday" translate
+                    >SUNDAY</label
+                    >
+                    </div>
+                    <div class="day">
+                      <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="Monday"
+                      formControlName="Monday"
+                      />
+                      <label class="custom-control-label ms-2" for="Monday" translate
+                      >MONDAY</label
+                      >
+                      </div>
+                      <div class="day">
+                        <input
+                        type="checkbox"
+                        class="custom-control-input"
+                        id="Tuesday"
+                        formControlName="Tuesday"
+                        />
+                        <label class="custom-control-label ms-2" for="Tuesday" translate
+                        >TUESDAY</label
+                        >
+                        </div>
+                        <div class="day">
+                          <input
+                        type="checkbox"
+                        class="custom-control-input"
+                        id="Wednesday"
+                        formControlName="Wednesday"
+                        />
+                        <label class="custom-control-label ms-2" for="Wednesday" translate
+                        >WEDNESDAY</label
+                        >
+                        </div>
+                        <div class="day">
+                          <input
+                          type="checkbox"
+                          class="custom-control-input"
+                          id="Thursday"
+                          formControlName="Thursday"
+                          />
+                          <label class="custom-control-label ms-2" for="Thursday" translate
+                          >THURSDAY</label
+                          >
+                          </div>
+    
+                          <div class="day">
+                            <input
+                            type="checkbox"
+                            class="custom-control-input"
+                            id="Friday"
+                            formControlName="Friday"
+                            />
+                            <label class="custom-control-label ms-2" for="Friday" translate
+                            >FRIDAY</label
+                            >
+                            </div>
+    
+                            <div class="day">
+                              <input
+                              type="checkbox"
+                              class="custom-control-input"
+                              id="Saturday"
+                              formControlName="Saturday"
+                              />
+                              <label class="custom-control-label ms-2" for="Saturday" translate
+                              >SATURDAY</label>
+                              </div>
+                            </div>
+                </div>
+              
+    
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    
+    
+      <div class="form-group sticky-buttons">
+      
+        <button type="button" (click)="onReset()" class="btn btn-light float-right" translate>
+          RESET
+        </button>
+        <button type="submit" class="btn btn-primary" translate>Generate Timetable</button>
+      </div>
+    </form>
+  </ng-container>
+
+
+<div class="card mb-4">
+  <div class="card-body table-body">
+    <form [formGroup]="allTimeTableForm">
+
+      <ngb-accordion #acc="ngbAccordion"  class="user-access-accordion" 
+      (panelChange)="changePanelCalled($event)"
+      activeIds="activePanel" [closeOthers]="true" formArrayName="gradeDivisionTableArray">
+   
+        <ngb-panel  *ngFor="let grade of gradeDivisionTable; let i = index;let last=last;let first=first"  class="row" [formGroupName]="i" 
+        [id]="getPanelId(grade)">
+            <ng-template ngbPanelTitle >
+              <div class="col-2" *ngIf="className">  <span>{{ className }}</span></div>
+              <div class="col-7">  <span>{{ getPanelLabel(grade) }}</span></div>
+              <div *ngIf="grade.get('isActive')?.value==false" class="col-2"> <span class="btn btn-sm btn-outline-danger">In-Active</span></div>
+              <div *ngIf="grade.get('isActive')?.value==true" class="col-2"> <span class="btn btn-sm btn-outline-success">Active</span></div>
+               
+            </ng-template>
+            <ng-template ngbPanelContent>
+              <div class="row">
+                <div class="col-6">
+                  <div class="form-group">
+                    <label translate class="required"
+                      >TIME_TABLE_NAME <span>*</span></label
+                    >
+                    <input
+                      type="text"
+                      formControlName="classTimeTableName"
+                      id="classTimeTableName_{{i}}"
+                      class="form-control"
+                      [ngClass]="{
+                        'is-invalid': timetableSubmitted && grade.get('classTimeTableName')?.errors
+                      }"
+                    />
+                   
+                    <div  *ngIf="timetableSubmitted && grade.get('classTimeTableName')?.errors"
+                           class="invalid-feedback">
+                                        <div *ngIf="grade.get('classTimeTableName')?.hasError('required')">
+                                          <span translate>TIME_TABLE_NAME</span>
+                                          <span translate> IS_REQUIRED</span>
+                                        </div>
+                       </div>
+                     
+                  </div>
+                </div>
+                <div class="col-6">
+                  <button *ngIf="this.sharedPermissionServiceService.havePermission('Manage Timetable','Delete')" 
+                  type="button"
+                  class="btn btn-danger action-btn mt-4"
+                  (click)="confirmClassTimeTableDelete(grade.get('classTimeTableId')?.value,grade.get('isActive')?.value)"
+                >
+                  <span
+                    placement="top"
+                    ngbTooltip="{{ 'DELETE' | translate }}"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </span>
+                </button>
+                <button *ngIf="!this.sharedPermissionServiceService.havePermission('Manage Timetable','Delete')" 
+                type="button"
+                class="btn btn-secondary action-btn btn-disabled  mt-4"
+               
+              >
+                <span
+                  placement="top"
+                  ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                >
+                  <i class="bi bi-trash"></i>
+                </span>
+              </button>
+                </div>
+              </div>
+             
+             
+              <div id="no-more-tables_{{i}}">
+                <table
+                  
+                  class="display table row-border hover"
+                >
+                  <thead>
+                    <tr>
+                      <th style="width: 15%;" translate>DAY_PERIOD</th>
+                      <th *ngFor="let day of  getDayPartYAxis(grade) index as i" >{{ day.value }}</th>
+                    </tr>
+                  </thead>
+                
+                    <tbody formArrayName="lstClassTimeTableRow">
+                     <tr *ngFor="let time of timeTableRow(grade);let j=index" [formGroupName]="j" >
+                          <td>
+                           <span class="hour"> {{getFormattedMinute(time.get('startingHour')?.value,time.get('startingMinute')?.value)}} - {{getFormattedMinute(time.get('endingHour')?.value,time.get('endingMinute')?.value)}}</span>
+                          </td>
+                          <ng-container formArrayName="lstClassTimeTableColumn">
+                              <td *ngFor="let column of timeTableColumn(time);let k=index" [formGroupName]="k">
+                              <ng-container *ngIf="time.get('periodTypeId')?.value==1">
+                                <div  class="col-12" *ngIf="!(classTimeTableUrlDetail?.classId!>0)">
+                                  <div class="form-group">
+                                   
+                                    <select 
+                                    formControlName="subjectId"
+                                      class="form-control"
+                                      id="subjectId_{{j}}_{{k}}"
+                                      (change)="updateTeacherForSubject(column.get('subjectId')!,column.get('teacherId')!,grade.get('classId')?.value!)"
+                                      [ngClass]="{
+                                        'is-invalid': timetableSubmitted && column.get('subjectId')?.errors
+                                      }"
+                                    >
+                                    <option [value]="null">
+                                      <span translate>SELECT_SUBJECT</span>
+                                      </option>
+                                
+                                    <option
+                                    *ngFor="let item of getSubjectList(grade.get('classId')?.value!)"
+                                    [value]="item.subjectId"
+                                  >
+                                    {{ item.subjectName }}
+                                  </option>
+                                 </select>
+                                    <div
+                                    *ngIf="timetableSubmitted && column.get('subjectId')?.errors"
+                                    class="invalid-feedback"
+                                  >
+                                    <div *ngIf="column.get('subjectId')?.hasError('required')">
+                                      <span translate>SELECT_SUBJECT</span>
+                                      <span translate> IS_REQUIRED</span>
+                                    </div>
+                                  </div>
+                                  </div>
+                                </div>
+                                <div  class="col-12" *ngIf="(classTimeTableUrlDetail?.classId! > 0)">
+                                  <div class="form-group">
+                                   
+                                    <select 
+                                    formControlName="subjectId"
+                                      class="form-control"
+                                      id="subjectId_{{j}}_{{k}}"
+                                      (change)="updateTeacherForSubject(column.get('subjectId')!,column.get('teacherId')!,grade.get('classId')?.value!) "
+                                      [ngClass]="{
+                                        'is-invalid': timetableSubmitted && column.get('subjectId')?.errors
+                                      }"
+                                    >
+                                    <option [value]="null">
+                                      <span translate>SELECT_SUBJECT</span>
+                                      </option>
+                                
+                                    <option
+                                    *ngFor="let item of subjectDropdown"
+                                    [value]="item.subjectId"
+                                  >
+                                    {{ item.subjectName }}
+                                  </option>
+                                 </select>
+                                    <div
+                                    *ngIf="timetableSubmitted && column.get('subjectId')?.errors"
+                                    class="invalid-feedback"
+                                  >
+                                    <div *ngIf="column.get('subjectId')?.hasError('required')">
+                                      <span translate>SELECT_SUBJECT</span>
+                                      <span translate> IS_REQUIRED</span>
+                                    </div>
+                                  </div>
+                                  </div>
+                                </div>
+                                <div  class="col-12">
+                                  <div class="form-group">
+                                   
+                                    <select
+                                    formControlName="teacherId"
+                                      class="form-control"
+                                      (change)="updateTeacherForAll(column.get('teacherId')!,column.get('subjectId')!,timeTableRowArray(grade),grade.get('classId')?.value!)"
+                                      id="teacherId_{{j}}_{{k}}"
+                                      [ngClass]="{
+                                        'is-invalid': timetableSubmitted && column.get('teacherId')?.errors
+                                      }"
+                                    >
+                                    <option [value]="null">
+                                      <span translate>SELECT_TEACHER</span>
+                                      </option>
+                                  
+                                   <option
+                                      *ngFor="let item of getAllTeachersForSubject(column.get('subjectId')?.value)"
+                                      [value]="item.teacherId"
+                                    >
+                                      {{ item.teacherName }}
+                                    </option>
+
+                                    </select>
+                                    <div
+                                    *ngIf="timetableSubmitted && column.get('teacherId')?.errors"
+                                    class="invalid-feedback"
+                                  >
+                                    <div *ngIf="column.get('teacherId')?.hasError('required')">
+                                      <span translate>SELECT_TEACHER</span>
+                                      <span translate> IS_REQUIRED</span>
+                                    </div>
+                                  </div>
+                                  </div>
+                                </div>
+                              </ng-container>
+                              <ng-container *ngIf="time.get('periodTypeId')?.value==2">
+                                  <label translate>RECESS_TIME</label>
+                              </ng-container>
+                              </td>
+                          </ng-container>
+
+                     </tr>
+                     
+                     
+                    </tbody>
+                
+                
+                </table>
+                <div class="form-group sticky-buttons">
+  
+                  <button type="button" (click)="onTimeTableReset(grade)" class="btn btn-light float-right" translate>
+                    RESET
+                  </button>
+                  <button type="button" (click)="saveTimeTable(grade)" class="btn btn-primary" translate>SAVE</button>
+                </div>
+              </div>
+            </ng-template>
+        </ngb-panel>
+       
+      
+    </ngb-accordion>
+    </form>
+    
+  
+  </div>
+</div>

@@ -1,0 +1,78 @@
+:host {
+    --min-height: 30px !important;
+        ion-item {
+        --background: #623AA2 !important;
+        background-color: #623AA2 !important;
+        --padding-start: 5px;
+    --inner-padding-end: 5px;
+    align-items: flex-start;
+    margin: 10px;
+    border-radius: 6px;
+    }
+}
+  
+
+.student-content {
+    display: flex;
+    .title {
+        font-size: 18px;
+        font-weight: normal;
+        width: 15%;
+        line-height: 1.4;
+        color: #fff;
+    }
+    .value {
+        font-size: 13px;
+        font-weight: 400;
+        flex: 0 0 1;
+        color: #fff;
+
+    }
+}
+.avatar-left {
+    margin-right: 10px;
+    width: 75px;
+    margin-top: 10px;
+    ion-avatar {
+        width: 40px;
+        height: 40px;
+        margin: 0 auto;
+    }
+    .roll {
+        font-size: 12px;
+        text-align: center;
+        margin-top: 10px;
+        color: #fff;
+
+    }
+}
+
+ion-label {
+    margin-top: 6px !important;
+    margin-bottom: 3px !important;
+    color: #fff;
+
+}
+
+ion-badge {
+    margin-top: 10px;
+    margin-left: 0;
+    color: #fff;
+
+}
+
+ion-list, list-ios {
+    background-color: #fff !important;
+    --background: #fff !important;
+    border-radius: 0;
+    --border-radius: 0;
+}
+.select-text-size {
+    -ms-flex: 1;
+    flex: 1;
+    min-width: 60px;
+    font-size: inherit;
+    text-overflow: ellipsis;
+    white-space: inherit;
+    overflow: hidden;
+}

@@ -1,0 +1,56 @@
+capacitor-google-map {
+  display: inline-block;
+  width: 275px;
+  height: 400px;
+}
+
+
+.driver {
+  padding:0 30px ;
+  .driver-home-button {
+    flex-direction: column;
+  }
+  .s-button {
+   width: 100%;
+    ion-button {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      border: 2px solid #737fad;
+      background: #E1F5FE;
+      background: linear-gradient(135deg, #E1F5FE, #C5CAE9);
+      transition: all 0.3s ease-in-out;
+      border-radius: 10px;
+      margin-bottom: 20px;
+        }
+    .home-icons {
+      height: 60px;
+      width: 80px;
+      display: flex;
+      align-items: center;
+      img {
+        width: 100%;
+        height: 80px;
+      }
+    }
+    .home-text {
+      font-size: 20px;
+      font-weight: bold;
+      margin-left: 20px;
+      flex: 1;
+      text-align: left;
+      color: #000;
+    }
+    &.driver-b {
+      .home-icons {
+        img {
+          height:55px;
+          width: 60px;
+        }
+      }
+    }
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+}

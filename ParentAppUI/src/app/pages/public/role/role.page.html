@@ -1,0 +1,38 @@
+
+
+  
+<ion-content>
+ 
+
+  <div class="form-padding">
+    <form class="form-default" [formGroup]="form">
+
+<h1 class="text-h1">Select your role</h1>
+      <ion-segment class="roles-boxes" name="role" formControlName="role">
+        <ion-segment-button value="{{role.roleKey}}" class="{{getClassNameByRoleKey(role.roleKey)}}" *ngFor="let role of roles">
+          <div class="inside">
+            <div class="image">
+              <img *ngIf="role.roleKey=='Parent'" src="../../../../assets/parents.svg" />
+              <img *ngIf="role.roleKey=='Teacher'" src="../../../../assets/teacher.svg" />
+              <img *ngIf="role.roleKey=='Cab_Driver'" src="../../../../assets/driver1.svg" />
+            </div>
+            <div class="text">
+              {{role.roleName}} <p>Select this if you are {{role.roleName}}</p>
+            </div>
+          </div> 
+        </ion-segment-button>
+      
+      </ion-segment>
+
+      
+    </form>
+    </div>
+
+
+</ion-content>
+
+<ion-footer class="continue-btn-footer animate__animated animate__fadeInUp">
+  <ion-button class="continue-btn" round="0" (click)="submit()">
+Continue  </ion-button>
+
+</ion-footer>

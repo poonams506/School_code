@@ -1,0 +1,115 @@
+
+  
+  <div class="d-flex align-items-center justify-content-center hv-100 login-new-ui">
+
+<div class="left">
+  <img src="./assets/img/sc.png">
+
+</div>
+
+<div class="right">
+  <div>
+    <div class="text-center logo mt-2 position-relative" style="z-index:2">
+      <img src="./assets/img/newlogo.png" alt="Logo">
+    </div>
+  
+      <form class="form-signin  login-with-width" [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
+        <div class="text-center">
+            <h4 class="login-text"> Login</h4>
+        </div>
+        <div class="row">
+          
+          <div class="col-12">
+            <div class="form-group">
+                <label for="schoolCode">School Code</label>
+                <div class="input-group">
+                  <span class="input-icon"><i class="bi bi-upc-scan"></i></span>
+                  <input type="text" class="form-control" id="schoolCode" formControlName="code" placeholder="School Code">
+                  <span class="input-icon-right"><i class="bi bi-x" (click)="f['code'].setValue('')" ></i></span>
+
+                </div>
+                <div *ngIf="f['code'].touched && f['code'].invalid">
+                  <div class="text-danger" *ngIf="f['code'].errors && f['code'].errors['required']">
+                    School Code is required.
+                  </div>
+                </div>
+              </div>
+        </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="username">User ID</label>
+                    <div class="input-group">
+                      <span class="input-icon"><i class="bi bi-person-fill"></i></span>
+                      <input type="text" id="username" class="form-control" formControlName="username"  placeholder="User ID">
+                      <span class="input-icon-right"><i class="bi bi-x" (click)="f['username'].setValue('')"></i></span>
+
+                    </div>
+                    
+                      <div *ngIf="f['username'].touched && f['username'].invalid">
+                        <div class="text-danger" *ngIf="f['username'].errors && f['username'].errors['required']">
+                          User ID is required.
+                        </div>
+                      </div>
+                  </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <div class="input-group">
+                    <span class="input-icon"><i class="bi bi-lock-fill"></i></span>
+                    <input [type]="isEyeOpen?'text':'password'" id="password" class="form-control" formControlName="password" placeholder="Password">
+                    <span class="input-icon-right">
+                      <i *ngIf="isEyeOpen" class="bi bi-eye" (click)="isEyeOpen=!isEyeOpen"></i>
+                      <i *ngIf="!isEyeOpen" class="bi bi-eye-slash" (click)="isEyeOpen=!isEyeOpen"></i>
+                    </span>
+
+
+                  </div>
+                  <div *ngIf="f['password'].touched && f['password'].invalid">
+                    <div class="text-danger" *ngIf="f['password'].errors && f['password'].errors['required']">
+                      Password is required.
+                    </div>
+                  </div>
+                  </div>
+            </div>
+        </div>
+        <div class="row">
+        <div class="col-6 d-flex justify-content-between">
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" id="gridCheck">
+              <label class="form-check-label" for="gridCheck">
+                Remember me
+              </label>
+            </div>
+        </div>
+        <div class="col-6 text-end">
+          <label class="cursor forgot-p" (click)="open(content)">
+            Forgot Password?       
+          </label>
+      </div>
+    </div>
+        <div class="row">
+          <div class="col-12"> <button type="submit"  class="btn btn-lg btn-secondary w-100 mt-4" >Login</button></div>
+            <div class="col-12 d-flex justify-content-center pt-3">
+              <span *ngIf="isError" class="text-danger">Please enter valid credentials</span>
+            </div>
+          </div>
+      </form>
+    </div>
+</div>
+
+  
+    </div>
+  
+    <ng-template #content let-modal>
+    
+      <div class="modal-body">
+        <div class="text-center icon-top"><i class="bi bi-exclamation-triangle"></i></div>
+        <h4 class="modal-title" id="modal-basic-title">Forgot Your Password?</h4>
+        <!-- <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button> -->
+       <div class="d-flex align-items-center justify-content-center"> <span>Not to worry, please contact your school admin to <br>reset your password.</span></div>
+       <div class="d-block text-center">      <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Close</button>
+       </div>
+ 
+      </div>
+    </ng-template>

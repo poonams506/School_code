@@ -1,0 +1,40 @@
+<div class="modal-header py-2">
+    <h4 class="modal-title" id="modal-basic-title" 
+    ngbAutofocus translate> ADD_FILE</h4>
+    
+</div>
+<div class="modal-body">
+    <form novalidate>
+        <div class="row">
+             
+              <div class="col-12 col-md-6">
+                <div class="input-group">
+                    <div class="custom-file">
+                        <input type="file" name="file" class="custom-file-input" id="inputGroupFile" required (change)="handleImport($event)"
+                          accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                        <label class="custom-file-label mb-0" for="inputGroupFile" translate>CHOOSE_FILE</label>
+                    </div>
+                </div>
+                
+            </div>
+              <div class="col-12 col-md-6">
+                <button type="button" class="btn btn-primary w-100"  (click)="onUpload()" translate 
+                >UPLOAD_FILE</button>
+              </div>
+              <div class="font12">{{selectedFileName}}</div>
+              <div *ngIf="errorMessage" class="text-danger font12" translate>{{errorMessage}}</div>
+          
+        </div>
+        </form>
+</div>
+<div class="modal-footer">
+  <div class="form-group mb-0 d-flex justify-content-between w-100">
+    <a class="xls" href="javascript:void()" (click)="downloadTemplate()"> <i class="bi bi-filetype-xls"></i> <span translate>DOWNLOAD_TEMPLATE</span></a>
+
+    <button class="btn btn-light btn-sm" translate (click)="close()"
+    >CANCEL</button>
+
+  </div>
+  
+</div>
+

@@ -1,0 +1,59 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title" 
+    *ngIf="f['subjectMasterId']?.value==0"
+    ngbAutofocus translate> ADD_SUBJECT</h4>
+    <h4 class="modal-title" id="modal-basic-title"
+    *ngIf="f['subjectMasterId']?.value>0"
+     ngbAutofocus translate> UPDATE_SUBJECT</h4>
+
+</div>
+<div class="modal-body">
+    <form [formGroup]="subjectMasterForm" novalidate>
+      <div class="row">
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label class="required" translate
+                >SUBJECT_NAME <span>*</span></label
+              >
+              <input
+                type="text"
+                formControlName="subjectName"
+                class="form-control"
+                placeholder="{{ 'SUBJECT_NAME' | translate }}"
+                [ngClass]="{
+                  'is-invalid': subjectSubmitted && f['subjectName'].errors
+                }"
+                maxlength="50"
+                (input)="clearErrorMessage()"
+              />
+              <div
+                *ngIf="subjectSubmitted && f['subjectName'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['subjectName'].errors['required']">
+                  <span translate>SUBJECT_NAME</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        <br />
+        <div class="col-12 col-md-12 col-lg-12">
+          <span *ngIf="errorMessage" class="text-danger text-center">{{errorMessage}}</span>
+        </div>
+      </div>
+   
+    </form>
+</div>
+<div class="modal-footer">
+  <div class="form-group mb-0 p-0">
+  
+    <button type="button" class="btn btn-primary" (click)="saveSubjectMasterData()"
+    translate
+    >SAVE</button>
+    <button class="btn btn-light" (click)="close()" translate
+    >CANCEL</button>
+
+  </div>
+  
+</div>

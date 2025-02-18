@@ -1,0 +1,33 @@
+<div class="modal-header">
+    <h4
+      class="modal-title"
+      id="modal-basic-title"
+      ngbAutofocus
+      translate
+    >
+      {{title}}
+    </h4>
+  </div>
+  <div class="modal-body">
+    <form class="search-filter">
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <!-- <span>{{message}}</span> -->
+            <div [innerHTML]="message"></div>
+           <ul *ngFor="let item of requiredItemsArray">
+            <li><span class="danger">{{item}}</span></li>
+           </ul>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <div class="form-group mb-0 pb-0">
+      <button class="btn btn-secondary" (click)="close()" translate>
+        Close
+      </button>
+    </div>
+  </div>
+  

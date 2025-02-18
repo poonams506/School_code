@@ -1,0 +1,38 @@
+
+<div class="overlay"  (click)="sidebarToggle()"></div>
+<div class="sidebar">
+  <!-- <div class="menu-toggle" (click)="sidebarToggle()">
+    <i class="bi bi-list"></i>
+  </div> --> 
+  <div class="side-nav-logo">
+    <a class="logo" href="javascript:void(0)" title="Logo">
+      <img *ngIf="isLogoImage" src="{{logoUrl}}" alt="Logo" height="60px"/>
+      <img *ngIf="!isLogoImage" src="../../../../assets/img/new-logo.png" style="background-color: white;" alt="Logo" height="60px"/>
+    </a>
+  </div>
+  <ul class="nav-links" id="nav-links">
+    <li *ngFor="let item of menuSidebar" #itemEl routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <div *ngIf="item.sub_menu.length == 0" class="dropdown-title">
+        <a [routerLink]="[item.link]">
+          <span class="menu-left-icon"> <i [class]="item.icon"></i></span>
+          <span class="link_name" translate>{{item.link_key}}</span>
+        </a>
+      </div>
+      <div *ngIf="item.sub_menu.length > 0" class="dropdown-title" (click)="showSubmenu(itemEl)">
+        <a>
+          <span class="menu-left-icon"> <i [class]="item.icon"></i></span>
+          <span class="link_name" translate>{{item.link_key}}</span>
+        </a>
+        <i class='bi bi-chevron-down arrow'></i>
+      </div>
+      <ul class="sub-menu" [class.blank]="item.sub_menu.length == 0">
+        <li><a class="link_name" translate>{{item.link_key}}</a></li>
+        <li *ngFor="let item_sub of item.sub_menu" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          <a [routerLink]="[item_sub.link]" translate>{{item_sub.link_key}}</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+    </li>
+  </ul>
+</div>

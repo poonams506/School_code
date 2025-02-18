@@ -1,0 +1,46 @@
+<ion-content [fullscreen]="true" class="light-content name-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div *ngIf="isAppAccessible" class="ion-padding driver mt-4">
+    <ion-buttons slot="primary" class="driver-home-button">
+     
+      <div class="s-button driver-b">
+        <ion-button routerLink="/driver-app/cabdriverTab/profile">
+          <div class="home-icons">
+            <img src="../../../../assets/profile-2.png" />
+          </div>
+          <ion-text class="home-text"> {{"PROFILE" | translate}}</ion-text>
+        </ion-button>
+      </div>
+      <div class="s-button color1">
+        <ion-button routerLink="/driver-app/cabdriverTab/pickup">
+          <div class="home-icons">
+            <img src="../../../../assets/school-pickup.svg" />
+          </div>
+          <ion-text class="home-text"> {{"PICKUP" | translate}}</ion-text>
+        </ion-button>
+      </div>
+      <div class="s-button color1">
+        <ion-button routerLink="/driver-app/cabdriverTab/drop">
+          <div class="home-icons">
+            <img src="../../../../assets/school-drop.svg" />
+          </div>
+          <ion-text class="home-text"> {{"DROP" | translate}}</ion-text>
+        </ion-button>
+      </div>
+    </ion-buttons> 
+  </div>
+</ion-content>
+
+<ion-modal id="example-modal" class="update-modal" #modal [isOpen]="!isAppAccessible"   [canDismiss]="canDismiss"  [presentingElement]="presentingElement">
+  <ng-template>
+    <div  class="update-app">
+        <span class="icon"><ion-icon name="notifications-outline"></ion-icon></span>
+        <p class="text">A new version of the app is available. If you haven't updated it please click on update or else click on close.</p>
+        <button (click)="redirectToPlayStore()" class="update-button">Update</button> &nbsp;
+        <button (click)="refreshPage()" class="update-button">Close</button>
+      </div>
+  </ng-template>
+</ion-modal>

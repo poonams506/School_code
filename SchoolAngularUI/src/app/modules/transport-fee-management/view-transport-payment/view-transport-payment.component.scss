@@ -1,0 +1,66 @@
+
+.no-data-available {
+    text-align: center;
+  }
+  
+  .actions-td2 {
+    .btn.btn-sm {
+      width: auto !important;
+      font-size: 11px !important;
+      min-width: auto;
+    }
+  }
+  ::ng-deep table.dataTable td.dataTables_empty {
+    display: none;
+  }
+  .table-body{
+    table{
+      width: 100% !important;
+    }
+    .search-body-table {
+      width: 40% !important;
+    }
+  }
+
+  .is-expand-td {
+    background-color: #B0D0D3;
+    border-bottom: 5px solid #fff;
+    border-top: 0 !important;
+    padding: 7px;
+    table {
+      background-color: #fff;
+    }
+  }
+
+  .expanded {
+    td {
+      background-color: #B0D0D3;
+      border:0;
+    
+    }
+  }
+
+  .action-btn-transport {
+    i {
+      font-size: 18px !important;
+    }
+  }
+  
+  .staff-table-td {
+    th, td {
+      width: 13.28571428571429% !important;
+    }
+    .staff-head {
+      th {
+        width: 13.28571428571429% !important;
+      }
+      .expanded{
+         td {
+          width: 13.28571428571429% !important;
+        }
+      }
+    }
+    .last-col-action {
+      width: 7% !important;
+    }
+  }

@@ -1,0 +1,117 @@
+
+<div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>STUDENT_ENQUIRY</h3>
+      <button class="btn btn-with-icon with-text btn-primary ms-auto" (click)="addStudentEnquiry()" translate>ADD_STUDENT_ENQUIRY</button>
+    </div>
+    
+  
+    <div class="card mb-4">
+      <div class="card-body table-body">
+        <!--table listing statrt-->
+        <div id="no-more-tables">
+           
+          <table  datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="display table row-border hover">
+            <thead>
+              <tr> 
+                <th  style="width: 10%;" translate>ENQUIRY_DATE</th>
+                <th  style="width: 10%;" translate>STUDENT_NAME</th>
+                <th  style="width: 10%;" translate>FATHER_NAME</th>
+                <th  style="width: 10%;" translate>ADHAAR_NO</th>
+                <th  style="width: 8%;" translate>INTERESTED_CLASS</th>
+                <th  style="width: 8%;" translate>MOBILE_NO</th>
+                <th  style="width: 7%;" translate>PAID_AMOUNT</th>
+                <th  style="width: 8%;" translate>STATUS</th>
+                <th  style="width: 20%" class="text-end" translate>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="studentEnquiryList?.length != 0">
+              <tr *ngFor="let studentEnquiry of studentEnquiryList index as i">
+                  <td [attr.data-title]=" 'ENQUIRY_DATE' | translate">{{ formatDate(studentEnquiry.enquiryDate) }}</td>
+                  <td [attr.data-title]=" 'STUDENT_NAME' | translate">{{ studentEnquiry.studentFullName }}</td>
+                  <td [attr.data-title]=" 'FATHER_NAME' | translate">{{ studentEnquiry.fatherFullName}}</td>
+                  <td [attr.data-title]=" 'ADHAR_NO' | translate">{{ studentEnquiry.adharNo }}</td>
+                  <td [attr.data-title]=" 'INTERESTED_CLASS' | translate">{{studentEnquiry.className }}</td>
+                  <td [attr.data-title]="'MOBILE_NO' | translate"> {{ studentEnquiry.mobileNumber }} </td>
+                  <td [attr.data-title]="'PAID_AMOUNT' | translate"> {{ studentEnquiry.paidAmount }} </td>
+                  <td [attr.data-title]="'STATUS' | translate"> {{ studentEnquiry.paymentStatus }} </td>
+                  <td [attr.data-title]=" 'ACTIONS' | translate" class="action text-center actions-td">
+                    
+                    <div class="d-flex flex-wrap justify-content-end">
+                      <button  *ngIf="this.sharedPermissionServiceService.havePermission('Academic Fee Payment','Create')"
+                    type="button"
+                    (click)="pay(studentEnquiry)"
+                    class="btn btn-primary action-btn"
+                  >
+                    <span placement="top" ngbTooltip="{{'PAY' | translate}}">
+                      <i class="bi bi-credit-card"></i>
+                    </span>
+                  </button>
+                    <button  *ngIf="this.sharedPermissionServiceService.havePermission('Additional Fee Payment','Read') && studentEnquiry.paymentStatus!='Pending'"
+                    type="button"
+                    class="btn btn-secondary action-btn"
+                    (click)="viewHistory(studentEnquiry)"
+                  >
+                  <span
+                      ngbTooltip="{{'PAYMENT_HISTORY' | translate}}"
+                      placement="top"
+                    >
+                      <i class="bi bi-clock-history"></i>
+                    </span>
+                  </button>
+
+                    
+                      <button type="button" 
+                      class="btn btn-secondary action-btn" 
+                      (click)="viewStudentEnquiry(studentEnquiry)"
+                      translate>
+                      <span placement="top" ngbTooltip="{{ 'VIEW' | translate }}">
+                        <i class="bi bi-eye"></i>
+                      </span>
+                    </button>
+                    
+                      <button 
+                        type="button"
+                        class="btn btn-secondary action-btn"
+                        (click)="addeditStudentEnquiry(studentEnquiry)"
+                      >
+                        <span
+                          placement="top"
+                          ngbTooltip="{{ 'VIEW_EDIT' | translate }}"
+                        >
+                          <i class="bi bi-pencil"></i>
+                        </span>
+                      </button>
+                      
+    
+                      <button 
+                        type="button"
+                        class="btn btn-danger action-btn"
+                        (click)="confirmStudentEnquiryDelete(studentEnquiry)" 
+                      >
+                        <span
+                          placement="top"
+                          ngbTooltip="{{ 'DELETE' | translate }}"
+                        >
+                          <i class="bi bi-trash"></i>
+                        </span>
+                      </button>
+                      
+                    </div>
+                  </td>
+  
+              </tr>
+              <tr *ngIf="studentEnquiryList?.length == 0">
+                <td colspan="7" class="no-data-available" translate>NO_RECORDS_FOUND</td>
+              
+              </tr>
+            </tbody>
+  
+          </table>
+        </div>
+      
+      </div>
+    </div>
+  </div>
+  
+  

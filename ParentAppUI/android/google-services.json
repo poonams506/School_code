@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "227404410860",
+    "project_id": "schoolhub360notification",
+    "storage_bucket": "schoolhub360notification.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:227404410860:android:942e02b58439bd4fa89ac9",
+        "android_client_info": {
+          "package_name": "com.schoolhub360.schoolApp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0SXnGUfXwRwl8AwiRGEHur_3w1YC8WiA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

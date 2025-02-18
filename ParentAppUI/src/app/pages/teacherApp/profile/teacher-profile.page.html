@@ -1,0 +1,131 @@
+
+
+<ion-content [fullscreen]="true" class="light-content">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-card class="ion-no-margin profile-card">
+    <ion-card-content>
+      <div class="profile-photos">
+        <img src="{{teacherProfileImageUrl}}">
+      </div>
+
+      <h1 class="white-text">
+        {{teacherFullName}}
+      </h1>
+      <ion-button class="ion-button-small"
+        (click)="updateProfilePicture()">
+        Update profile picture
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+
+  <div class="form-padding">
+    <form class="form-default" novalidate [formGroup]="teacherProfileForm">
+      <ion-item lines="none">
+        <ion-label position="stacked">
+          First name
+        </ion-label>
+        <ion-input formControlName="firstName" placeholder="First name"></ion-input>
+        <ion-note slot="error"> First name is required.</ion-note>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">
+          Middle name
+        </ion-label>
+        <ion-input formControlName="middleName" placeholder="Middle name"></ion-input>
+        <ion-note slot="error">Middle name is required.</ion-note>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">
+          Last name
+        </ion-label>
+        <ion-input formControlName="lastName" placeholder="Last name"></ion-input>
+        <ion-note slot="error">Last name is required.</ion-note>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">
+          Address Line 1 <span class="star-required">*</span>
+        </ion-label>
+        <ion-input formControlName="addressLine1" placeholder="Address Line 1"></ion-input>
+        <ion-note slot="error"> Address Line 1 is required.</ion-note>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">
+          Address Line 2
+        </ion-label>
+        <ion-input formControlName="addressLine2" placeholder="Address Line 2"></ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Select Country <span class="star-required">*</span></ion-label>
+        <ion-select interface="action-sheet" cancelText="Cancel" 
+           formControlName="countryId"  (ion-change)="resetSelectList(f,'countryId')">
+          <ion-select-option [value]="null" >Select Country</ion-select-option>
+          <ion-select-option *ngFor="let country of countryDropdownList"
+            [value]="country.countryId">{{country.countryName}}</ion-select-option>
+        </ion-select>
+        <ion-note slot="error">Country is required</ion-note>
+        <div *ngIf="submitted && f['countryId']?.errors">
+          <ion-note *ngIf="f['countryId'].errors['required']"  class="custom-error" >Country is required.</ion-note>
+         </div>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Select State <span class="star-required">*</span></ion-label>
+        <ion-select interface="action-sheet" cancelText="Cancel"
+         formControlName="stateId"   (ion-change)="resetSelectList(f,'stateId')" >
+          <ion-select-option [value]="null" >Select State</ion-select-option>
+          <ion-select-option *ngFor="let state of stateFilteredDropdownList"
+            [value]="state.stateId">{{state.stateName}}</ion-select-option>
+        </ion-select>
+        <div *ngIf="submitted && f['stateId']?.errors">
+          <ion-note *ngIf="f['stateId'].errors['required']"  class="custom-error" >State is required.</ion-note>
+         </div>
+      </ion-item>
+
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Select District <span class="star-required">*</span></ion-label>
+        <ion-select interface="action-sheet" cancelText="Cancel" 
+           formControlName="districtId" (ion-change)="resetSelectList(f,'districtId')" >
+          <ion-select-option [value]="null" >Select District</ion-select-option>
+          <ion-select-option *ngFor="let district of districtFilteredDropdownList"
+            [value]="district.districtId">{{district.districtName}}</ion-select-option>
+        </ion-select>
+        <div *ngIf="submitted && f['districtId']?.errors">
+          <ion-note *ngIf="f['districtId'].errors['required']"  class="custom-error" >District is required.</ion-note>
+         </div>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Select Taluka <span class="star-required">*</span></ion-label>
+        <ion-select interface="action-sheet" cancelText="Cancel" 
+             formControlName="talukaId"  (ion-change)="resetSelectList(f,'talukaId')" >
+          <ion-select-option [value]="null" >Select Taluka</ion-select-option>
+          <ion-select-option *ngFor="let taluka of talukaFilteredDropdownList"
+            [value]="taluka.talukaId">{{taluka.talukaName}}</ion-select-option>
+        </ion-select>
+        <div *ngIf="submitted && f['talukaId']?.errors">
+          <ion-note *ngIf="f['talukaId'].errors['required']"  class="custom-error" >Taluka is required.</ion-note>
+         </div>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Pincode <span class="star-required">*</span></ion-label>
+        <ion-input type="text" formControlName="pincode" placeholder="Pincode" formControlName="zipCode"></ion-input>
+        <ion-note slot="error">Pincode is required.</ion-note>
+      </ion-item>
+
+
+      <ion-button class="submit-form-btn" (click)="submit()">Submit</ion-button>
+
+    </form>
+
+  </div>
+</ion-content>

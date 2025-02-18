@@ -1,0 +1,101 @@
+<ion-content class="light-content" [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ng-container *ngIf="!content_loaded">
+    <!-- Skeleton loading content -->
+    <ion-list-header class="ion-list-header-small">
+      <ion-label><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></ion-label>
+      <ion-note color="tertiary" class="ion-note-small">
+        <ion-skeleton-text animated style="width: 40px"></ion-skeleton-text>
+      </ion-note>
+    </ion-list-header>
+    <ion-list class="list-custom animate__animated animate__fadeIn" lines="full">
+      <ion-item color="light" button detail="false" *ngFor="let i of [].constructor(12)">
+        <ion-avatar slot="start" class="ion-avatar-default-icon">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-avatar>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 75%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+        <ion-skeleton-text slot="end" animated style="width: 15%"></ion-skeleton-text>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+
+  <ng-container *ngIf="content_loaded">
+    <ion-card-header class="date-header mt-2">
+      <div class="form-control-wrapper">
+        <div class="custom-input-css without-label" style="margin-right: 200px;">
+          <ion-select class="custom-select-css" placeholder="Sent/Received" [(ngModel)]="galleryTypeId"
+            (ionChange)="onSentReceiveChange($event)">
+            <ion-select-option value="1">Sent</ion-select-option>
+            <ion-select-option value="2">Received</ion-select-option>
+          </ion-select>
+        </div>
+      </div>
+    </ion-card-header>
+
+    <ion-card class="card-new-one" *ngFor="let gallery of galleryList">
+      <ion-card-header>
+        <ion-card-subtitle class="class">{{galleryTypeId == '2' ? teacherName : gallery.galleryTo}}</ion-card-subtitle>
+      </ion-card-header>
+
+      <div class="d-flex right-bg">
+        <ion-icon class="exclamation-icon" name="alert-circle" *ngIf="gallery.isImportant"></ion-icon>
+        <p class="text-start" [ngClass]="{'green-color': gallery.isPublished != true}">{{gallery.galleryTitle}}</p>
+      </div>
+
+      <!-- Actions for Sent -->
+      <div class="new-actions" *ngIf="galleryTypeId == '1'">
+        <ion-fab>
+          <ion-fab-button>
+            <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-list side="start">
+            <ion-fab-button>
+              <ion-icon name="eye-outline" (click)="openGalleryDetail(gallery.galleryId)"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button>
+              <ion-icon name="create-sharp" (click)="editGallery($event, gallery)"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button>
+              <ion-icon [name]="gallery.isPublished ? 'notifications-outline' : 'notifications-off-outline'" (click)="Publish($event, gallery)"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button *ngIf="!gallery.isPublished">
+              <ion-icon name="trash-sharp" (click)="Delete($event, gallery)"></ion-icon>
+            </ion-fab-button>            
+          </ion-fab-list>
+        </ion-fab>
+      </div>
+
+      <!-- Actions for Received -->
+      <div class="new-actions" *ngIf="galleryTypeId == '2'">
+        <ion-fab>
+          <ion-fab-button>
+            <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-list side="start">
+            <ion-fab-button>
+              <ion-icon name="eye-outline" (click)="openGalleryDetail(gallery.galleryId)"></ion-icon>
+            </ion-fab-button>
+          </ion-fab-list>
+        </ion-fab>
+      </div>
+      
+
+    </ion-card>
+  </ng-container>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button [disabled]="buttonDisable" (click)="filter()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

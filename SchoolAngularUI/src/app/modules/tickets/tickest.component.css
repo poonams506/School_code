@@ -1,0 +1,141 @@
+
+  
+  .error:focus,
+  .error {
+    border-color: #E91E63;
+    color: #E91E63;
+  }
+  
+  .invalid-feedback {
+    color: #E91E63;
+  }
+  
+  .btn-danger,
+  body .btn-danger:hover {
+    background: #012E45;
+    border-color: #012E45;
+    color: #4EABE6;
+  }
+  
+  .subjectList {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .subjectList li {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .invalid-feedback {
+    display: block;
+  }
+  
+  .mb-3,
+  .my-3 {
+    margin-bottom: 15px !important;
+  }
+  
+  .custom-control {
+    margin-bottom: 5px;
+  }
+  
+  .custom-control label {
+    font-weight: 400;
+  }
+  
+  .section4 {
+    padding-top: 90px;
+    height: calc(100vh - 29px);
+    overflow-y: auto;
+  }
+  .shadow-nav {
+    box-shadow: 1px 1px 1px 1px #d2d8e0;
+    background-color: #fff;
+  }
+  .btn {
+    border-radius: 4px;
+    background-color: #012E45 !important;
+    border-color: #012E45 !important;
+  }
+
+  .btn.btn-light {
+    background-color: #ccc !important;
+    border-color: #ccc !important;
+    color: #000 !important;
+  }
+
+  footer {
+    background-color: #fff;
+    box-shadow: -4px -1px 1px 1px #d2d8e0;
+    text-align: center;
+    padding: 10px;
+  }
+
+  .box {
+    position: relative;
+    display: block;
+    color: #000;
+    text-decoration: none;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .custom-wrapper p{ font-size: 16px; margin-bottom: 0;}
+  .custom-wrapper h6{ font-size: 20px; line-height: 1; font-weight: 400;}
+
+  .file-input {
+    position: relative;
+    display: flex;
+    padding: 0;
+    background: #fff;
+}
+
+.file-input input[type=file] {
+    opacity: 0;
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.file-input-button {
+    margin: -1px;
+    transition: .24 ease;
+    background-color: #ccc !important;
+    border-color: #ccc !important;
+    color: #000 !important;
+    font-size: 14px;
+    padding: 7px 16px;
+    
+}
+
+.add-extra-attachement {
+    padding: 8px 16px;
+    /* background-color: #5e56cd !important;
+    border-color: #5e56cd !important; */
+    color: #fff !important;
+}
+
+.file-input-text {
+    display: flex;
+    align-items: center;
+    padding: 5pxpx;
+}
+
+.ticket-attachments-message {
+    margin: 5px 0 0 0;
+    color: #E91E63;
+    font-size: 12px !important;
+    line-height:16px;
+}
+
+.navbar-custom {
+    padding: 5px 0 !important;
+}

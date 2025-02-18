@@ -1,0 +1,177 @@
+<ion-content class="light-content" [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ng-container *ngIf="!content_loaded  && isAppAccessible">
+    <ion-list-header class="ion-list-header-small">
+      <ion-label><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></ion-label>
+      <ion-note color="tertiary" class="ion-note-small">
+        <ion-skeleton-text animated style="width: 40px"></ion-skeleton-text>
+      </ion-note>
+    </ion-list-header>
+
+
+    <ion-list class="list-custom animate__animated animate__fadeIn" lines="full">
+      <ion-item color="light" button detail="false" *ngFor="let i of [].constructor(12)">
+        <ion-avatar slot="start" class="ion-avatar-default-icon">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-avatar>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 75%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+        <ion-skeleton-text slot="end" animated style="width: 15%"></ion-skeleton-text>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+  <ng-container *ngIf="content_loaded  && isAppAccessible">
+    <ion-card-header class="date-header mt-2">
+      <div class="form-control-wrapper">
+        <div class="custom-input-css without-label custom-width">
+        </div>
+      </div>
+    </ion-card-header>
+    <div class="head-4">
+      <h4>Today's Lectures</h4>
+      <h5>Today</h5>
+    </div>
+    <ion-list>
+      <ion-card class="white-bg-color" *ngFor="let teacherLecture of teacherLectureList" (click)="setOpen(true)">
+        <ion-card-header>
+          <ion-card-subtitle>{{teacherLecture.startTime}} <b>To</b> {{teacherLecture.endTime}}</ion-card-subtitle>
+           </ion-card-header>
+
+        <ion-card-content>
+          <ion-title slot="start" class="text-start">
+            {{teacherLecture.gradeName}} - {{teacherLecture.divisionName}} ,
+            {{teacherLecture.subjectName}} 
+          </ion-title>
+        
+        </ion-card-content>
+      </ion-card>
+      <ion-card-header *ngIf="teacherLectureList?.length === 0" class="redbg font16 px-3"><i class="bi bi-exclamation-triangle"></i>
+        <span class="ms-2" translate>There is no Lectures for Today.</span>
+      </ion-card-header>
+    </ion-list>
+
+    <hr />
+
+    <hr />
+
+    <div class="head-4 mt-2">
+      <h4>Upcoming Events</h4>
+      <h5>Next 30 Days</h5>
+    </div>
+    <div *ngIf="schoolEventList?.length === 0">
+      <ion-card-header class="redbg font16 px-3">
+        <i class="bi bi-exclamation-triangle"></i>
+        <span class="ms-2" translate>There is no upcoming events in next 30 days.</span>
+      </ion-card-header>
+    </div>
+
+    <div *ngFor="let schoolEvent of schoolEventList">
+      <h6>{{ schoolEvent.startDate?.format('DD MMM yyyy') }}</h6>
+      <ion-list class="no-bg">
+        <ion-card class="white-bg-color"  (click)="openSchoolEventDetail( schoolEvent.schoolEventId)">
+          <ion-card-header>
+            <ion-card-subtitle *ngIf="schoolEvent && schoolEvent.startTime && schoolEvent.endTime">
+              {{ schoolEvent.startTime?.format('hh:mm a') }} 
+              <b>To</b>
+              {{ schoolEvent.endTime?.format('hh:mm a') }}
+            </ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <span class="text-start yellow-span">
+              <span><b>Event Title:</b> {{schoolEvent.eventTitle}}</span> 
+              <span *ngIf="schoolEvent.eventTitle && schoolEvent.eventVenue"><b>Event Venue:</b> {{ schoolEvent.eventVenue }}</span>
+            </span>
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
+      
+    </div>
+    
+    <div class="head-4 mt-2" *ngIf="showMissingAttendanceSection">
+      <h4>Missing Attendance</h4>
+    </div>
+    <div class="date-header mt-0">
+      <div class="form-control-wrapper d-flex align-items-center">
+        <label for="classSelect" class="me-2 black-text"><strong>Select Month:</strong></label>
+        <div class="custom-input-css without-label custom-width">
+          <ion-select class="custom-select-css" [(ngModel)]="selectedMonth" (ionChange)="onMonthChange($event)">
+            <ion-select-option *ngFor="let month of months" [value]="month.value">{{month.text}}</ion-select-option>
+          </ion-select>
+        </div>
+      </div>
+    </div>
+    <ion-list *ngIf="showMissingAttendanceSection">
+      <ion-card class="white-bg-color" *ngFor="let classAttendanceMissing of classAttendanceMissingList" (click)="setOpen(true)">
+        <ion-card-header>
+          <ion-card-subtitle>{{classAttendanceMissing.attendanceMissingDate?.format('ddd DD MMM YYYY') }}</ion-card-subtitle>
+          <ion-card-subtitle class="class">{{classAttendanceMissing.gradeName}} - {{classAttendanceMissing.divisionName}}</ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+          <a href="javascript:void(0)" class="mark-btn" (click)="goToAttendancePage(classAttendanceMissing)">
+            Mark Attendance
+          </a>
+        </ion-card-content>
+      </ion-card>
+      <ion-card-header *ngIf="classAttendanceMissingList?.length === 0" class="redbg2 font16 p-1"><i class="bi bi-exclamation-triangle"></i>
+        <span class="ms-2" translate>There is no missing attendance record found for this academic year .</span>
+      </ion-card-header>
+    </ion-list>
+
+    
+
+    <ion-card class="ion-no-margin ion-card-chart animate__animated animate__fadeIn dark-bg-color">
+      <!-- Skeletons -->
+      <ng-container *ngIf="!content_loaded">
+        <ion-card-header>
+          <div>
+            <ion-card-title>
+              <ion-skeleton-text animated style="width: 60px"></ion-skeleton-text>
+            </ion-card-title>
+            <ion-card-subtitle>
+              <ion-skeleton-text animated style="width: 80px"></ion-skeleton-text>
+            </ion-card-subtitle>
+          </div>
+          <ion-badge color="primary" mode="ios">
+            <ion-skeleton-text animated style="width: 50px"></ion-skeleton-text>
+          </ion-badge>
+        </ion-card-header>
+
+        <ion-skeleton-text animated style="
+              width: calc(100% - 40px);
+              margin: 16px auto 16px auto;
+              min-height: 140px;
+            ">
+        </ion-skeleton-text>
+      </ng-container>
+
+    </ion-card>
+  </ng-container>
+
+</ion-content>
+
+<!-- <div class="update-app-wrapper"></div>
+<div *ngIf="!isAppAccessible" class="update-app">
+  <span class="icon"><ion-icon name="notifications-outline"></ion-icon></span>
+  <p class="text">A new version of the app is available. Please update to continue using the app.</p>
+  <button (click)="redirectToPlayStore()" class="update-button">Update</button>
+</div> -->
+  <ion-modal id="example-modal" class="update-modal" #modal [isOpen]="!isAppAccessible"  [canDismiss]="canDismiss"  [presentingElement]="presentingElement">
+    <ng-template>
+      <div  class="update-app">
+          <span class="icon"><ion-icon name="notifications-outline"></ion-icon></span>
+          <p class="text">A new version of the app is available. If you haven't updated it please click on update or else click on close.</p>
+        <button (click)="redirectToPlayStore()" class="update-button">Update</button> &nbsp;
+        <button (click)="refreshPage()" class="update-button">Close</button>
+        </div>
+    </ng-template>
+  </ion-modal>
+

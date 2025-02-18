@@ -1,0 +1,45 @@
+.custom-file {
+  width: 100%;
+    [type="file"] {
+        height: 0;
+        overflow: hidden;
+        width: 0;
+      }
+      
+      [type="file"] + label {
+        background: #fff;
+        border: 1px solid #022e45;
+        border-radius: 5px;
+        color: #022e45;
+        cursor: pointer;
+        display: inline-block;
+          font-family: 'Rubik', sans-serif;
+          font-size: inherit;
+        font-weight: 500;
+        margin-bottom: 1rem;
+        outline: none;
+        padding: 7px;
+        position: relative;
+        transition: all 0.3s;
+        vertical-align: middle;
+        font-size: 13px;
+        white-space: nowrap;
+        width: 100%;
+        text-align: center;
+        
+        // &:hover {
+        //   background-color: darken(#f15d22, 10%);
+        // }
+}
+}
+
+.xls {
+    color: green;
+    i {
+        margin-right: 10px;
+        font-size: 20px;
+    }
+    span {
+        color: green;
+    }
+}

@@ -1,0 +1,98 @@
+
+  
+  <div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>TIME_TABLE</h3>
+      <button type="button" class="btn btn-with-icon with-text btn-primary ms-auto" *ngIf="this.sharedPermissionServiceService.havePermission('Manage Timetable','Create')"  (click)="addClassTimeTable()" translate>ADD_TIME_TABLE</button>
+      <button type="button" container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"  class="btn btn-with-icon with-text btn-primary ms-auto btn-disabled" *ngIf="!this.sharedPermissionServiceService.havePermission('Manage Timetable','Create')"  translate>ADD_TIME_TABLE</button>
+    
+  </div>
+
+  
+    <div class="card mb-4">
+      <div class="card-body table-body">
+        <div id="no-more-tables">
+        
+
+          <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="display table row-border hover">
+            <thead>
+              <tr>
+               
+                <th style="width: 10%;" translate>CLASS_NAME</th>
+                <th style="width: 10%;" translate>SELECT_IS_ACTIVE_TIME_TABLE</th>
+                <th style="width: 10%;" class="text-end" translate>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="classTimeTables?.length != 0">
+              <tr *ngFor="let timeTable of classTimeTables index as i">
+                  <td [attr.data-title]=" 'CLASS_NAME' | translate">{{ timeTable.className }}</td>
+                  <td>
+                    <ng-select 
+          [items]="timeTable.timeTableIsActiveSelectList"
+          [multiple]="true"
+          bindLabel='classTimeTableName'
+          [selectableGroup]="false"
+          [closeOnSelect]="false"
+          bindValue="classTimeTableId"
+          placeholder="{{ 'SELECT_ACTIVE_TIMETABLE' | translate }}"
+          (clear) = "markIsActiveTimeTable(timeTable,$event,true)"
+          (remove) = "markIsActiveTimeTable(timeTable,$event,false);"
+          (close)="markIsActiveTimeTable(timeTable,$event,false)"
+          [ngModelOptions]="{standalone: true}"
+          [(ngModel)]="timeTable.lstActiveTimeTable"
+          >
+          
+          <ng-template ng-option-tmp  let-item="item" let-item$="item$" let-index="index">
+            <input id="item-{{index}}"  type="checkbox" [ngModelOptions]="{standalone: true}" [ngModel]="item$.selected"
+            (change)="checkSelectAllTimeTable(timeTable)"/> 
+            {{item.classTimeTableName}}
+          </ng-template>
+          <ng-template ng-header-tmp>
+            <input type="checkbox" [id]="'select-all'" [ngModelOptions]="{standalone: true}" (change)="selectAllOptionTimeTable(timeTable)" [(ngModel)]="timeTable.selectAllClass"/> 
+            <label [for]="'select-all'" translate>SELECT_ALL</label>
+          </ng-template>
+          </ng-select>
+                  </td>
+                  <td [attr.data-title]=" 'ACTIONS' | translate" class="action text-center actions-td">
+                    <div class="d-flex flex-wrap justify-content-end">
+                      <button
+                        type="button" *ngIf="this.sharedPermissionServiceService.havePermission('Manage Timetable','Update')" 
+                        class="btn btn-secondary action-btn"
+                        (click)="editClassTimeTable(timeTable)" 
+                      >
+                        <span
+                          placement="top"
+                          ngbTooltip="{{ 'VIEW_EDIT' | translate }}"
+                        >
+                          <i class="bi bi-pencil"></i>
+                        </span>
+                      </button>
+                      <button
+                      type="button" *ngIf="!this.sharedPermissionServiceService.havePermission('Manage Timetable','Update')" 
+                      class="btn btn-secondary action-btn btn-disabled"
+                    >
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                      >
+                        <i class="bi bi-pencil"></i>
+                      </span>
+                    </button>
+                  
+                    </div>
+                  </td>
+               
+              </tr>
+              <tr *ngIf="classTimeTables?.length == 0">
+                <td colspan="7" class="no-data-available" translate>NO_RECORDS_FOUND</td>
+              </tr>
+            </tbody>
+  
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  

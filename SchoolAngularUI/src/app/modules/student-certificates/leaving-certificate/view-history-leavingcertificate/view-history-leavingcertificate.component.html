@@ -1,0 +1,85 @@
+<!-- <p>student-attendance-report works!</p> -->
+<div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>LEAVING_CERTIFICATE_HISTORY</h3>
+    <a routerLink="/student-certificates/student-leaving-certificate" class="back-arrow"><i class="bi bi-arrow-left-circle"></i></a>
+    </div>
+
+   
+    <div class="card mb-4">
+      <div class="card-body table-body">
+          <table
+            datatable
+            [dtOptions]="dtOptions"
+            [dtTrigger]="dtTrigger"
+            class="display table row-border hover"
+          >
+            <thead>
+              <tr>
+                <!-- <th style="width: 2%;" translate>SR_NO</th> -->
+                <th style="width: 11%" translate>STUDENT_NAME</th>
+                <th style="width: 3%;" translate>CLASS</th>
+                <th style="width: 4%;" translate>Gen Reg No</th>
+                <th style="width: 4%;" translate>STATUS</th>
+                <th style="width: 4%;" translate>LC_TYPE</th>
+                <th style="width: 10%;" translate>DATE_OF_LEAVING_SCHOOL</th>
+                <th style="width: 9%;" translate>ISSUED_DATE</th>
+                <!-- <th style="width: 2%;" translate>DUPLICATE_DATE</th> -->
+            </tr>
+            </thead>
+            <tbody *ngIf="viewLeavingHistory?.length != 0">
+              <tr *ngFor="let viewHistory of viewLeavingHistory; index as i">
+                <!-- <td [attr.data-title]=" 'SERIAL_NUMBER' | translate">
+                    {{ viewHistory.serialNumber }}
+                </td> -->
+                <td [attr.data-title]="'STUDENT_NAME' | translate">
+                    {{ viewHistory.studentName }}
+                </td>
+                <td [attr.data-title]="'CLASS' | translate">
+                    {{ viewHistory.class }}
+                </td>
+                <td [attr.data-title]="'GR_NO' | translate">
+                  {{ viewHistory.generalRegistrationNo }}
+                </td>
+                <td>
+                    <span *ngIf="viewHistory.statusId == 0">Generated</span>
+                    <span *ngIf="viewHistory.statusId == 1">Printed</span>
+                    <span *ngIf="viewHistory.statusId >= 2">Completed</span>
+                  </td>
+                  <td>
+                    <span *ngIf="viewHistory.statusId == 2">Original</span>
+                    <span *ngIf="viewHistory.statusId == 3">Duplicate</span>
+                    <span *ngIf="viewHistory.statusId == 4">Cancelled</span>
+                  </td>
+                <!-- <td [attr.data-title]="'DATE_SIGN_CURRENT' | translate">
+                    {{ viewHistory.dateSignCurrent | date : 'dd/MM/yyyy'}}
+                </td>
+                <td [attr.data-title]="'DUPLICATE_DATE' | translate">
+                    {{ viewHistory.createdDate | date : 'dd/MM/yyyy'}}
+                </td> -->
+                <td [attr.data-title]="'DATE_OF_LEAVING_SCHOOL' | translate">
+                  {{ viewHistory.dateOfLeavingTheSchool | date : 'dd/MM/yyyy'}}
+                </td>
+                <td [attr.data-title]="'ISSUED_DATE' | translate">
+                  <ng-container *ngIf="viewHistory.statusId == 2 && viewHistory.dateSignCurrent">
+                      {{ viewHistory.dateSignCurrent | date : 'dd/MM/yyyy'}}
+                  </ng-container>
+                  <ng-container *ngIf="viewHistory.statusId == 3 && viewHistory.createdDate">
+                      {{ viewHistory.createdDate | date : 'dd/MM/yyyy'}}
+                  </ng-container>
+              </td>
+               
+                  
+              </tr>
+              <tr *ngIf="viewLeavingHistory?.length == 0">
+                <td colspan="7" class="no-data-available" translate>
+                  NO_RECORDS_FOUND
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  

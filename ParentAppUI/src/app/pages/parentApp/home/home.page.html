@@ -1,0 +1,121 @@
+
+<ion-content [fullscreen]="true" class="light-content name-padding">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+    <div *ngIf="isAppAccessible"  class="ion-padding">
+      <ion-buttons slot="primary" class="dashboard-button">
+       
+
+       
+        <div class="s-button">
+          <ion-button routerLink="/parent-app/parentTab/attendance">
+            <div class="dashboard-icons">
+              <img src="../../../../assets/attendance-2.png" />
+            </div>
+          </ion-button>
+          <ion-text class="dashboard-text">Attendance</ion-text>
+        </div>
+
+        <div class="s-button">
+          <ion-button routerLink="/parent-app/parentTab/timetable">
+            <div class="dashboard-icons">
+              <img src="../../../../assets/timetable.png" />
+            </div>
+          </ion-button>
+          <ion-text class="dashboard-text">Timetable</ion-text>
+        </div>
+
+        <div class="s-button">
+          <ion-button routerLink="/parent-app/parentTab/homework">
+            <div class="dashboard-icons">
+              <img src="../../../../assets/homework.png" />
+            </div>
+          </ion-button>
+          <ion-text class="dashboard-text">Homework</ion-text>
+        </div>
+
+        <div class="s-button">
+          <ion-button routerLink="/parent-app/parentTab/notice">
+            <div class="dashboard-icons">
+              <img src="../../../../assets/message.png" />
+            </div>
+          </ion-button>
+          <ion-text class="dashboard-text">Notice</ion-text>
+        </div>
+
+        <div class="s-button">
+          <ion-button routerLink="/parent-app/parentTab/gallery">
+            <div class="dashboard-icons">
+              <img src="../../../../assets/gallery.png" />
+            </div>
+          </ion-button>
+          <ion-text class="dashboard-text">Gallery</ion-text>
+        </div>
+
+        
+
+        <div class="s-button">
+          <ion-button routerLink="/parent-app/parentTab/parents">
+            <div class="dashboard-icons">
+              <img src="../../../../assets/parents.png" />
+            </div>
+          </ion-button>
+          <ion-text class="dashboard-text">Parents</ion-text>
+        </div>
+
+        <div class="s-button">
+          <ion-button routerLink="/parent-app/parentTab/calendar">
+            <div class="dashboard-icons">
+              <img src="../../../../assets/calendar.png" />
+            </div>
+          </ion-button>
+          <ion-text class="dashboard-text">Calendar</ion-text>
+        </div>
+
+      
+        <div class="s-button">
+          <ion-button routerLink="/parent-app/parentTab/fees">
+            <div class="dashboard-icons">
+              <img src="../../../../assets/fees.png" />
+            </div>
+          </ion-button>
+          <ion-text class="dashboard-text">Academic Fees</ion-text>
+        </div>
+
+        <div class="s-button">
+          <ion-button routerLink="/parent-app/parentTab/transport-fees">
+            <div class="dashboard-icons">
+              <img src="../../../../assets/fees.png" />
+            </div>
+          </ion-button>
+          <ion-text class="dashboard-text">Transport Fees</ion-text>
+        </div>
+
+        <div class="s-button">
+          <ion-button (click)="navigateAndRefresh('/parent-app/parentTab/track-bus')">
+            <div class="dashboard-icons">
+              <img  src="../../../../assets/icons/bus.png" />
+            </div>
+          </ion-button>
+          <ion-text class="dashboard-text">Track Bus</ion-text>
+        </div>
+
+
+       
+      </ion-buttons>
+    </div>
+   
+  </ion-content>
+
+
+  <ion-modal id="example-modal" class="update-modal" #modal [isOpen]="!isAppAccessible"  [canDismiss]="canDismiss"  [presentingElement]="presentingElement">
+    <ng-template>
+      <div  class="update-app">
+          <span class="icon"><ion-icon name="notifications-outline"></ion-icon></span>
+          <p class="text">A new version of the app is available. If you haven't updated it please click on update or else click on close.</p>
+        <button (click)="redirectToPlayStore()" class="update-button">Update</button> &nbsp;
+        <button (click)="refreshPage()" class="update-button">Close</button>
+        </div>
+    </ng-template>
+  </ion-modal>

@@ -1,0 +1,191 @@
+<ion-header collapse="fade" [translucent]="true" class="modal-header">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="secondary" fill="outline" (click)="close()">
+        Cancel
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title color="dark-color"> {{ homeworkId>0?'Edit' :'Add'}} Homework </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button color="primary" fill="solid" (click)="saveHomeworkData()">
+        Save
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="form-padding">
+    <form class="form-default m-0" novalidate [formGroup]="homeworkForm">
+      <div class="form-control-wrapper">
+        <div class="custom-input-css">
+          <ion-label color="dark" position="stacked">Class <span class="star-required">*</span></ion-label>
+          <ion-select class="custom-select-css" placeholder="Select Class" formControlName="classId" (ionChange)="resetSelectList(f,'classId')" >
+            <ion-select-option *ngFor="let item of divisionGradeMapping" [value]="item.schoolGradeDivisionMatrixId"> {{item.className}}</ion-select-option>
+          </ion-select>
+           </div> 
+           <div *ngIf="submitted && f['classId']?.errors">
+            <ion-note *ngIf="f['classId'].errors['required']" slot="error">Please select class.</ion-note>
+           </div>
+          
+      </div>
+
+      <div class="form-control-wrapper">
+        <div class="custom-input-css">
+          <ion-label color="dark" position="stacked">Subject <span class="star-required">*</span></ion-label>
+          <ion-select class="custom-select-css" (ionChange)="resetSelectList(f,'subjectId')" placeholder="Select Subject" formControlName="subjectId">
+            <ion-select-option *ngFor="let item of subjectDropdownList" [value]="item.subjectMasterId"> {{ item.subjectName }}</ion-select-option>
+
+          </ion-select>
+        </div>
+        <div *ngIf="submitted && f['subjectId']?.errors">
+          <ion-note *ngIf="f['subjectId'].errors['required']" slot="error">Please select subject.</ion-note>
+         </div>
+      </div>
+
+      <div class="form-control-wrapper">
+        <div class="custom-input-css">
+          <ion-label color="dark" position="stacked">Homework Title <span class="star-required">*</span></ion-label>
+          <ion-input inputmode="text" placeholder="Homework Title" formControlName="homeworkTitle"></ion-input>
+        </div>
+        <div *ngIf="submitted && f['homeworkTitle']?.errors">
+          <ion-note *ngIf="f['homeworkTitle'].errors['required']" slot="error">Homework title is required.</ion-note>
+         </div>
+      </div>
+
+      <div class="form-control-wrapper">
+        <div class="custom-input-css">
+          <ion-label color="dark" position="stacked">Start Date <span class="star-required">*</span></ion-label>
+          
+          <ion-input id="open-modal-startDate" 
+          value="{{ getFormattedDate(f['startDate'].value) }}" 
+          inputmode="text"
+            placeholder="DD-MM-YYYY"></ion-input>
+          <ion-modal trigger="open-modal-startDate" [cssClass]="'bottom-end'" [keepContentsMounted]="true"
+            [initialBreakpoint]="0.65">
+            <ng-template>
+              <ion-datetime locale="en-IN" displayFormat="DD-MM-YYYY" formControlName="startDate" presentation="date" size="cover"
+                 [showDefaultButtons]="true"></ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </div>
+        <div *ngIf="submitted && f['startDate']?.errors">
+          <ion-note *ngIf="f['startDate'].errors['required']" slot="error">Start Date is required.</ion-note>
+         </div>
+      </div>
+
+      <div class="form-control-wrapper">
+        <div class="custom-input-css">
+          <ion-label color="dark" position="stacked">End Date <span class="star-required">*</span></ion-label>
+          
+          <ion-input id="open-modal-endDate" 
+          value="{{ getFormattedDate(f['endDate'].value) }}" 
+          inputmode="text"
+            placeholder="DD-MM-YYYY"></ion-input>
+          <ion-modal trigger="open-modal-endDate" [cssClass]="'bottom-end'" [keepContentsMounted]="true"
+            [initialBreakpoint]="0.65">
+            <ng-template>
+              <ion-datetime locale="en-IN" displayFormat="DD-MM-YYYY" formControlName="endDate" 
+              presentation="date" size="cover"
+                 [showDefaultButtons]="true"></ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </div>
+        <div *ngIf="submitted && f['endDate']?.errors">
+          <ion-note *ngIf="f['endDate'].errors['required']" slot="error">End Date is required.</ion-note>
+         </div>
+      </div>
+
+      <div class="form-control-wrapper">
+        <div class="custom-input-css">
+           <ion-checkbox formControlName="isPublished" labelPlacement="end">Is Publish</ion-checkbox>
+      </div>
+      
+      </div>
+      
+            <!-- Homework Description Section -->
+            <div class="form-control-wrapper">
+              <div class="custom-input-css">
+                <ion-label position="stacked" class="ion-lable-size">Homework Description <span class="star-required">*</span></ion-label>
+                <ckeditor [editor]="Editor" formControlName="homeworkDescription"></ckeditor>
+              </div>
+              <div *ngIf="submitted && f['homeworkDescription']?.errors">
+                <ion-note *ngIf="f['homeworkDescription'].errors['required']" slot="error">Homework Description is required.</ion-note>
+              </div>
+            </div>
+
+
+
+      <ion-button class="ion-button-small" color="primary" (click)="uploadFiles()">
+        Upload Files
+      </ion-button>
+      <p class="black-text">
+        (PDF, JPG, PNG, JPEG, BMP, XLSX, CSV, DOC, DOCX, TEXT, SVG, PPT,PPTX)
+      </p>
+      <div class="form-control uploaded-file-text">
+        <span class="file-thumb" *ngFor="let f of textfiles; let i = index">
+          <img *ngIf="getFileExtension(f.name) === 'png'" src="../../../../assets/img/img.png"
+            (click)="showFile(f)" />
+          <img *ngIf="getFileExtension(f.name) === 'jpeg'" src="../../../../assets/img/img.png"
+            (click)="showFile(f)" />
+          <img *ngIf="getFileExtension(f.name) === 'jpg'" src="../../../../assets/img/img.png"
+            (click)="showFile(f)" />
+          <img *ngIf="getFileExtension(f.name) === 'pdf'" src="../../../../assets/img/pdf.png"
+            (click)="showFile(f)" />
+          <img *ngIf="getFileExtension(f.name) === 'docx'" src="../../../../assets/img/docx-file.png"
+            (click)="showFile(f)" />
+          <img *ngIf="getFileExtension(f.name) === 'xls'" src="../../../../assets/img/xlsx.png.png"
+            (click)="showFile(f)" />
+          <img *ngIf="getFileExtension(f.name) === 'pptx'" src="../../../../assets/img/ppt.png"
+            (click)="showFile(f)" />
+          <img *ngIf="getFileExtension(f.name) === 'txt'" src="../../../../assets/img/txt.png"
+            (click)="showFile(f)" />
+          <img *ngIf="getFileExtension(f.name) === 'svg'" src="../../../../assets/img/img.png"  
+            (click)="showFile(f)" />
+          <img *ngIf="getFileExtension(f.name) === 'csv'" src="../../../../assets/img/csv.png"
+            (click)="showFile(f)" />
+          <img *ngIf="getFileExtension(f.name) === 'bmp'" src="../../../../assets/img/bmp.png"
+            (click)="showFile(f)" />
+          <img *ngIf="getFileExtension(f.name) === 'xlsx'" src="../../../../assets/img/xlsx.png"
+            (click)="showFile(f)" />
+          <img *ngIf="getFileExtension(f.name) === 'doc'" src="../../../../assets/img/doc.png"
+            (click)="showFile(f)" />
+
+          <!-- Add similar conditions for other file types -->
+          <span class="delete-file" (click)="onTextFileRemove(i)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </span>
+        </span>
+      </div>
+
+        <!-- Video Text Section -->
+        <div class="videoText p-0" formArrayName="mediaVideoText">
+          <div class="mb-2">
+            <ion-label position="stacked" class="ion-lable-size black-text">Upload Media File </ion-label>
+          </div>
+          <div *ngFor="let item of mediaVideoText; let i = index; let last = last; let first = first">
+            <div [formGroupName]="i" class="flex-wrap mb-3">
+              <div  class="w-100">
+                <input type="text" formControlName="contentUrl" id="contentUrl_{{i}}" class="form-control notice-video-input"
+                           placeholder="Add Video Url" maxlength="1000"/>
+              </div>
+              <div class="d-flex align-items-center ">
+                <ion-button (click)="openLink(item.value.contentUrl)" class="action-btn open-btn" size="small">
+                  Open Link
+                </ion-button>
+                <ion-button *ngIf="last" (click)="addMediaVideoText()" class="action-btn add-btn" size="small" small>
+                  <ion-icon name="add-outline" style="font-size: small"></ion-icon>
+                </ion-button>
+                <ion-button *ngIf="mediaVideoText.length > 1" (click)="removeMediaVideoText(i)" class="action-btn remove-btn" size="small"
+                            color="danger" small>
+                  <ion-icon name="remove-outline" style="font-size: small"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+          </div>
+        </div>
+    </form>
+  </div>
+</ion-content>

@@ -1,0 +1,100 @@
+
+<div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>SUBJECT_MASTER</h3>
+      <button class="btn btn-with-icon with-text btn-primary ms-auto" (click)="addSubject()" *ngIf="this.sharedPermissionServiceService.havePermission('Subject Master','Create')"  class="btn btn-with-icon with-text btn-primary ms-auto" translate>ADD_SUBJECT</button>
+      <button container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"  *ngIf="!this.sharedPermissionServiceService.havePermission('Subject Master','Create')"  class="btn btn-with-icon with-text btn-primary ms-auto btn-disabled" translate>ADD_SUBJECT</button>
+      <!-- <button class="btn btn-with-icon  btn-primary">
+        <i class="bi bi-box-arrow-in-down"></i>
+      </button> -->
+      <button container="body"
+      *ngIf="this.sharedPermissionServiceService.havePermission('Subject Master','Create')" class="btn btn-with-icon  btn-primary" (click)="importData()">
+        <span
+      placement="top"
+      ngbTooltip="{{ 'IMPORT' | translate }}"
+    >
+    <i class="bi bi-box-arrow-in-down"></i>
+    </span>
+      </button>
+     
+    </div>
+  
+    <div class="card mb-4">
+      <div class="card-body table-body">
+        <!--table listing statrt-->
+        <div id="no-more-tables">
+           
+          <table  datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="display table row-border hover">
+            <thead>
+              <tr> 
+                <th translate>SUBJECT_NAME</th>
+                <th style="width: 7%" class="text-end" translate>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="subjects?.length != 0">
+              <tr *ngFor="let subject of subjects index as i">
+                  <td [attr.data-title]=" 'SUBJECT_NAME' | translate">{{ subject.subjectName }}</td>
+  
+                  <td [attr.data-title]=" 'ACTIONS' | translate" class="action text-center actions-td">
+                    <div class="d-flex flex-wrap justify-content-end">
+                      <button  *ngIf="this.sharedPermissionServiceService.havePermission('Subject Master','Update')"
+                        type="button"
+                        class="btn btn-secondary action-btn"
+                        (click)="editSubject(subject)"
+                      >
+                        <span
+                          placement="top"
+                          ngbTooltip="{{ 'VIEW_EDIT' | translate }}"
+                        >
+                          <i class="bi bi-pencil"></i>
+                        </span>
+                      </button>
+                      <button *ngIf="!this.sharedPermissionServiceService.havePermission('Subject Master','Update')" 
+                      type="button"
+                      class="btn btn-secondary action-btn btn-disabled"
+                    >
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                      >
+                        <i class="bi bi-pencil"></i>
+                      </span>
+                    </button>
+
+                      <button  *ngIf="this.sharedPermissionServiceService.havePermission('Subject Master','Delete')"
+                      type="button"
+                      class="btn btn-danger action-btn"
+                      (click)="confirmSubjectDelete(subject)"
+                    >
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'DELETE' | translate }}"
+                      >
+                        <i class="bi bi-trash"></i>
+                      </span>
+                    </button>
+                    <button  *ngIf="!this.sharedPermissionServiceService.havePermission('Subject Master','Delete')"
+                    type="button"
+                    class="btn btn-secondary action-btn btn-disabled" 
+                  >
+                    <span
+                      placement="top"
+                      ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                    >
+                      <i class="bi bi-trash"></i>
+                    </span>
+                  </button>
+                    </div>
+                  </td>
+              </tr>
+              <tr *ngIf="subjects?.length == 0">
+                <td colspan="7" class="no-data-available" translate>NO_RECORDS_FOUND</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  

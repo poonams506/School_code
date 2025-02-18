@@ -1,0 +1,148 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title" ngbAutofocus translate>
+    VIEW_HISTORY
+  </h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="close()"></button>
+
+</div>
+<div class="modal-body bg-grey" id="print-section">
+  <div class="card pt-2 mb-0">
+    <app-print-common-header></app-print-common-header>
+
+</div>
+
+  <div class="card p-0">
+    <div class="card-header">
+      <h4 class="card-title" translate>BASIC_DETAILS</h4>
+    </div>
+
+    <div class="card-body table-body pt-0">
+      <div class="row mb-2">
+        <div class="col-12 col-md-6">
+          <div class="form-group mb-0">
+            <label for="studentName" translate>STUDENT_NAME</label>:
+            <label class="read-only-lable">{{basicInfo.studentName}}</label>
+          </div>
+          <div class="form-group mb-0">
+            <label for="academicYear" translate>ACADEMIC_YEAR</label>:
+            <label translate class="read-only-lable">{{getAcademicYearValue()}}</label>
+          </div>
+        </div>
+        
+        <div class="col-12 col-md-6">
+          <div class="form-group mb-0">
+            <label for="rollNo" translate>General Registration No</label>:
+            <label class="read-only-lable">{{basicInfo.generalRegistrationNo}}</label>
+          </div>
+          <div class="form-group mb-0">
+            <label for="gradeAndDivision" translate>GRADE_AND_DIVISION</label>:
+            <label class="read-only-lable">{{basicInfo.gradeName}} - {{basicInfo.divisionName}}</label>
+          </div>
+        </div>
+        
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="card p-0">
+    <div class="card-header">
+      <h4 class="card-title" translate>PARTICULARS</h4>
+    </div>
+
+    <div class="card-body table-body pt-0">
+      <div id="no-more-tables">
+        <table id="table_id" class="display table table-bordered">
+          <thead>
+            <tr>
+              <th translate>PARTICULAR</th>
+              <th translate>Total Additional Fee</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td [attr.data-title]="'PARTICULAR' | translate">
+                {{ particular }}
+              </td>
+              <td [attr.data-title]="'Total Additional Fee' | translate">
+                ₹ {{ totalFee | number : '1.1-2'}}
+              </td>
+            </tr>
+            <tr class="fw-bold">
+              <td [attr.data-title]="'Total' | translate">
+                Total
+              </td>
+              <td [attr.data-title]="'Total Additional Fee' | translate">
+                ₹ {{ totalFee | number : '1.1-2'}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-0 p-0">
+    <div class="card-header">
+      <h4 class="card-title" translate>PAYMENT_DETAILS</h4>
+    </div>
+
+    <div class="card-body table-body pt-0">
+      <div class="payment-details">
+        <div class="w-100">
+          <div class="d-text">
+            <span translate class="left" style="font-size: 12px;font-weight: 500;">INVOICE_NUMBER</span>:
+            <span class="right" style="font-size: 12px;">{{basicInfo.invoiceNumber}}</span>
+          </div>
+          <div class="d-text">
+            <span translate class="left"  style="font-size: 12px;font-weight: 500;">PAYMENT_MODE</span>:
+            <span class="right" style="font-size: 12px;">{{basicInfo.paymentTypeName}}</span>
+          </div>
+          <div class="d-text">
+            <span translate class="left"  style="font-size: 12px;font-weight: 500;">PAYMENT_DATE</span>:
+            <span class="right" style="font-size: 12px;">{{paymentDate | date:"dd/MM/yyyy"}}</span>
+          </div>
+          <div class="d-text" *ngIf="basicInfo.paymentTypeName == 'Cheque' || basicInfo.paymentTypeName == 'DD'">
+            <span translate class="left"  style="font-size: 12px;font-weight: 500;">BANK_NAME</span>:
+            <span class="right" style="font-size: 12px;">{{basicInfo.chequeBank}}</span>
+          </div>
+          <div class="d-text" *ngIf="basicInfo.paymentTypeName == 'Cheque' || basicInfo.paymentTypeName == 'DD'">
+            <span translate class="left"  style="font-size: 12px;font-weight: 500;">CLEARING_DATE</span>:
+            <span class="right" style="font-size: 12px;">{{chequeDate | date:"dd/MM/yyyy"}}</span>
+          </div>
+          <div class="d-text" *ngIf="basicInfo.transactionId">
+            <span translate class="left"  style="font-size: 12px;font-weight: 500;" *ngIf="basicInfo.paymentTypeName != 'Cheque' && basicInfo.paymentTypeName != 'DD'">TRANSACTION_ID</span>
+            <span translate class="left"  style="font-size: 12px;font-weight: 500;" *ngIf="basicInfo.paymentTypeName == 'Cheque' || basicInfo.paymentTypeName == 'DD'">Cheque/DD Number</span>:
+            <span class="right" style="font-size: 12px;">{{basicInfo.transactionId}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+<div class="modal-footer">
+  <div class="form-group mb-0 pb-0">
+    <button *ngIf="this.sharedPermissionServiceService.havePermission('Additional Fee Payment','Print')"
+     type="button" class="btn btn-primary"
+    [useExistingCss]="true" ngxPrint printSectionId="print-section" 
+    translate><i class="bi bi-printer"></i> PRINT</button>
+
+    <button *ngIf="!this.sharedPermissionServiceService.havePermission('Additional Fee Payment','Print')"
+    type="button" class=" btn btn-primary ms-auto btn-disabled bi bi-printer"
+    ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+   translate>PRINT</button>
+    <button class="btn btn-light" (click)="close()" translate>
+      CLOSE
+    </button>
+  </div>
+</div>
+
+
+<style>
+  @media print {
+    .card .card-header {
+      padding-left: 0 !important;
+    }
+}
+</style>

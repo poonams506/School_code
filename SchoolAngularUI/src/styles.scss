@@ -1,0 +1,23 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "assets/scss/variables";
+
+@import "assets/scss/component/header";
+@import "assets/scss/component/side-nav-new";
+@import "assets/scss/component/tables";
+@import 'assets/scss/component/buttons';
+@import 'assets/scss/component/forms';
+@import 'assets/scss/component/modal';
+@import "assets/scss/component/chart";
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
+@import "../node_modules/@costlydeveloper/ngx-awesome-popup/styles/theme.css";
+@import "~@ng-select/ng-select/themes/default.theme.css";
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+
+
+// Global
+@import "assets/scss/global";
+//@import "assets/scss/public";
+@import "assets/scss/component/responsive"
+

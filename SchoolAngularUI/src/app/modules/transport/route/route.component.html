@@ -1,0 +1,541 @@
+<div class="container-fluid">
+  <div class="d-flex align-items-center page-heading-wrapper">
+        <h3 class="page-heading" translate>TRANSPORT_MANAGEMENT</h3>
+        <div class="w-50 ms-5">
+          <input class="form-control" placeholder="Search Consumer Name" (keyup)="onSearch($event)" />
+        </div>
+        <div class="ms-auto">
+          <button class="btn btn-with-icon with-text btn-primary" (click)="addRoute()"
+               *ngIf="this.sharedPermissionServiceService.havePermission('Route Management','Create')"  translate>ADD_ROUTE</button>
+           <button container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+               *ngIf="!this.sharedPermissionServiceService.havePermission('Route Management','Create')"
+               class="btn btn-with-icon with-text btn-primary btn-disabled" translate>ADD_ROUTE</button>
+      
+         </div>
+      </div>
+
+  <div class="card mb-4">
+      <div class="card-body table-body route-accordion">
+        
+            <div *ngFor="let route of routeList index as i" class="accordion-item-c">
+              <div class="accordion-header" >
+                <div class="route-wrap-container">
+               <h4 class="a-title">{{ route.routeName }}</h4>
+               <div class="d-flex route-wrap route-wrap-first">
+               
+                <div class="route-wrap-in">
+                  <span translate>FIRST_PICKUP_TIME</span>
+                  <span>{{ route.formattedFirstPickUpTime }}</span>
+                </div>
+                <div class="route-wrap-in">
+                  <span translate>LAST_PICKUP_TIME</span>
+                  <span>{{ route.formattedLastPickUpTime }}</span>
+                </div>
+                <div class="route-wrap-in">
+                  <span translate>CO_ORDINATOR</span>
+                  <span>{{ route.coOrdinatorName }}</span>
+                </div>
+                <div class="route-wrap-in">
+                  <span translate>VEHICLE</span>
+                  <span>{{ route.ragistrationNumber }}</span>
+                </div>
+                <div class="route-wrap-in">
+                  <span translate>VEHICLE_TYPE</span>
+                  <span>{{ route.type }}</span>
+                </div>
+                <div class="route-wrap-in">
+                  <span translate>TOTAL_SEATS</span>
+                  <span>{{ route.totalSeats }}</span>
+                </div>
+                <div class="route-wrap-in">
+                  <span translate>Available Seat</span>
+                  <span>{{ route.availableSeat }}</span>
+                </div>
+                <div class="route-actions">
+                
+                      <button 
+                      type="button"
+                      *ngIf="this.sharedPermissionServiceService.havePermission('Route Management','Create')"
+                      class="btn btn-secondary action-btn"
+                      (click)="addStoppage(route)"
+                    >
+                    <i class="bi bi-geo-alt r-icon"></i>
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'ADD_STOPPAGE' | translate }}"
+                        translate
+                      >
+                        ADD_STOPPAGE
+                      </span>
+                    </button>
+                    <button *ngIf="!this.sharedPermissionServiceService.havePermission('Route Management','Create')" 
+                    type="button"
+                    class="btn btn-secondary action-btn btn-disabled"
+                  >
+                  <i class="bi bi-geo-alt r-icon"></i>
+
+                    <span
+                      placement="top"
+                      ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                      translate
+                    >
+                    ADD_STOPPAGE
+                    </span>
+                  </button>
+                  <button type="button" class="btn btn-secondary action-btn" *ngIf="this.sharedPermissionServiceService.havePermission('Route Management','Update')" 
+                  (click)="editRoute(route)">
+                  <span placement="top" ngbTooltip="{{ 'VIEW_EDIT' | translate }}">
+                      <i class="bi bi-pencil"></i>
+                  </span>
+              </button>
+              <button *ngIf="!this.sharedPermissionServiceService.havePermission('Route Management','Update')" 
+              type="button"
+              class="btn btn-secondary action-btn btn-disabled"
+            >
+              <span
+                placement="top"
+                ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+              >
+                <i class="bi bi-pencil"></i>
+              </span>
+            </button>
+              <button type="button" class="btn btn-danger action-btn" *ngIf="this.sharedPermissionServiceService.havePermission('Route Management','Delete')"
+                  (click)="confirmRouteDelete(route)">
+                  <span placement="top" ngbTooltip="{{ 'DELETE' | translate }}">
+                      <i class="bi bi-trash"></i>
+                  </span>
+              </button>
+              <button *ngIf="!this.sharedPermissionServiceService.havePermission('Route Management','Delete')" 
+              type="button"
+              class="btn btn-secondary action-btn btn-disabled"
+            >
+              <span
+                placement="top"
+                ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+              >
+              <i class="bi bi-trash"></i>
+              </span>
+            </button>
+                <button 
+                         type="button"
+                         class="btn btn-secondary action-btn"
+                         (click)="toggleRouteAccordion(route.routeId)">
+                            <span  placement="top" *ngIf="!isRouteOpen(route.routeId)" ngbTooltip="{{ 'EXPAND' | translate }}">
+                                <i class="bi bi-plus-circle"></i>
+                            </span>
+                            <span  placement="top" *ngIf="isRouteOpen(route.routeId)" ngbTooltip="{{ 'EXPAND' | translate }}">
+                              <i class="bi bi-dash-circle"></i>
+                          </span>
+                           
+                </button>
+             
+                </div>
+              </div>
+
+            </div>
+          </div >
+
+              <div class="accordion-body" [ngClass]="{ 'active': isRouteOpen(route.routeId) }">
+                <table class="table d-none">
+                  <thead>
+                    <tr>
+                      <th translate>ROUTE_NAME</th>
+                      <th translate>FIRST_PICKUP_TIME</th>
+                      <th translate>LAST_PICKUP_TIME</th>
+                      <th translate>CO_ORDINATOR</th>
+                      <th translate>VEHICLE</th>
+                      <th translate>VEHICLE_TYPE</th>
+                      <th translate>TOTAL_SEATS</th>
+                      <th translate>Available Seat</th>
+                      <th translate  style="width:16%">ACTIONS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{{ route.routeName }}</td>
+                      <td>{{ route.formattedFirstPickUpTime }}</td>
+                      <td>{{ route.formattedLastPickUpTime }}</td>
+                      <td>{{ route.coOrdinatorName }}</td>
+                      <td>{{ route.ragistrationNumber }}</td>
+                      <td>{{ route.type }}</td>
+                      <td>{{ route.totalSeats }}</td>
+                      <td>{{ route.availableSeat }}</td>
+                      <td>
+                      
+                    <button 
+                    type="button"
+                    *ngIf="this.sharedPermissionServiceService.havePermission('Route Management','Create')"
+                    class="btn btn-secondary action-btn"
+                    (click)="addStoppage(route)"
+                  >
+                    <span
+                      placement="top"
+                      ngbTooltip="{{ 'ADD_STOPPAGE' | translate }}"
+                      translate
+                    >
+                      ADD_STOPPAGE
+                    </span>
+                  </button>
+                  <button *ngIf="!this.sharedPermissionServiceService.havePermission('Route Management','Create')" 
+                  type="button"
+                  class="btn btn-secondary action-btn btn-disabled"
+                >
+                  <span
+                    placement="top"
+                    ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                    translate
+                  >
+                  ADD_STOPPAGE
+                  </span>
+                </button>
+                <button type="button" class="btn btn-secondary action-btn" *ngIf="this.sharedPermissionServiceService.havePermission('Route Management','Update')" 
+                (click)="editRoute(route)">
+                <span placement="top" ngbTooltip="{{ 'VIEW_EDIT' | translate }}">
+                    <i class="bi bi-pencil"></i>
+                </span>
+            </button>
+            <button *ngIf="!this.sharedPermissionServiceService.havePermission('Route Management','Update')" 
+            type="button"
+            class="btn btn-secondary action-btn btn-disabled"
+          >
+            <span
+              placement="top"
+              ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+            >
+              <i class="bi bi-pencil"></i>
+            </span>
+          </button>
+            <button type="button" class="btn btn-danger action-btn" *ngIf="this.sharedPermissionServiceService.havePermission('Route Management','Delete')"
+                (click)="confirmRouteDelete(route)">
+                <span placement="top" ngbTooltip="{{ 'DELETE' | translate }}">
+                    <i class="bi bi-trash"></i>
+                </span>
+            </button>
+            <button *ngIf="!this.sharedPermissionServiceService.havePermission('Route Management','Delete')" 
+            type="button"
+            class="btn btn-secondary action-btn btn-disabled"
+          >
+            <span
+              placement="top"
+              ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+            >
+            <i class="bi bi-trash"></i>
+            </span>
+          </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+    
+                <!-- Nested Stoppages Accordion -->
+             
+                  <div *ngFor="let stoppage of stoppageList" [id]="stoppage.stoppageId.toString()">
+                    <div class="accordion-header accordion-header-sub" >
+                      <div class="route-wrap-container">
+                        <h4 class="a2-title"> {{stoppage.orderNo}}. {{ stoppage.stoppageName }}</h4>
+                        <div class="d-flex route-wrap">
+                          <!-- <div>
+                            <span translate>ROUTE_NAME</span>
+                            <span>{{ route.routeName }}</span>
+                          </div> -->
+                          <div class="route-wrap-in">
+                            <span translate>ORDER_NO</span>
+                            <span>{{ stoppage.orderNo }}</span>
+                          </div>
+                          <div class="route-wrap-in">
+                            <span translate>STOPPAGE_NAME</span>
+                            <span>{{ stoppage.stoppageName }}</span>
+                          </div>
+                          <div class="route-wrap-in">
+                            <span translate>AREA_NAME</span>
+                            <span>{{ stoppage.areaName }}</span>
+                          </div>
+                          <div class="route-wrap-in">
+                            <span translate>PICK_PRICE</span>
+                            <span>{{ stoppage.pickPrice }}</span>
+                          </div>
+                          <div class="route-wrap-in">
+                            <span translate>DROP_PRICE</span>
+                            <span>{{ stoppage.dropPrice }}</span>
+                          </div>
+                          <div class="route-wrap-in">
+                            <span translate>PICK_DROP_PRICE</span>
+                            <span>{{ stoppage.pickAndDropPrice }}</span>
+                          </div>
+                          <div class="route-wrap-in">
+                            <span translate>PICKUP_TIME</span>
+                            <span>{{ stoppage.formattedPickUpTime }}</span>
+                          </div>
+                          <div class="route-wrap-in">
+                            <span translate>DROP_PICKUP_TIME</span>
+                            <span>{{ stoppage.formattedDropPickUpTime }}</span>
+                          </div>
+                          <div class="route-wrap-in">
+                            <span translate>KILOMETER</span>
+                            <span>{{ stoppage.kiloMeter }}</span>
+                          </div>
+                          <div class="route-actions">
+                         
+                            <button 
+                                 type="button"
+                                 *ngIf="this.sharedPermissionServiceService.havePermission('Route Management','Create')"
+                                 class="btn btn-secondary action-btn"
+                                 (click)="addConsumer(stoppage)">
+                                 <i class="bi bi-person r-icon"></i>
+                                <span
+                                  placement="top"
+                                  ngbTooltip="{{ 'ADD_CONSUMER' | translate }}"
+                                  translate>
+                                  ADD_CONSUMER
+                                </span>
+                           </button>
+                           <button *ngIf="!this.sharedPermissionServiceService.havePermission('Route Management','Create')" 
+                           type="button"
+                           class="btn btn-secondary action-btn btn-disabled"
+                         >
+                         <i class="bi bi-person r-icon"></i>
+
+                           <span
+                             placement="top"
+                             ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                             translate
+                           >
+                           ADD_CONSUMER
+                           </span>
+                         </button>
+                         <button type="button"
+                         *ngIf="this.sharedPermissionServiceService.havePermission('Route Management','Update')"
+                             class="btn btn-secondary action-btn"
+                             (click)="editStoppage(stoppage,route)">
+                             <span placement="top"
+                                 ngbTooltip="{{ 'VIEW_EDIT' | translate }}">
+                                 <i class="bi bi-pencil"></i>
+                             </span>
+                         </button>
+                         <button *ngIf="!this.sharedPermissionServiceService.havePermission('Route Management','Update')" 
+                         type="button"
+                         class="btn btn-secondary action-btn btn-disabled"
+                       >
+                         <span
+                           placement="top"
+                           ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                         >
+                           <i class="bi bi-pencil"></i>
+                         </span>
+                       </button>
+                         <button type="button"
+                         *ngIf="this.sharedPermissionServiceService.havePermission('Route Management','Delete')" 
+                             class="btn btn-danger action-btn"
+                             (click)="confirmStoppageDelete(stoppage)">
+                             <span placement="top"
+                                 ngbTooltip="{{ 'DELETE' | translate }}">
+                                 <i class="bi bi-trash"></i>
+                             </span>
+                         </button>
+                         <button *ngIf="!this.sharedPermissionServiceService.havePermission('Route Management','Delete')" 
+                         type="button"
+                         class="btn btn-secondary action-btn btn-disabled"
+                       >
+                         <span
+                           placement="top"
+                           ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                         >
+                         <i class="bi bi-trash"></i>
+                         </span>
+                       </button>
+                        
+                     <button 
+                     type="button"
+                     class="btn btn-secondary action-btn"
+                    (click)="toggleStoppageAccordion(stoppage.stoppageId)"
+                   >
+                        <span  placement="top" *ngIf="!isStoppageOpen(stoppage.stoppageId)" ngbTooltip="{{ 'EXPAND' | translate }}">
+                            <i class="bi bi-plus-circle"></i>
+                        </span>
+                        <span  placement="top" *ngIf="isStoppageOpen(stoppage.stoppageId)" ngbTooltip="{{ 'EXPAND' | translate }}">
+                          <i class="bi bi-dash-circle"></i>
+                      </span>
+            </button>
+           
+                          </div>
+                        </div>
+                      </div>
+                      
+                    </div >
+                    <div class="accordion-body" [ngClass]="{ 'active': isStoppageOpen(stoppage.stoppageId) }">
+                      <!-- Stoppage Details Table -->
+                      <table class="table d-none">
+                        <thead>
+                          <tr>
+                            <th translate>ORDER_NO</th>
+                            <th translate>STOPPAGE_NAME</th>
+                            <th translate>AREA_NAME</th>
+                            <th translate>PICK_PRICE</th>
+                            <th translate>DROP_PRICE</th>
+                            <th translate>PICK_DROP_PRICE</th>
+                            <th translate>PICKUP_TIME</th>
+                            <th translate>DROP_PICKUP_TIME</th>
+                            <th translate>KILOMETER</th>
+                            <th translate style="width:16%">ACTION</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>{{ stoppage.orderNo }}</td>
+                            <td>{{ stoppage.stoppageName }}</td>
+                            <td>{{ stoppage.areaName }}</td>
+                            <td>{{ stoppage.pickPrice }}</td>
+                            <td>{{ stoppage.dropPrice }}</td>
+                            <td>{{ stoppage.pickAndDropPrice }}</td>
+                            <td>{{ stoppage.formattedPickUpTime }}</td>
+                            <td>{{ stoppage.formattedDropPickUpTime }}</td>
+                            <td>{{ stoppage.kiloMeter }}</td>
+                            <td style="width: 20%;">
+                           
+                            <button 
+                                 type="button"
+                                 *ngIf="this.sharedPermissionServiceService.havePermission('Route Management','Create')"
+                                 class="btn btn-secondary action-btn"
+                                 (click)="addConsumer(stoppage)">
+                                <span
+                                  placement="top"
+                                  ngbTooltip="{{ 'ADD_CONSUMER' | translate }}"
+                                  translate>
+                                  ADD_CONSUMER
+                                </span>
+                           </button>
+                           <button *ngIf="!this.sharedPermissionServiceService.havePermission('Route Management','Create')" 
+                           type="button"
+                           class="btn btn-secondary action-btn btn-disabled"
+                         >
+                           <span
+                             placement="top"
+                             ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                             translate
+                           >
+                           ADD_CONSUMER
+                           </span>
+                         </button>
+                         <button type="button"
+                         *ngIf="this.sharedPermissionServiceService.havePermission('Route Management','Update')"
+                             class="btn btn-secondary action-btn"
+                             (click)="editStoppage(stoppage,route)">
+                             <span placement="top"
+                                 ngbTooltip="{{ 'VIEW_EDIT' | translate }}">
+                                 <i class="bi bi-pencil"></i>
+                             </span>
+                         </button>
+                         <button *ngIf="!this.sharedPermissionServiceService.havePermission('Route Management','Update')" 
+                         type="button"
+                         class="btn btn-secondary action-btn btn-disabled"
+                       >
+                         <span
+                           placement="top"
+                           ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                         >
+                           <i class="bi bi-pencil"></i>
+                         </span>
+                       </button>
+                         <button type="button"
+                         *ngIf="this.sharedPermissionServiceService.havePermission('Route Management','Delete')" 
+                             class="btn btn-danger action-btn"
+                             (click)="confirmStoppageDelete(stoppage)">
+                             <span placement="top"
+                                 ngbTooltip="{{ 'DELETE' | translate }}">
+                                 <i class="bi bi-trash"></i>
+                             </span>
+                         </button>
+                         <button *ngIf="!this.sharedPermissionServiceService.havePermission('Route Management','Delete')" 
+                         type="button"
+                         class="btn btn-secondary action-btn btn-disabled"
+                       >
+                         <span
+                           placement="top"
+                           ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                         >
+                         <i class="bi bi-trash"></i>
+                         </span>
+                       </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <table class="table" *ngIf="consumerForStoppage.length>0">
+                        <thead>
+                          <tr>
+                            <th translate>TYPE</th>
+                            <th translate>NAME</th>
+                            <th translate>FROM_DATE</th>
+                            <th translate>TO_DATE</th>
+                            <th translate>PICKDROP_TYPE</th>
+                            <th translate>PRICE</th>
+                            <th translate style="width:16%">ACTION</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let consumer of consumerForStoppage">
+                            <td>{{ consumer.roleName }}</td>
+                            <td>{{ consumer.userName }}</td>
+                            <td>{{ consumer.fromDate?.format('DD/MM/yyyy')}}</td>
+                            <td>{{ consumer.toDate ?.format('DD/MM/yyyy')}}</td>
+                            <td>{{ getPickDropTypeName(consumer.pickDropId) }}</td>
+                            <td>{{ consumer.pickDropPrice }}</td>
+                            <td style="width: 10%;">
+                              <button type="button"
+                              *ngIf="this.sharedPermissionServiceService.havePermission('Route Management','Update')"
+                                  class="btn btn-secondary action-btn"
+                                  (click)="editConsumer(stoppage,consumer)">
+                                  <span placement="top"
+                                      ngbTooltip="{{ 'VIEW_EDIT' | translate }}">
+                                      <i class="bi bi-pencil"></i>
+                                  </span>
+                              </button>
+                              <button *ngIf="!this.sharedPermissionServiceService.havePermission('Route Management','Update')" 
+                              type="button"
+                              class="btn btn-secondary action-btn btn-disabled"
+                            >
+                              <span
+                                placement="top"
+                                ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                              >
+                                <i class="bi bi-pencil"></i>
+                              </span>
+                            </button>
+                           
+                            <button type="button"
+                            *ngIf="!consumer.isFeePaymentAlreadyDone && this.sharedPermissionServiceService.havePermission('Route Management','Delete')"
+                                class="btn btn-danger action-btn"
+                                (click)="confirmConsumeDelete(consumer)">
+                                <span placement="top"
+                                    ngbTooltip="{{ 'DELETE' | translate }}">
+                                    <i class="bi bi-trash"></i>
+                                </span>
+                            </button>
+                            <button *ngIf="!consumer.isFeePaymentAlreadyDone && !this.sharedPermissionServiceService.havePermission('Route Management','Delete')" 
+                            type="button"
+                            class="btn btn-secondary action-btn btn-disabled"
+                          >
+                            <span
+                              placement="top"
+                              ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                            >
+                            <i class="bi bi-trash"></i>
+                            </span>
+                          </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <span *ngIf="consumerForStoppage.length==0">No consumer allocated to this stoppage</span>
+                    </div>
+                  </div>
+              
+             
+            </div>
+       
+          
+          
+      </div>
+  </div>
+</div>
+

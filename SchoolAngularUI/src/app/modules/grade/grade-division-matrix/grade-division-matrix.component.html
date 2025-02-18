@@ -1,0 +1,151 @@
+
+  
+  <div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>CREATE_GRADE_DIVISION_MAPPING</h3>
+      </div>
+    <div class="card mb-4 d-md-block">
+      <div class="card-body search-body">
+        <!--table search filter start-->
+        <form [formGroup]="gradeDivisionForm" (ngSubmit)="saveGradeDivisionProfile()" class="search-filter">
+          <div class="row mb-2">
+            <div class="col-sm">
+              <div class="form-group">
+                  <label for="gradeId" translate>GRADE</label>
+                  <select
+                  formControlName="gradeId"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['gradeId'].errors
+                  }"
+                >
+                <option [value]="null">
+                  <span translate>SELECT_GRADE</span>
+                  </option>
+                <option *ngFor="let item of gradeDropdownList" [value]="item.gradeId" >
+                  {{item.gradeName}}
+                </option>
+                </select>
+                <div
+                *ngIf="submitted && f['gradeId'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['gradeId'].errors['required']">
+                  <span translate>GRADE</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>
+                </div>
+            </div>
+            <div class="col-sm">
+              <div class="form-group">
+                  <label for="divisionName" translate>DIVISION</label>
+    
+               
+              <ng-select *ngIf="showDivision"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['gradeId'].errors
+                  }"
+      [items]="divisionFilteredDropdownList"
+      [multiple]="true"
+      bindLabel="divisionName"
+      [selectableGroup]="false"
+      [closeOnSelect]="false"
+      bindValue="divisionId"
+      placeholder="Select Division"
+      formControlName="divisionId"
+      >
+    
+      <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+          <input id="item-{{index}}" [disabled]="item.disabled" type="checkbox" [ngModelOptions]="{standalone: true}" [ngModel]="item$.selected"/> {{item.divisionName}}
+      </ng-template>
+  </ng-select>
+  <div
+  *ngIf="submitted && f['divisionId'].errors"
+  class="invalid-feedback"
+  >
+  <div *ngIf="f['divisionId'].errors['required']">
+    <span translate>DIVISION</span>
+    <span translate> IS_REQUIRED</span>
+  </div>
+  </div>
+                </div>
+            </div>
+            <div class="col-sm text-right">
+              <div class="form-group search-btns-mobile-margin">
+                <label for="city" class="d-none d-md-block">&nbsp;</label>
+                <button type="button" (click)="onReset()" class="btn btn-light" translate>
+                  RESET
+                </button>
+                <button type="submit" class="btn btn-secondary" *ngIf="this.sharedPermissionServiceService.havePermission('Grade Division Matrix','Create')" translate>
+                  SAVE
+                </button>
+                <button type="button"  container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"  class="btn btn-primary btn-disabled " *ngIf="!this.sharedPermissionServiceService.havePermission('Grade Division Matrix','Create')" translate>
+                  SAVE
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+   
+    <div class="card mb-4">
+      <div class="card-body table-body position-relative">
+        <!--table listing statrt-->
+        <div id="no-more-tables">
+           
+          <table  datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="display table row-border hover">
+            <thead>
+              <tr>
+                <th translate>GRADE</th>
+                <th translate>CLASSES</th>
+                <!-- <th style="width: 7%" class="text-end" translate>ACTIONS</th> -->
+              </tr>
+            </thead>
+            <tbody *ngIf="gradeDivisions?.length != 0">
+              <tr *ngFor="let gradeDivision of gradeDivisions index as i">
+                  <td [attr.data-title]=" 'GRADE' | translate">{{ gradeDivision.gradeName }}</td>
+                  <td [attr.data-title]=" 'CLASSES' | translate" class="classes">
+                   <span class="m-span" *ngFor="let divisionItem of  gradeDivision.gradeDivisions.split(',')">
+                    &nbsp; {{divisionItem}}
+                    <button
+                        type="button" *ngIf="this.sharedPermissionServiceService.havePermission('Grade Division Matrix','Delete')" 
+                        class="action-btn"
+                        (click)="confirmGradeDivisionDelete(gradeDivision, divisionItem, gradeDivision.gradeName)" 
+                      >
+                        <span
+                          placement="top"
+                          ngbTooltip="{{ 'DELETE' | translate }}"
+                        >
+                          <i class="bi bi-trash"></i>
+                        </span>
+                      </button>
+                      <button
+                      type="button" *ngIf="!this.sharedPermissionServiceService.havePermission('Grade Division Matrix','Delete')" 
+                      class="btn btn-secondary action-btn btn-disabled"
+                      
+                    >
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                      >
+                        <i class="bi bi-trash"></i>
+                      </span>
+                    </button>
+                   </span>
+
+                  </td>
+  
+              </tr>
+              <tr *ngIf="gradeDivisions?.length == 0">
+                <td colspan="3" class="no-data-available" translate>NO_RECORDS_FOUND</td>
+              </tr>
+            </tbody>
+  
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  

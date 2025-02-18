@@ -1,0 +1,70 @@
+
+  
+  <ion-content class="light-content" [fullscreen]="true">
+    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <ng-container *ngIf="!content_loaded">
+      <ion-list-header class="ion-list-header-small">
+        <ion-label><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></ion-label>
+        <ion-note color="tertiary" class="ion-note-small">
+          <ion-skeleton-text animated style="width: 40px"></ion-skeleton-text>
+        </ion-note>
+      </ion-list-header>
+  
+      <ion-list
+        class="list-custom animate__animated animate__fadeIn"
+        lines="full"
+      >
+        <ion-item
+          color="light"
+          button
+          detail="false"
+          *ngFor="let i of [].constructor(12)"
+        >
+          <ion-avatar slot="start" class="ion-avatar-default-icon">
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-avatar>
+          <ion-label>
+            <h3>
+              <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+            </h3>
+            <p>
+              <ion-skeleton-text animated style="width: 75%"></ion-skeleton-text>
+            </p>
+          </ion-label>
+          <ion-skeleton-text
+            slot="end"
+            animated
+            style="width: 15%"
+          ></ion-skeleton-text>
+        </ion-item>
+      </ion-list>
+    </ng-container>
+    <ng-container *ngIf="content_loaded">
+       <div class="white-space month" scroll-x="true">
+          <ion-chip [ngClass]="{'selected': day.isSelected}" (click)="loadTeacherTimeTableForDay(day.id)" class="selected" *ngFor="let day of lstWeek">
+            <ion-label class="day">{{day.value}}</ion-label>
+          </ion-chip>
+        
+          
+         
+        </div>
+
+       
+
+        <div class="time-wrapper">
+            <div class="period"  *ngFor="let period of teacherPeriodListCurrentDay;let i=index">
+              <span class="time"><span class="left">{{period.StartDate.format('hh:mm A')}} to {{period.EndDate.format('hh:mm A')}}</span> <span class="border-dashed"></span></span>
+              <span class="class"><span class="fw-bold dark-color">{{period.ClassName}}</span> <span class="black-color fw-500">Period {{i+1}}</span></span>
+                <span class="subject">{{period.SubjectName}}</span>
+            </div>
+            
+        </div>
+    </ng-container>
+  
+  </ion-content>
+
+ 
+  
+  

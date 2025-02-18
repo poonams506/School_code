@@ -1,0 +1,290 @@
+<!-- <div class="login-page-bg-cover">
+  
+    <div class="login-page-bg-overlay"></div>
+    <div class="arc-bottom">
+      <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 120">
+        <path d="M 0,36 C 144,53.6 432,123.2 720,124 C 1008,124.8 1296,56.8 1440,40L1440 140L0 140z"></path>
+    </svg>
+    </div>
+    </div> -->
+
+<div class="d-flex justify-content-center hv-100">
+  <div class="container">
+    <div class="text-center logo mt-2 position-relative" style="z-index: 2">
+      <img src="./assets/img/logo-full.png" alt="Logo" />
+      <h4 class="mb-3 login-text">Sign Up</h4>
+      <p class="mb-3 mt-3">Please fill your details.</p>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <form
+          class="form-signin signup-padding width-100"
+          [formGroup]="registerForm"
+          (ngSubmit)="onSubmit()"
+          novalidate
+        >
+          <div class="text-center">
+            <!-- <img src="./assets/img/logo-full.png" alt="Logo"> -->
+            <!-- <p class="mb-0">Welcome Back !</p> -->
+            <!-- <h4 class="mb-3 login-text">Sign Up</h4> -->
+          </div>
+          <div class="row">
+            <div class="col-3">
+              <div class="form-group">
+                <label for="userType" translate class="required"
+                  >USER_TYPE <span>*</span></label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="userType"
+                  formControlName="userType"
+                  placeholder="{{ 'USER_TYPE' | translate }}"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['userType'].errors
+                  }"
+                />
+                <div
+                  *ngIf="submitted && f['userType'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['userType'].errors['required']">
+                    <span translate>USER_TYPE</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="form-group">
+                <label for="schoolId" translate class="required"
+                  >SCHOOL_ID <span>*</span></label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="schoolId"
+                  formControlName="schoolId"
+                  placeholder="{{ 'SCHOOL_ID' | translate }}"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['schoolId'].errors
+                  }"
+                />
+                <div
+                  *ngIf="submitted && f['schoolId'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['schoolId'].errors['required']">
+                    <span translate>SCHOOL_ID</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="form-group">
+                <label for="firstName" translate class="required"
+                  >FIRST_NAME <span>*</span></label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="firstName"
+                  formControlName="firstName"
+                  placeholder="{{ 'FIRST_NAME' | translate }}"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['firstName'].errors
+                  }"
+                />
+                <div
+                  *ngIf="submitted && f['firstName'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['firstName'].errors['required']">
+                    <span translate>FIRST_NAME</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-3">
+              <div class="form-group">
+                <label for="middleName" translate>MIDDLE_NAME</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="middleName"
+                  placeholder="{{ 'MIDDLE_NAME' | translate }}"
+                />
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="form-group">
+                <label for="lastName" translate class="required"
+                  >LAST_NAME <span>*</span></label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="lastName"
+                  formControlName="lastName"
+                  placeholder="{{ 'LAST_NAME' | translate }}"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['lastName'].errors
+                  }"
+                />
+                <div
+                  *ngIf="submitted && f['lastName'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['lastName'].errors['required']">
+                    <span translate>LAST_NAME</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+           
+
+            <div class="col-3">
+              <div class="form-group">
+                <label for="mobileNo" translate class="required"
+                  >MOBILE_NO <span>*</span></label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="mobileNo"
+                  formControlName="mobileNo"
+                  [attr.disabled]="true"
+                    value="+91 9876543290"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['mobileNo'].errors
+                  }"
+                />
+                <div
+                  *ngIf="submitted && f['mobileNo'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['mobileNo'].errors['required']">
+                    <span translate>MOBILE_NO</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="form-group">
+                <label for="altNo" translate>ALTERNATE_NO</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="altNO"
+                  placeholder="{{ 'ALTERNATE_NO' | translate }}"
+                />
+              </div>
+            </div>
+
+            <div class="col-3 datepicker">
+              <div class="form-group">
+                <label for="lastName" translate class="required"
+                  >DATE_OF_BIRTH <span>*</span></label
+                >
+                <div class="input-group">
+                  <input
+                    class="form-control"
+                    formControlName="dob"
+                    placeholder="dd/mm/yyyy"
+                    name="dp"
+                    [(ngModel)]="model"
+                    ngbDatepicker [minDate]="{year: 1901, month: 1, day: 1}" [maxDate]="{year: 2100, month: 1, day: 1}" [readonly]="true"
+                    #d="ngbDatepicker"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['dob'].errors
+                    }"
+                  />
+                  <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button"></button>
+                  <div
+                  *ngIf="submitted && f['dob'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['dob'].errors['required']">
+                    <span translate>DATE_OF_BIRTH</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+                </div>
+                
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="form-group">
+                <label for="exampleFormControlInput1">Address</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="password"
+                  placeholder="Address"
+                />
+                <div class="invalid-feedback">Please enter address.</div>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="form-group">
+                <label for="exampleFormControlInput1">Phone</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="password"
+                  placeholder="Phone"
+                />
+                <div class="invalid-feedback">Please enter phone.</div>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="form-group">
+                <label for="exampleFormControlInput1">New Password</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="exampleFormControlInput1"
+                  placeholder="New Password"
+                />
+                <div class="invalid-feedback">Please enter password.</div>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="form-group">
+                <label for="exampleFormControlInput1">Confirm Password</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="exampleFormControlInput1"
+                  placeholder="Confirm Password"
+                />
+                <div class="invalid-feedback">
+                  Please enter confirm password.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-3">
+              <button type="submit" class="btn btn-primary" translate>
+                SIGN_UP
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

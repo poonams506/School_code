@@ -1,0 +1,110 @@
+.other-fees-row {
+    td {
+        background-color: #ccc !important;
+    }
+}
+
+.upload-icon-cursor {
+    cursor: pointer;
+    font-size: 30px;
+    line-height: 1;
+}
+
+.additional-d-card {
+    .whole .type {
+        font-size: 12px !important;
+    }
+}
+
+.nav-tabs-buttons-card {
+    display: flex;
+    column-gap: 15px;
+    border-bottom: 0;
+    .nav-item {
+
+        .nav-link {
+            text-transform: none;
+            padding: 5px 10px;
+            min-width: 70px;
+            border: 1px solid #ccc;
+            border-radius: 4px !important;
+            display: flex;
+            align-items: center;
+            background-color: #f4f8fc;
+            margin-bottom: 7px;
+            
+            i {
+                margin-right: 10px;
+                font-size: 18px;
+                line-height: 1;
+            }
+            span {
+                font-size: 12px;
+    font-weight: normal;
+            }
+            &.upi {
+                img {
+                    width: 34px;
+                margin-right: 10px;
+                }
+            }
+            &.active {
+                background-color: #022e45;
+                span, i {
+                    color: var(--white-text-color);
+                }
+            }
+        }
+    }
+
+  
+}
+
+.installments-right {
+    display: flex;
+    align-items: center;
+    .ins-text {
+        display: inline-block;
+       
+        border-left: 0;
+        border-right: 0;
+        font-size: 12px;
+        font-weight: 500;
+        padding: 2px 10px;
+        height: 18px;
+        line-height: 1;
+        color: #444343;
+    }
+    .ins-no {
+        text-align: center;
+        //width: 25px;
+        height: 25px;
+        line-height: 1;
+        display: inline-block;
+        border-radius: 4px;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        background-color: var(--primary);
+        border:1px solid var(--primary);
+        color: var(--white-text-color);
+        font-size: 12px;
+        font-weight: 500;
+        padding: 2px 5px;
+    }
+    .ins-total {
+        text-align: center;
+    
+        height: 22px;
+        line-height: 1.5;
+        display: inline-block;
+        border-radius: 4px;
+        
+        background-color: var(--secondary);
+        border:1px solid var(--secondary);
+        color: var(--white-text-color);
+        font-size: 12px;
+        font-weight: 500;
+        padding: 2px 5px;
+    }
+    
+}

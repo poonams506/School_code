@@ -1,0 +1,493 @@
+/*buttons related all css here*/
+
+.btn {
+  font-size: 13px;
+  padding: 9px 10px;
+  margin: 0;
+  min-width: 80px;
+  border-radius: 4px;
+  cursor: pointer !important;
+  &.btn-info{
+    background: var(--primary-btn-bg-color);
+    color:var(--white-text-color);
+    &:hover{
+      background:var(--primary-btn-bg-color);
+    }
+  }
+ 
+  &.btn-search {
+    min-width: 30px;
+    width: 30px;
+    height: 26px;
+    font-size: 13px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color:var(--primary-btn-bg-color);
+    border-color: var(--primary-btn-bg-color);
+    cursor: pointer;
+  
+    &.danger{
+      background: var(--danger);
+      border-color:var(--danger)
+    }
+  }
+
+  &.btn-primary {
+    color: var(--white-text-color);
+    background-color: var(--primary-btn-bg-color);
+    border-color: var(--primary-btn-border-color);
+    &:active {
+      color: var(--white-text-color);
+      background-color: var(--primary-btn-bg-color);
+      border-color: var(--primary-btn-border-color);
+    }
+  }
+
+
+  &.btn-disabled{
+    // color: #fff !important;
+    // background-color: #6c757d !important;
+    // border-color: #6c757d !important;
+    opacity: .4;
+    cursor: not-allowed !important;
+  }
+
+  &.btn-danger{
+    color: var(--white-text-color);
+    background-color: var(--danger-bg-color);
+    border-color: var(--danger-bg-color);
+    &:active {
+      color: var(--white-text-color);
+      background-color: var(--danger-bg-color);
+      border-color: var(--danger-bg-color);
+    }
+  }
+
+
+  
+  &.btn-secondary {
+    color: var(--white-text-color);
+    background-color: var(--secondary-btn-bg-color);
+    border-color: var(--secondary-btn-border-color);
+  }
+
+  &.btn-warning {
+    color: var(--white-text-color);
+  }
+  &.btn-outline-primary {
+    font-size: 13px;
+    color: var(--primary-text);
+    border-color: var(--primary-btn-border-color);
+    &:hover {
+      color: var(--white-text-color);
+      background-color: var(--primary-btn-bg-color);
+      border-color: var(--primary-btn-border-color);
+    }
+  
+  }
+
+  &.btn-outline-secondary {
+    font-size: 13px;
+    color: var(--secondary-text);
+    &:hover {
+      color: var(--white-text-color);
+      background-color: var(--secondary-btn-bg-color);
+      border-color: var(--secondary-btn-border-color);
+    }
+  
+  }
+  
+
+  &.btn-outline + .btn-outline {
+    margin-right: 0 !important;
+    margin-left: 0.625rem;
+  }
+ &.btn-light {
+  background-color: var(--light-bg-color);
+      border-color: var(--light-border-color);
+ }
+  &.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+    min-width: 4rem;
+  }
+  &.action-btn {
+    padding: 4px 4px;
+    min-width: 26px;
+    /* height: 26px; */
+    font-size: 11px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    &.dropdown-toggle::after  {
+      display: none;
+    }
+  }
+  &.action-btn2 {
+    padding: 4px 8px;
+    min-width: 26px;
+    /* height: 26px; */
+    font-size: 11px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    &.dropdown-toggle::after  {
+      display: none;
+    }
+  }
+  &.btn-with-icon {
+    padding: 4px;
+    font-size: 17px;
+    min-width: 35px;
+    &.with-text {
+      font-size: 13px;
+      padding: 7px 12px;
+    }
+    // &.btn-icon-search {
+    //   font-size: 15px;
+    // }
+  }
+}
+
+a {
+  &.btn-primary {
+    color: var(--white-text-color) !important;
+  }
+}
+
+.btn + .btn {
+  margin-right: 0 !important;
+  margin-left: 0.625rem;
+}
+
+.btn-group {
+  &.btn-group-toggle {
+    .btn {
+      margin: 0;
+    }
+  }
+  &.radio-toggle-btns {
+    label.btn {
+      background-color: transparent;
+      &:hover {
+        color: var(--primary-btn-bg-color);
+      }
+      &.active:hover {
+        color: var(--white-text-color);
+      }
+    }
+  }
+}
+
+.btn.active.focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn:active:focus,
+.btn:focus {
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+a.btn-link.active.focus,
+a.btn-link.active:focus,
+a.btn-link.focus,
+a.btn-link:active.focus,
+a.btn-link:active:focus,
+a.btn-link:focus {
+  outline: 0 !important;
+  box-shadow: none !important;
+  border: 0;
+  text-decoration: none;
+}
+
+footer {
+  .btn-outline {
+    padding: 0.375rem 0.75rem !important;
+    font-size: 1rem !important;
+  }
+}
+.dropdown {
+  .dropdown-menu {
+    .dropdown-item {
+      font-size: 0.875rem;
+      line-height: 1.3rem;
+      padding: 0.25rem 1rem;
+    }
+  }
+}
+
+/*swicth button style start*/
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 3.75rem;
+  height: 2.1875rem;
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  input:checked + .slider {
+    background-color: var(--primary-btn-bg-color);
+  }
+  input:focus + .slider {
+    box-shadow: none;
+  }
+  input:checked + .slider:before {
+    -webkit-transform: translateX(1.625rem);
+    -ms-transform: translateX(1.625rem);
+    transform: translateX(1.625rem);
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--primary-btn-bg-color);
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+    &:before {
+      position: absolute;
+      content: "";
+      height: 1.625rem;
+      width: 1.625rem;
+      left: 0.25rem;
+      bottom: 0.25rem;
+      background-color: var(--white-text-color);
+      -webkit-transition: 0.4s;
+      transition: 0.4s;
+    }
+    &.round {
+      border-radius: 2.125rem;
+      &:before {
+        border-radius: 50%;
+      }
+    }
+  }
+}
+
+// second option of switch button
+
+.switchToggle {
+  position: relative;
+  input[type="checkbox"] {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+    position: absolute;
+  }
+
+  label {
+    cursor: pointer;
+    text-indent: -9999px;
+    width: 100px;
+    max-width: 85px;
+    border: 1px solid $dark-blue;
+    display: block;
+    border-radius: 85px;
+    position: relative;
+    margin-bottom: 0;
+    font-size: 0.875rem;
+    padding: 0.2125rem 0.4375rem;
+    &::after {
+      content: "";
+      position: absolute;
+      top: 6px;
+      left: 8px;
+      width: 20px;
+      height: 20px;
+      background-color: $grey;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+  }
+  // input:checked + label, input:checked + input + label  {background: #3e98d3; }
+  input + label:before,
+  input + input + label:before {
+    content: "Family";
+    position: absolute;
+    top: 3px;
+    left: 35px;
+    width: 45px;
+    transition: 0.3s;
+    text-indent: 0;
+    color: $dark-blue;
+  }
+  input:checked + label:before,
+  input:checked + input + label:before {
+    content: "Family";
+    position: absolute;
+    top: 3px;
+    left: 10px;
+    width: 45px;
+    transition: 0.3s;
+    text-indent: 0;
+    color: $dark-blue;
+  }
+  input:checked + label:after,
+  input:checked + input + label:after {
+    left: calc(100% - 6px);
+    transform: translateX(-100%);
+    background-color: $green;
+  }
+  label:active:after {
+    width: 60px;
+  }
+}
+
+.toast-wrapper.simple-toast .evolve-toast{
+  &.success-dialog {
+    background-color: #0ab39c  !important;
+  }
+  .content-holder, .toast-title-content, .ap-icon-success, .close-ico {
+    color: #fff;
+  }
+}
+
+.toast-wrapper.simple-toast .evolve-toast{
+  &.danger-dialog {
+    background-color: #bd362f  !important;
+  }
+  .content-holder, .toast-title-content, .ap-icon-danger, .close-ico {
+    color: #fff;
+  }
+}
+ 
+.sticky-buttons {
+  position: sticky !important;
+    bottom: 0px;
+    width: 100%;
+    padding: 7px 0 !important;
+    background: #fff;
+    text-align: right;
+    border-top: 1px solid var(--primary-btn-border-color);
+    &.padding-right {
+      padding-right: 15px !important;
+    }
+}
+
+// tabs css
+
+.nav-tabs {
+  background-color: var(--white-bg-color);
+  .nav-item {
+    border: 0;
+    .nav-link {
+      border: 0;
+      color: var(--input-lable-color);
+      text-transform: uppercase;
+      &.active {
+        border-bottom: 2px solid var(--secondary);;
+        color: var(--secondary);;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+// media queries csss for buttons
+@media only screen and (max-width: 992px) {
+  .btn {
+    padding: 0.375rem 0.9375rem;
+    margin: 0;
+  }
+}
+
+@media only screen and (max-width: 441px) {
+  .btns-center-on-device {
+    text-align: center !important;
+  }
+  .btn{
+    &.btn-with-icon {
+      padding: 4px 2px;
+    font-size: 13px;
+    min-width: 32px;
+    height: 30px;
+    &.with-text {
+      padding: 4px 9px;
+    }
+    }
+  }
+}
+
+
+.pass-fail-btns {
+  .btn {
+    min-width: 60px;
+    padding: 2px;
+  }
+}
+
+.pass-fail-btns2 {
+  .btn {
+    min-width: 60px;
+    padding: 6px;
+  }
+}
+
+.new-checkbox {
+input[type=checkbox] + label {
+  display: block;
+  margin: 0.2em;
+  cursor: pointer;
+  padding: 0.2em;
+}
+
+input[type=checkbox] {
+  display: none;
+}
+
+input[type=checkbox] + label:before {
+  content: "\2714";
+  border: 0.1em solid #000;
+  border-radius: 0.2em;
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  padding-left: 0.2em;
+  padding-bottom: 0.3em;
+  margin-right: 0.2em;
+  vertical-align: bottom;
+  color: transparent;
+  transition: .2s;
+}
+
+input[type=checkbox] + label:active:before {
+  transform: scale(0);
+}
+
+input[type=checkbox]:checked + label:before {
+  background-color: MediumSeaGreen;
+  border-color: MediumSeaGreen;
+  color: #fff;
+}
+
+input[type=checkbox]:disabled + label:before {
+  transform: scale(1);
+  border-color: #aaa;
+}
+
+input[type=checkbox]:checked:disabled + label:before {
+  transform: scale(1);
+  background-color: #bfb;
+  border-color: #bfb;
+}
+&.new-checkbox2 {
+  input[type=checkbox] + label:before 
+  {
+    width: 13px;
+    height: 13px;
+    line-height: 13px;
+    margin-right: 5px;
+  }
+}
+}

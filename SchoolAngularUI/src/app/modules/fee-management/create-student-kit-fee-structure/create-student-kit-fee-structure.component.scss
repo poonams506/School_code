@@ -1,0 +1,188 @@
+
+
+.create-fee-wrapper {
+    .create-fee-wrapper-header {
+        display: flex;
+        column-gap: 50px;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        .heading {
+            flex: 0 0 19%;
+            font-weight: 600;
+        }
+    }
+    .create-fee-wrapper-body {
+        display: flex;
+        column-gap: 50px;
+        margin-bottom: 10px;
+        .heading {
+            flex: 0 0 19%;
+            &.heading-btns {
+                display: flex;
+                column-gap: 5px;
+            }
+            .form-control {
+                height: 35px;
+            }
+            .btn.action-btn {
+                padding: 4px 12px;
+            }
+        }
+    }
+    .create-fee-wrapper-content {
+        display: flex;
+        column-gap: 50px;
+        padding: 15px 0;
+        border-top: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
+        margin-top: 20px;
+
+    }
+}
+
+@media (max-width: 768px) {
+    .create-fee-wrapper {
+      .create-fee-wrapper-header {
+        column-gap: 10px;
+        .heading {
+          line-height: 1.2;
+          font-size: 12px;
+        
+        }
+    }
+      .create-fee-wrapper-body {
+        column-gap: 10px;
+        padding: 0px;
+        .heading {
+          &.heading-btns {
+            flex:0 0 15%;
+            .btn {
+              padding: 4px !important;
+              &+.btn {
+                margin-left: 2px !important;
+              }
+            }
+          }
+        }
+    }
+    .create-fee-wrapper-content {                       
+        flex-wrap: wrap;
+        column-gap: 10px;
+        .custom-checkbox {
+            width: 35%;
+        } 
+    }
+    } 
+
+  
+}
+
+
+// checkobx design
+
+
+.label__checkbox {
+    display: none;
+  }
+  
+  .label__check {
+    display: inline-block;
+    border-radius: 4px;
+    border: 3px solid #0000008c;
+    background: white;
+    vertical-align: middle;
+    margin-right: 20px;
+    width: 2em;
+    height: 2em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border .3s ease;
+    
+    i.icon {
+      opacity: 0;
+      font-size: 26px;
+      color: transparent;
+      transition: opacity .3s .1s ease;
+      -webkit-text-stroke: 3px rgba(0,0,0,.5);
+    }
+    
+    &:hover {
+      border: 3px solid rgba(0,0,0,0.2);
+    }
+  }
+  
+  .label__checkbox:checked + .label__text .label__check {
+    animation: check .5s cubic-bezier(0.895, 0.030, 0.685, 0.220) forwards;
+    
+    .icon {
+      opacity: 1;
+      transform: scale(0);
+      color: white;
+      -webkit-text-stroke: 0;
+      animation: icon .3s cubic-bezier(1.000, 0.008, 0.565, 1.650) .1s 1 forwards;
+    }
+  }
+  
+//   .center {
+//     position: absolute;
+//     top: 50%; left: 50%;
+//     transform: translate(-50%,-50%);
+//   }
+  
+  @keyframes icon {
+    from {
+      opacity: 0;
+      transform: scale(0.3);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1)
+    }
+  }
+  
+  @keyframes check {
+    0% {
+      width: 1.5em;
+      height: 1.5em;
+      border-width: 5px;
+    }
+    10% {
+      width: 1.5em;
+      height: 1.5em;
+      opacity: 0.1;
+      background: rgba(0,0,0,0.2);
+      border-width: 15px;
+    }
+    12% {
+      width: 1.5em;
+      height: 1.5em;
+      opacity: 0.4;
+      background: rgba(0,0,0,0.1);
+      border-width: 0;
+    }
+    50% {
+      width: 2em;
+      height: 2em;
+      background: #00d478;
+      border: 0;
+      opacity: 0.6;
+    }
+    100% {
+      width: 2em;
+      height: 2em;
+      background: #00d478;
+      border: 0;
+      opacity: 1;
+    }
+  }
+
+  .sub-lable {
+    font-size: 12px;
+    font-style: italic;
+    margin-bottom: 0;
+    font-weight: normal;
+    line-height: 1;
+  }

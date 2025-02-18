@@ -1,0 +1,70 @@
+<form >
+    <div class="container-fluid">
+        <div class="d-flex align-items-center page-heading-wrapper">
+          <h3 class="page-heading" translate>CLASS_EXAM_MAPPING</h3>
+        </div>
+        <div class="card mb-4">
+          <div class="card-body table-body">
+            <!--table listing statrt-->
+            <div id="no-more-tables">
+              <table
+                datatable
+                [dtOptions]="dtOptions"
+                [dtTrigger]="dtTrigger"
+                class="display table row-border hover">
+                <thead>
+                  <tr>
+                    <th style="width: 10%;" translate>EXAM_TYPE</th>
+                    <th style="width: 10%;" translate>TERM</th>
+                    <th style="width: 15%;" translate>EXAM_NAME</th>
+                    <th style="width: 65%;" translate>CLASS</th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="classExamMappings?.length != 0">
+                  <tr *ngFor="let classExamMapping of classExamMappings index as i ">
+                        <td [attr.data-title]=" 'EXAM_TYPE' | translate">{{ classExamMapping.examTypeName }}</td>
+                        <td [attr.data-title]=" 'TERM' | translate">{{ classExamMapping.termName }}</td>
+                        <td [attr.data-title]=" 'EXAM_NAME' | translate">{{ classExamMapping.examName }}</td>
+                        <td [attr.data-title]="'CLASS' | translate" >
+                        <ng-select
+                       [items]="divisionGradeMapping"
+                       [multiple]="true"
+                       [clearable]="false" 
+                       [closeOnSelect]="false"
+                       bindLabel="className"
+                       bindValue="schoolGradeDivisionMatrixId"
+                       placeholder="{{ 'SELECT_CLASS' | translate }}"
+                       [ngModelOptions]="{standalone: true}"
+                       [(ngModel)]="classExamMapping.classList"
+                       (remove)="onDropDownClose(classExamMapping, $event,  classExamMapping.examMasterId)" 
+                       (close)="onDropDownAdd(classExamMapping, $event,  classExamMapping.examMasterId)"   
+                       (clear) = "checkSelectAllClass(classExamMapping)"
+                       (remove) = "checkSelectAllClass(classExamMapping)"
+                       >
+    
+                       <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                        <span *ngIf="!isDisabled(item, classExamMapping.examMasterId)" >
+                        <input
+                          id="item-{{ index }}"
+                          type="checkbox"
+                          [ngModelOptions]="{ standalone: true }"
+                          [ngModel]="item$.selected"
+                          (change)="checkSelectAllClass(classExamMapping)"
+                        />
+                        {{ item.className }}
+                      </span>  
+                      </ng-template>
+                      <ng-template ng-header-tmp>
+                        <input type="checkbox" [id]="'select-all'" [ngModelOptions]="{standalone: true}" (change)="selectAllOptionClass(classExamMapping)" [(ngModel)]="selectAllClass"/> 
+                        <label [for]="'select-all'" translate>SELECT_ALL</label>
+                      </ng-template>
+                     </ng-select>
+                    </td> 
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>

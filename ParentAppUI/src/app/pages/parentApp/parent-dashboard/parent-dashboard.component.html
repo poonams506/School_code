@@ -1,0 +1,138 @@
+<ion-content class="light-content" [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ng-container *ngIf="!content_loaded && isAppAccessible">
+    <ion-list-header class="ion-list-header-small">
+      <ion-label><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></ion-label>
+      <ion-note color="tertiary" class="ion-note-small">
+        <ion-skeleton-text animated style="width: 40px"></ion-skeleton-text>
+      </ion-note>
+    </ion-list-header>
+
+
+    <ion-list class="list-custom animate__animated animate__fadeIn" lines="full">
+      <ion-item color="light" button detail="false" *ngFor="let i of [].constructor(12)">
+        <ion-avatar slot="start" class="ion-avatar-default-icon">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-avatar>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 75%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+        <ion-skeleton-text slot="end" animated style="width: 15%"></ion-skeleton-text>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+  <ng-container *ngIf="content_loaded && isAppAccessible">
+
+    <div class="head-4">
+      <h4>Today’s Attendance Status</h4>
+    </div>
+    <div class="attendance-wrap">
+      <div class="present">{{ attendanceStatus?.status }}</div>
+    </div>
+
+    <hr />
+
+    <div class="head-4">
+      <h4>Today’s Lectures</h4>
+    </div>
+    <ion-list>
+      <ion-card class="white-bg-color lecture-card" *ngFor="let lecture of lectureList">
+        <ion-card-subtitle class="class">{{ lecture.teacherName }}</ion-card-subtitle>
+        <ion-card-header>
+          <ion-card-subtitle>{{ lecture.startTime }} <span class="to">to</span> {{ lecture.endTime
+            }}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-title slot="start" class="text-start">{{ lecture.subjectName }}</ion-title>
+        </ion-card-content>
+      </ion-card>
+    
+    </ion-list>
+
+    <div *ngIf="lectureList?.length === 0">
+      <ion-card-header class="redbg font16 px-2">
+        <i class="bi bi-exclamation-triangle"></i>
+        <span class="ms-2" translate>There is no Lecture Today.</span>
+      </ion-card-header>
+    </div>
+    <hr />
+
+    <div class="head-4 mt-2">
+      <h4>Upcoming Events</h4>
+      <h5>Next 30 Days</h5>
+    </div>
+    <div *ngIf="schoolEventList?.length === 0">
+      <ion-card-header class="redbg font16 px-2">
+        <i class="bi bi-exclamation-triangle"></i>
+        <span class="ms-2" translate>There is no upcoming events in next 30 days.</span>
+      </ion-card-header>
+    </div>
+
+    <ng-container *ngFor="let event of schoolEventList">
+      <h6>{{ event.startDate?.format('DD MMM yyyy') }}</h6>
+      <ion-list class="no-bg">
+        <ion-card class="white-bg-color" (click)="openSchoolEventDetail( event.schoolEventId)">
+          <ion-card-header>
+            <ion-card-subtitle>
+              {{ event.startTime?.format('hh:mm a') }} 
+              <span class="to" *ngIf="event.startTime && event.endTime">to</span> 
+              {{ event.endTime?.format('hh:mm a') }}
+            </ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <span class="text-start yellow-span">
+              <span><b>Event Title:</b> {{ event.eventTitle }}</span> 
+              <span *ngIf="event.eventTitle && event.eventVenue"><b>Event Venue:</b> {{ event.eventVenue }}</span>
+            </span>
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
+    </ng-container>
+    <ion-card class="ion-no-margin ion-card-chart animate__animated animate__fadeIn dark-bg-color">
+      <!-- Skeletons -->
+      <ng-container *ngIf="!content_loaded">
+        <ion-card-header>
+          <div>
+            <ion-card-title>
+              <ion-skeleton-text animated style="width: 60px"></ion-skeleton-text>
+            </ion-card-title>
+            <ion-card-subtitle>
+              <ion-skeleton-text animated style="width: 80px"></ion-skeleton-text>
+            </ion-card-subtitle>
+          </div>
+          <ion-badge color="primary" mode="ios">
+            <ion-skeleton-text animated style="width: 50px"></ion-skeleton-text>
+          </ion-badge>
+        </ion-card-header>
+
+        <ion-skeleton-text animated style="
+              width: calc(100% - 40px);
+              margin: 16px auto 16px auto;
+              min-height: 140px;
+            ">
+        </ion-skeleton-text>
+      </ng-container>
+
+    </ion-card>
+  </ng-container>
+
+</ion-content>
+
+
+<ion-modal id="example-modal" class="update-modal" #modal [isOpen]="!isAppAccessible"  [canDismiss]="canDismiss"  [presentingElement]="presentingElement">
+  <ng-template>
+    <div  class="update-app">
+        <span class="icon"><ion-icon name="notifications-outline"></ion-icon></span>
+        <p class="text">A new version of the app is available. If you haven't updated it please click on update or else click on close.</p>
+        <button (click)="redirectToPlayStore()" class="update-button">Update</button> &nbsp;
+        <button (click)="refreshPage()" class="update-button">Close</button>
+      </div>
+  </ng-template>
+</ion-modal>

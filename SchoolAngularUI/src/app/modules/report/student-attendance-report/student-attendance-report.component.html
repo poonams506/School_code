@@ -1,0 +1,134 @@
+<!-- <p>student-attendance-report works!</p> -->
+<div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>STUDENT_ATTENDANCE_REPORT</h3>
+    </div>
+   
+
+    <div class="card mb-4">
+        <div class="card-body search-body table-body position-relative">
+          <div class=" search-body-table report-search">
+            <!--table search filter start-->
+            <form [formGroup]="studentAttendanceReportForm" class="search-filter">
+              <div class="row mb-2">
+                <div class="col-12 col-md-2" >
+                  <div class="form-group mb-0">
+                    <!-- <label translate>CLASS </label> -->
+                    <ng-select 
+                    [ngClass]="{
+                      'is-invalid': submitted && f['classId'].errors
+                       }"
+                       [items]="divisionGradeMapping"
+                       [multiple]="true"
+                       bindLabel='className'
+                       [selectableGroup]="false"
+                       [closeOnSelect]="false"
+                       bindValue="schoolGradeDivisionMatrixId"
+                       placeholder="{{ 'SELECT_CLASS' | translate }}"
+                       formControlName="classId"
+                       (clear) = "checkSelectAllClass()"
+                       (remove) = "checkSelectAllClass()"
+                       >
+          
+                   <ng-template ng-option-tmp  let-item="item" let-item$="item$" let-index="index">
+                   <input id="item-{{index}}"  type="checkbox" [ngModelOptions]="{standalone: true}" [ngModel]="item$.selected"
+                   (change)="checkSelectAllClass()"/> {{item.className}}
+                 </ng-template>
+                 <ng-template ng-header-tmp>
+                  <input type="checkbox" [id]="'select-all'" [ngModelOptions]="{standalone: true}" (change)="selectAllOptionClass()" [(ngModel)]="selectAllClass"/> 
+                  <label [for]="'select-all'" translate>SELECT_ALL</label>
+                </ng-template>
+                 </ng-select>
+                </div>
+              </div>
+              <div class="col-12 col-md-3">
+                <div class="form-group datepicker mb-0">
+                  <!-- <label  translate>FROM_DATE</label> -->
+                  <input
+                    type="text"
+                    formControlName="ngbfromDate"
+                    class="form-control"
+                    placeholder="{{ 'FROM_DATE' | translate }}"
+                    ngbDatepicker
+                    [maxDate]="maxDate"
+                    #fromDateDatepicker="ngbDatepicker"
+                    (click)="fromDateDatepicker.toggle()"
+                    />
+                    <div class="calendar"  (click)="fromDateDatepicker.toggle()">
+                     <i class="bi bi-calendar3"></i>
+                    </div>
+                </div>
+              </div>
+              <div class="col-12 col-md-3">
+                <div class="form-group datepicker mb-0">
+                  <!-- <label  translate>TILL_DATE</label> -->
+                  <input
+                    type="text"
+                    formControlName="ngbtillDate"
+                    class="form-control"
+                    placeholder="{{ 'TILL_DATE' | translate }}"
+                    ngbDatepicker
+                    [minDate]="minEndDate"
+                     
+                    #tillDateDatepicker="ngbDatepicker"
+                    (click)="tillDateDatepicker.toggle()"
+                    />
+                    <div class="calendar"  (click)="tillDateDatepicker.toggle()">
+                     <i class="bi bi-calendar3"></i>
+                    </div>
+                </div>
+              </div>
+                <div class="col-12 col-md-3 text-right">
+                  <div class="form-group search-btns-mobile-margin mb-0">
+                    <label for="city" class="d-none">&nbsp;</label>
+                    <button type="button" (click)="onReset()" class="btn btn-light" translate>
+                      RESET
+                    </button>
+                    <button type="button" (click)="search()" class="btn btn-secondary" 
+                    *ngIf="this.sharedPermissionServiceService.havePermission('Student Attendance Report','Read')" translate>
+                      SEARCH
+                    </button>
+                    <button type="button" container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"  class="btn btn-secondary btn-disabled"
+                    *ngIf="!this.sharedPermissionServiceService.havePermission('Student Attendance Report','Read')" translate>
+                      SEARCH
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!--table listing statrt-->
+          <div id="no-more-tables">
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="display table row-border hover">
+              <thead>
+                <tr>
+                  <th style="width: 8%;" translate>CLASS</th>
+                  <th style="width: 7%;" translate>ROLL_NO</th>
+                  <th style="width: 20%;" translate>STUDENT_NAME</th>
+                  <th style="width: 7%;" translate>TOTAL_DAY</th>
+                  <th style="width: 8%;" translate>PRESENT_DAY</th>
+                  <th style="width: 7%;" translate>HALF_DAY</th>
+                  <th style="width: 8%;" translate>ABSENT_DAY</th>
+                  <th style="width: 10%;" translate>ATTENDANCE_PERCENTAGE</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="attendanceReports?.length != 0">
+                <tr *ngFor="let attendanceReport of attendanceReports index as i">
+                    <td [attr.data-title]=" 'CLASS' | translate">{{ attendanceReport.gradeName }} - {{attendanceReport.divisionName}}</td>
+                    <td [attr.data-title]=" 'ROLL_NUMBER' | translate">{{ attendanceReport.rollNumber }}</td>
+                    <td [attr.data-title]=" 'STUDENT_NAME' | translate">{{ attendanceReport.fullName }}</td>
+                    <td [attr.data-title]=" 'TOTAL_DAY' | translate">{{ attendanceReport.totalDay }}</td>
+                    <td [attr.data-title]=" 'PRESENT_DAY' | translate">{{ attendanceReport.presentDay }}</td>
+                    <td [attr.data-title]=" 'HALF_DAY' | translate">{{ attendanceReport.halfDay }}</td>
+                    <td [attr.data-title]=" 'ABSENT_DAY' | translate">{{ attendanceReport.absentDay }}</td>
+                    <td [attr.data-title]=" 'ATTENDANCE_PERCENTAGE' | translate">{{ attendanceReport.attendancePercentage }}</td>
+                </tr>
+                <tr *ngIf="attendanceReports?.length == 0">
+                  <td colspan="7" class="no-data-available" translate>NO_RECORDS_FOUND</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>

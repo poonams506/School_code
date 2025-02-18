@@ -1,0 +1,89 @@
+<ion-content [fullscreen]="true" class="light-content" >
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="form-padding pt-0" *ngIf="isLocationEnabled">
+    <form class="form-default" novalidate [formGroup]="cabDriverPickUpForm">
+    
+      <ion-item lines="none" class="m-0">
+        <ion-label position="stacked" class="mb-2">Route </ion-label>
+        <ion-select interface="action-sheet" cancelText="Cancel" formControlName="routeId" class="custom-select"
+
+        (ionChange)="resetSelectList(f, 'routeId')">
+        <ion-select-option [value]="null">Select Route</ion-select-option>
+        <ion-select-option *ngFor="let route of routeList"
+          [value]="route.routeId">{{route.routeName}}</ion-select-option>
+      </ion-select>
+      <div *ngIf="submitted && f['routeId']?.errors">
+        <ion-note *ngIf="f['routeId'].errors['required']" class="custom-error">Route Name is required.</ion-note>
+      </div>
+      </ion-item>
+
+      <div class="d-flex mt-2">
+
+        <ion-button class="primary w-100" type="button" [disabled]="pickUpButtonDisabled" (click)="pickup()" >Pick Up</ion-button>
+        <ion-button class="secondary w-100" type="button" (click)="reset()">reset</ion-button>
+      </div>
+    
+    </form>
+    <div  *ngIf="qrCodeVisible">
+      <!-- <ion-note *ngIf="!invalidQRCodeError" class="custom-error">Invalid QR Code</ion-note> -->
+     
+      <button class="scan-form-btn btn btn-success" type="button" (click)="scanQRCode()">Scan QR Code</button>
+   
+       <div class="stopp-drive-wrapper" *ngFor="let item of stopageList">
+        <div class="stopp-name-drive">
+          {{item.stoppageName}}
+        </div>
+        <div>
+         <ng-container >
+          <div class="list-custom animate__animated animate__fadeIn">
+            <div class="studets-listing-pickup mt-2" button routerLink="detail" detail="false" *ngFor="let student of getStudentListByStoppageId(item.stoppageId)">
+              <div class="avatar-left ion-avatar-default-icon">
+                <div>
+                <ion-avatar slot="start">
+                  <img alt="Silhouette of a person's head" src="{{student.profileImageURL?student.profileImageURL:'https://ionicframework.com/docs/img/demos/avatar.svg'}}" />
+                </ion-avatar>
+                <div class="roll">{{student.rollNumber}}</div>
+              </div>
+                <span class="text-pick-wrap">
+                  <span 
+                  class="student-circle"
+                  [ngClass]="{'picked-circle': student.isAlreadyPickedDropped, 'unpicked-circle': !student.isAlreadyPickedDropped}"
+                  > {{ student.isAlreadyPickedDropped ? 'Picked' : 'Not-Picked' }}  </span>
+                </span>
+              </div>
+              <ion-label>
+                <div class="student-content">
+                  <div class="title"><ion-icon name="person"></ion-icon></div>
+                  <div class="value">{{student.studentName}}</div>
+                
+                </div>
+                <div class="student-content">
+                  <div class="title"><ion-icon name="people"></ion-icon></div>
+                  <div class="value">{{student.className}}</div>
+                </div>
+                <div class="student-content">
+                  <div class="title"><ion-icon name="call"></ion-icon></div>
+                  <div class="value">{{student.emergencyContactNumber}}</div>
+                </div>
+               
+              </ion-label>
+             
+            </div>
+            <div *ngIf="!studentList || studentList.length==0" class="text-center">No Student Found</div>
+          
+          
+          </div>
+         
+        </ng-container>
+        </div>
+      </div> 
+      <ion-button class="submit-form-btn" (click)="endPickup()">End PickUp</ion-button>
+    </div>
+  </div>
+  <ion-text *ngIf="!isLocationEnabled">Please enable location before pickup start.</ion-text>
+</ion-content>
+
+

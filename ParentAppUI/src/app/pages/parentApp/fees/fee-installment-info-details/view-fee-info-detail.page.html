@@ -1,0 +1,26 @@
+<ion-header collapse="fade" [translucent]="true" class="modal-header">
+  <ion-toolbar>
+    <ion-title ><b>Installment Details</b></ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" fill="solid" (click)="close()">
+        Close
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <div class="installment-details"  *ngFor="let installment of installments">
+    <p class="header-title">Installment No :&nbsp;{{installment.installmentNumber}}</p>
+    <ul>
+      <li>
+        <span class="title">Discount End Date :&nbsp;</span>
+        <span class="amount">{{getFormattedDate(installment.discountEndDate)}}</span>
+      </li>
+      <li>
+        <span class="title">Late Fee Start Date :&nbsp;</span>
+        <span class="amount">{{getFormattedDate(installment.lateFeeStartDate)}}</span>
+      </li>
+    </ul>
+  </div>
+  
+</ion-content>

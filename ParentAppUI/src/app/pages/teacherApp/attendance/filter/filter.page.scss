@@ -1,0 +1,16 @@
+:host {
+  ion-list {
+    background-color: var(--ion-color-primary);
+  }
+  ion-item {
+    --border-radius: 8px;
+    margin-bottom: 8px;
+  }
+
+  .form-default {
+    margin-top: 20px;
+  }
+  .label-floating {
+max-width: fit-content !important;
+  }
+}

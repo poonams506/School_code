@@ -1,0 +1,400 @@
+<div class="container-fluid position-relative">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>TRANSPORT FEE PAYMENT</h3>
+    </div>
+   
+  
+    <div class="card mb-4">
+      <div class="card-body table-body position-relative">
+        <div class="search-body search-body-table">
+          <!--table search filter start-->
+          <form [formGroup]="paymentForm" class="search-filter" >
+            <div class="row mb-2">
+              <div class="col-12 col-md-4">
+                <div class="form-group">
+                  <select
+                  formControlName="roleId"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['roleId'].errors
+                  }"
+                  
+                >
+                <option value="5">Student</option>
+                <option value="3">Staff</option>
+                </select>
+                  </div>
+              </div>
+              <div class="col-12 col-md-4" [hidden]="paymentForm.get('roleId')?.value == 3">
+                <div class="form-group">
+                    <!-- <label for="classId" translate>CLASS</label> -->
+                    <select
+                    formControlName="classId"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['classId'].errors
+                    }"
+                    
+                  >
+                  <option [value]="null">
+                    <span translate>SELECT_CLASS</span>
+                    </option>
+                  <option *ngFor="let item of divisionGradeMapping" [value]="item.schoolGradeDivisionMatrixId" >
+                    {{item.className}}
+                  </option>
+                  </select>
+                  </div>
+              </div>
+              <div class="col-sm text-right">
+                <div class="form-group search-btns-mobile-margin">
+                  <label for="city" class="d-none">&nbsp;</label>
+                  <button type="button" (click)="onReset()" class="btn btn-light" translate>
+                    RESET
+                  </button>
+                  <button type="button"  *ngIf="this.sharedPermissionServiceService.havePermission('Academic Fee Payment','Read')" (click)="search()" class="btn btn-secondary" translate>
+                    SEARCH
+                  </button>
+                  <button type="button"  *ngIf="!this.sharedPermissionServiceService.havePermission('Academic Fee Payment','Read')" container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}" class="btn btn-secondary btn-disabled" translate>
+                    SEARCH
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!--table listing statrt-->
+        <div id="no-more-tables" [hidden]="paymentForm.get('roleId')?.value == 3">
+          <table
+            datatable
+            [dtOptions]="dtOptions1"
+            [dtTrigger]="dtTrigger1"
+            class="display table row-border hover"
+          >
+            <thead>
+              <tr>
+                <th  translate>GRADE</th>
+                <th translate>FULL_NAME</th>
+                <th translate>Gen Reg No</th>
+                <th translate>Is RTE</th>
+                <th translate>TOTAL_FEE</th>
+                <th translate>DISCOUNTED_FEE</th>
+                <th translate>PAID_AMOUNT</th>
+                <th translate>DUE_AMOUNT</th>
+                <th translate>CHEQUE_UNCLEARED_AMOUNT</th>
+                <th style="width: 5%" class="text-end" translate>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="transportFeePaymentsStudents?.length != 0">
+              <ng-container *ngFor="let item of transportFeePaymentsStudents index as i">
+              <tr [class.expanded]="item.isExpand">
+                <td [attr.data-title]="'GRADE' | translate"  [ngClass]="{'is-highlighted-student': hlighlightedConsumerId == item.studentId}">
+                  {{ item.gradeName }}
+                </td>
+                <td [attr.data-title]="'FULL_NAME' | translate" [ngClass]="{'is-highlighted-student': hlighlightedConsumerId == item.studentId}">
+                  {{ item.fullName }}
+                </td>
+                <td [attr.data-title]="'General Registration No' | translate" [ngClass]="{'is-highlighted-student': hlighlightedConsumerId == item.studentId}">
+                  {{ item.generalRegistrationNo }}
+                </td>
+                <td [attr.data-title]="'IS_RTE' | translate" [ngClass]="{'is-highlighted-student': hlighlightedConsumerId == item.studentId}">
+                  <span *ngIf="item.isRTEStudent == true">Yes</span>
+                  <span *ngIf="item.isRTEStudent == false">No</span>
+                </td>
+                <td [attr.data-title]="'TOTAL_FEE' | translate" [ngClass]="{'is-highlighted-student': hlighlightedConsumerId == item.studentId}">
+                  ₹ {{ item.totalFee | number : '1.1-2'}}
+                </td>
+                <td [attr.data-title]="'DISCOUNTED_FEE' | translate" [ngClass]="{'is-highlighted-student': hlighlightedConsumerId == item.studentId}">
+                  ₹ {{ item.discountedFee | number : '1.1-2'}}
+                </td>
+                <td [attr.data-title]="'PAID_AMOUNT' | translate" [ngClass]="{'is-highlighted-student': hlighlightedConsumerId == item.studentId}">
+                  ₹ {{ item.paidAmount | number : '1.1-2'}}
+                </td>
+                <td
+                  [attr.data-title]="'DUE_AMOUNT' | translate"  [ngClass]="{'is-highlighted-student': hlighlightedConsumerId == item.studentId}"
+                  class="fee-imp"
+                >
+                  ₹ {{ item.dueAmount | number : '1.1-2'}}
+                </td>
+                <td [attr.data-title]="'CHEQUE_UNCLEARED_AMOUNT' | translate"  [ngClass]="{'is-highlighted-student': hlighlightedConsumerId == item.studentId}">
+                  ₹ {{ item.chequeUnclearAmount | number : '1.1-2'}}
+                </td>
+                <td [attr.data-title]=" 'ACTIONS' | translate" class="action text-center actions-td"  [ngClass]="{'is-highlighted-student': hlighlightedConsumerId == item.studentId}">
+                  <div class="d-flex justify-content-end">
+                
+                  <div class="btn btn-secondary action-btn action-btn-transport">
+                    <i (click)="expand(item)" class="bi-plus" *ngIf="!item.isExpand"></i>
+                    <i (click)="expand(item)" class="bi-dash" *ngIf="item.isExpand"></i>
+                  </div>
+                  </div>
+
+                 
+                </td>
+              </tr>
+              <tr *ngIf="item.isExpand">
+                <td colspan="10" class="is-expand-td">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th translate>Stoppage</th>
+                        <th translate>Type</th>
+                        <th translate>From Date</th>
+                        <th translate>To Date</th>
+                        <th translate>Price</th>
+                        <th translate>TOTAL_FEE</th>
+                        <th translate>DISCOUNTED_FEE</th>
+                        <th translate>PAID_AMOUNT</th>
+                        <th translate>DUE_AMOUNT</th>
+                        <th translate>CHEQUE_UNCLEARED_AMOUNT</th>
+                        <th style="width: 10%" class="text-end" translate>ACTIONS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let stoppageItem of transportFeePaymentStoppageDtoList">
+                        <td>{{stoppageItem.stoppageName}}</td>
+                        <td>
+                           <span *ngIf="stoppageItem.pickDropId == 1">Pick</span>
+                           <span *ngIf="stoppageItem.pickDropId == 2">Drop</span>
+                           <span *ngIf="stoppageItem.pickDropId == 3">PickDrop</span>
+                        </td>
+                        <td>{{stoppageItem.fromDateString}}</td>
+                        <td>{{stoppageItem.toDateString}}</td>
+                        <td>₹ {{ stoppageItem.pickDropPrice | number : '1.1-2'}}</td>
+                        <td>
+                          ₹ {{ stoppageItem.totalFee | number : '1.1-2'}}
+                        </td>
+                        <td>
+                          ₹ {{ stoppageItem.discountedFee | number : '1.1-2'}}
+                        </td>
+                        <td>
+                          ₹ {{ stoppageItem.paidAmount | number : '1.1-2'}}
+                        </td>
+                        <td class="fee-imp">
+                          ₹ {{ stoppageItem.dueAmount | number : '1.1-2'}}
+                        </td>
+                        <td>
+                          ₹ {{ stoppageItem.chequeUnclearAmount | number : '1.1-2'}}
+                        </td>
+                        <td>
+                          <div class="d-flex justify-content-end">
+                            <button  *ngIf="this.sharedPermissionServiceService.havePermission('Transport Fee Payment','Create')"
+                              type="button"
+                              (click)="pay(stoppageItem)"
+                              class="btn btn-primary action-btn"
+                            >
+                              <span placement="top" ngbTooltip="{{'PAY' | translate}}">
+                                <i class="bi bi-credit-card"></i>
+                              </span>
+                            </button>
+                            <button  *ngIf="!this.sharedPermissionServiceService.havePermission('Transport Fee Payment','Create')"
+                            type="button"
+                            class="btn btn-primary action-btn btn-disabled"
+                          >
+                            <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                              <i class="bi bi-credit-card"></i>
+                            </span>
+                          </button>
+          
+                            <button *ngIf="this.sharedPermissionServiceService.havePermission('Transport Fee Payment','Read')"
+                              type="button"
+                              class="btn btn-secondary action-btn"
+                              (click)="paymentHistory(stoppageItem)"
+                            >
+                              <span
+                                ngbTooltip="{{'PAYMENT_HISTORY' | translate}}"
+                                placement="top"
+                              >
+                                <i class="bi bi-clock-history"></i>
+                              </span>
+                            </button>
+                            <button *ngIf="!this.sharedPermissionServiceService.havePermission('Transport Fee Payment','Read')"
+                            type="button"
+                            class="btn btn-secondary action-btn btn-disabled"
+                          >
+                            <span
+                            ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                              placement="top"
+                            >
+                              <i class="bi bi-clock-history"></i>
+                            </span>
+                          </button>
+                         
+                          </div>
+                        </td>
+
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            </ng-container>
+              <tr *ngIf="transportFeePaymentsStudents?.length == 0">
+                <td colspan="12" class="no-data-available" translate>NO_RECORDS_FOUND</td>
+              </tr>
+              
+            </tbody>
+            
+          </table>
+        </div>
+        <div id="no-more-tables" [hidden]="paymentForm.get('roleId')?.value == 5 || paymentForm.get('roleId')?.value == null || paymentForm.get('roleId')?.value == undefined">
+          <table
+            datatable
+            [dtOptions]="dtOptions2"
+            [dtTrigger]="dtTrigger2"
+            class="display table row-border hover staff-table-td"
+          >
+            <thead>
+              <tr class="staff-head">
+                <th translate>FULL_NAME</th>
+                <th translate>Role Name</th>
+                <th translate>TOTAL_FEE</th>
+                <th translate>DISCOUNTED_FEE</th>
+                <th translate>PAID_AMOUNT</th>
+                <th translate>DUE_AMOUNT</th>
+                <th translate>CHEQUE_UNCLEARED_AMOUNT</th>
+                <th class="text-end last-col-action" translate>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="transportFeePaymentsStaff?.length != 0">
+              <ng-container *ngFor="let item of transportFeePaymentsStaff index as i">
+              <tr [class.expanded]="item.isExpandT">
+                <td [attr.data-title]="'FULL_NAME' | translate"  [ngClass]="{'is-highlighted-student': hlighlightedConsumerId == item.studentId}">
+                  {{ item.fullName }}
+                </td>
+                <td [attr.data-title]="'Role Name' | translate" [ngClass]="{'is-highlighted-student': hlighlightedConsumerId == item.studentId}">
+                  {{ item.roleName }}
+                </td>
+                <td [attr.data-title]="'TOTAL_FEE' | translate" [ngClass]="{'is-highlighted-student': hlighlightedConsumerId == item.studentId}">
+                  ₹ {{ item.totalFee | number : '1.1-2'}}
+                </td>
+                <td [attr.data-title]="'DISCOUNTED_FEE' | translate" [ngClass]="{'is-highlighted-student': hlighlightedConsumerId == item.studentId}">
+                  ₹ {{ item.discountedFee | number : '1.1-2'}}
+                </td>
+                <td [attr.data-title]="'PAID_AMOUNT' | translate" [ngClass]="{'is-highlighted-student': hlighlightedConsumerId == item.studentId}">
+                  ₹ {{ item.paidAmount | number : '1.1-2'}}
+                </td>
+                <td
+                  [attr.data-title]="'DUE_AMOUNT' | translate" [ngClass]="{'is-highlighted-student': hlighlightedConsumerId == item.studentId}"
+                  class="fee-imp"
+                >
+                  ₹ {{ item.dueAmount | number : '1.1-2'}}
+                </td>
+                <td [attr.data-title]="'CHEQUE_UNCLEARED_AMOUNT' | translate" [ngClass]="{'is-highlighted-student': hlighlightedConsumerId == item.studentId}">
+                  ₹ {{ item.chequeUnclearAmount | number : '1.1-2'}}
+                </td>
+                <td [attr.data-title]=" 'ACTIONS' | translate" class="action text-center actions-td" [ngClass]="{'is-highlighted-student': hlighlightedConsumerId == item.studentId}">
+                  <div class="d-flex justify-content-end">
+
+                  <div class="btn btn-secondary action-btn action-btn-transport">
+                    <i (click)="expandTwo(item)" class="bi-plus" *ngIf="!item.isExpandT"></i>
+                    <i (click)="expandTwo(item)" class="bi-dash" *ngIf="item.isExpandT"></i>
+                  </div>
+                  </div>
+                  
+                </td>
+              </tr>
+              <tr *ngIf="item.isExpandT">
+                <td colspan="10" class="is-expand-td">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th translate>Stoppage</th>
+                        <th translate>Type</th>
+                        <th translate>From Date</th>
+                        <th translate>To Date</th>
+                        <th translate>Price</th>
+                        <th translate>TOTAL_FEE</th>
+                        <th translate>DISCOUNTED_FEE</th>
+                        <th translate>PAID_AMOUNT</th>
+                        <th translate>DUE_AMOUNT</th>
+                        <th translate>CHEQUE_UNCLEARED_AMOUNT</th>
+                        <th style="width: 10%" class="text-end" translate>ACTIONS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let stoppageItem of transportFeePaymentStoppageDtoList">
+                        <td>{{stoppageItem.stoppageName}}</td>
+                        <td>
+                           <span *ngIf="stoppageItem.pickDropId == 1">Pick</span>
+                           <span *ngIf="stoppageItem.pickDropId == 2">Drop</span>
+                           <span *ngIf="stoppageItem.pickDropId == 3">PickDrop</span>
+                        </td>
+                        <td>{{stoppageItem.fromDateString}}</td>
+                        <td>{{stoppageItem.toDateString}}</td>
+                        <td>₹ {{ stoppageItem.pickDropPrice | number : '1.1-2'}}</td>
+                        <td>
+                          ₹ {{ stoppageItem.totalFee | number : '1.1-2'}}
+                        </td>
+                        <td>
+                          ₹ {{ stoppageItem.discountedFee | number : '1.1-2'}}
+                        </td>
+                        <td>
+                          ₹ {{ stoppageItem.paidAmount | number : '1.1-2'}}
+                        </td>
+                        <td class="fee-imp">
+                          ₹ {{ stoppageItem.dueAmount | number : '1.1-2'}}
+                        </td>
+                        <td>
+                          ₹ {{ stoppageItem.chequeUnclearAmount | number : '1.1-2'}}
+                        </td>
+                        <td>
+                          <div class="d-flex justify-content-end">
+                            <button  *ngIf="this.sharedPermissionServiceService.havePermission('Transport Fee Payment','Create')"
+                              type="button"
+                              (click)="pay(stoppageItem)"
+                              class="btn btn-primary action-btn"
+                            >
+                              <span placement="top" ngbTooltip="{{'PAY' | translate}}">
+                                <i class="bi bi-credit-card"></i>
+                              </span>
+                            </button>
+                            <button  *ngIf="!this.sharedPermissionServiceService.havePermission('Transport Fee Payment','Create')"
+                            type="button"
+                            class="btn btn-primary action-btn btn-disabled"
+                          >
+                            <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                              <i class="bi bi-credit-card"></i>
+                            </span>
+                          </button>
+          
+                            <button *ngIf="this.sharedPermissionServiceService.havePermission('Transport Fee Payment','Read')"
+                              type="button"
+                              class="btn btn-secondary action-btn"
+                              (click)="paymentHistory(stoppageItem)"
+                            >
+                              <span
+                                ngbTooltip="{{'PAYMENT_HISTORY' | translate}}"
+                                placement="top"
+                              >
+                                <i class="bi bi-clock-history"></i>
+                              </span>
+                            </button>
+                            <button *ngIf="!this.sharedPermissionServiceService.havePermission('Transport Fee Payment','Read')"
+                            type="button"
+                            class="btn btn-secondary action-btn btn-disabled"
+                          >
+                            <span
+                            ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                              placement="top"
+                            >
+                              <i class="bi bi-clock-history"></i>
+                            </span>
+                          </button>
+                          </div>
+                        </td>
+
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            </ng-container>
+              <tr *ngIf="transportFeePaymentsStaff?.length == 0">
+                <td colspan="12" class="no-data-available" translate>NO_RECORDS_FOUND</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  

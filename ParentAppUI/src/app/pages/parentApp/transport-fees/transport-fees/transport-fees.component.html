@@ -1,0 +1,228 @@
+<ion-content [fullscreen]="true" class="light-content">
+    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <ion-card
+      class="ion-no-margin ion-card-chart animate__animated animate__fadeIn white-bg-color border-0 rounded-0 mb-0"
+    >
+      <!-- Skeletons -->
+      <ng-container *ngIf="!content_loaded">
+        <ion-card-header>
+          <div>
+            <ion-card-title>
+              <ion-skeleton-text animated style="width: 60px"></ion-skeleton-text>
+            </ion-card-title>
+            <ion-card-subtitle>
+              <ion-skeleton-text animated style="width: 80px"></ion-skeleton-text>
+            </ion-card-subtitle>
+          </div>
+          <ion-badge color="light" mode="ios">
+            <ion-skeleton-text animated style="width: 50px"></ion-skeleton-text>
+          </ion-badge>
+        </ion-card-header>
+  
+        <ion-skeleton-text
+          animated
+          style="
+            width: calc(100% - 40px);
+            margin: 16px auto 16px auto;
+            min-height: 140px;
+          "
+        >
+        </ion-skeleton-text>
+      </ng-container>
+  
+      <!-- Chart -->
+      <ng-container *ngIf="content_loaded">
+        <div class="fees-chart">
+          <div class="chart">
+            <canvas
+              baseChart
+              class="chart"
+              [data]="doughnutChartData"
+              [type]="doughnutChartType"
+              [labels]="doughnutChartLabels"
+              [options]="options"
+            >
+            </canvas>
+          </div>
+  
+          <div class="chart-labels">
+            <div class="text-end total-fees">Total Fees : {{feePaymentDetails.totalFee  | currency:'INR'}}</div>
+            <ul>
+              <li>
+                <span class="color-dot green"></span>
+                <div>
+                  <p>{{feePaymentDetails.totalPaid  | currency:'INR'}}</p>
+                  <p class="text">Paid Amount</p>
+                </div>
+              </li>
+              <li>
+                <span class="color-dot red"></span>
+                <div>
+                  <p>{{feePaymentDetails.totalDue  | currency:'INR'}}</p>
+                  <p class="text">Due Amount</p>
+                </div>
+              </li>
+              <li>
+                <span class="color-dot blue"></span>
+                <div>
+                  <p>{{feePaymentDetails.totalDiscount  | currency:'INR'}}</p>
+                  <p class="text">Discount Amount</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </ng-container>
+    </ion-card>
+  
+    <ng-container *ngIf="content_loaded">
+      <ion-segment
+        class="border-tab-btn"
+        [(ngModel)]="type"
+        (ionChange)="segmentChanged($event)"
+        scrollable
+      >
+        <ion-segment-button value="dues" checked>
+          <ion-label>Fees</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="history">
+          <ion-label>History</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+  
+      <div [ngSwitch]="type">
+        <ion-list *ngSwitchCase="'dues'" class="light-blue-bg-color rounded-0">
+          <ng-container *ngIf="content_loaded">
+            <!-- <ion-title class="titles">Transport Fee</ion-title> -->
+  
+            <div class="payments-wrap">
+              <ion-title class="titles">Transport Fee Details</ion-title>
+  
+              <ion-card class="payments"  *ngFor="let feeParticular of feePaymentDetails.transportFeePaymentParticularSectionDtoList">
+                <!-- <ion-title class="header-title">{{feeParticular.routeName}}</ion-title> -->
+                <ion-card-content>
+                  <ul>
+                    <li>
+                        <span class="title">Route Name</span>
+                        <span class="amount">{{feeParticular.routeName}}</span>
+                    </li>
+                    <li>
+                        <span class="title">Stoppage Name</span>
+                        <span class="amount">{{feeParticular.stoppageName}}</span>
+                    </li>
+                    <li>
+                        <span class="title">Type</span>
+                        <span class="amount" *ngIf="feeParticular.pickDropId == 1">Pick</span>
+                           <span class="amount" *ngIf="feeParticular.pickDropId == 2">Drop</span>
+                           <span class="amount" *ngIf="feeParticular.pickDropId == 3">PickDrop</span>
+                    </li>
+                    <li>
+                        <span class="title">From Date</span>
+                        <span class="amount">{{feeParticular.fromDateString}}</span>
+                    </li>
+                    <li>
+                        <span class="title">To Date</span>
+                        <span class="amount">{{feeParticular.toDateString}}</span>
+                    </li>
+                    <li>
+                        <span class="title">Price</span>
+                        <span class="amount">₹ {{ feeParticular.pickDropPrice | number : '1.1-2'}}</span>
+                    </li>
+                    <li>
+                      <span class="title">Total Fees</span>
+                      <span class="amount">{{feeParticular.totalFee | currency:'INR'}}</span>
+                    </li>
+                    <li>
+                      <span class="title">Applied Discount</span>
+                      <span class="amount">{{feeParticular.discountedFee}}%</span>
+                    </li>
+                    <li>
+                      <span class="title">Paid Fee</span>
+                      <span class="amount">{{feeParticular.paidAmount | currency:'INR'}}</span>
+                    </li>
+                    <li>
+                        <span class="title">Due Fee</span>
+                        <span class="amount">{{feeParticular.dueAmount | currency:'INR'}}</span>
+                      </li>
+                      <li *ngIf="feeParticular.chequeUnclearAmount > 0">
+                        <span class="title">Cheque Unclear Fee</span>
+                        <span class="amount">{{feeParticular.chequeUnclearAmount | currency:'INR'}}</span>
+                      </li>
+                  </ul>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </ng-container>
+        </ion-list>
+  
+        <ion-list *ngSwitchCase="'history'" class="light-blue-bg-color rounded-0">
+          <ng-container *ngIf="content_loaded">
+            <ion-card *ngFor="let reciept of feePaymentDetails.transportPaymentHistoryReceiptDtoList" class="yellow-bg-color">
+              <ion-card-content>
+                <ul>
+                  <li>
+                    <span class="left">Installment No</span>
+                    <span class="right">{{reciept.installmentNumber}}</span>
+                  </li>
+                  <li>
+                    <span class="left">Invoice No</span>
+                    <span class="right">{{reciept.invoiceNumber}}</span>
+                  </li>
+                  <li>
+                    <span class="left">Paid Amount</span>
+                    <span class="right">{{reciept.paidAmount | currency:'INR'}}</span>
+                  </li>
+                  <li>
+                    <span class="left">Payment Mode</span>
+                    <span class="right">{{reciept.paymentTypeName}}</span>
+                  </li>
+                  <li>
+                    <span class="left">Transaction Date</span>
+                    <span class="right">{{getFormattedDate(reciept.onlineTransactionDateTime)}}</span>
+                  </li>
+                  <li *ngIf="reciept.paymentTypeName == 'Cheque'">
+                    <span class="left">Cheque No</span>
+                    <span class="right">{{reciept.onlineTransactionId}}</span>
+                  </li>
+                  <li *ngIf="reciept.paymentTypeName == 'Cheque'">
+                    <span class="left">Cheque Date</span>
+                    <span class="right">{{getFormattedDate(reciept.chequeDate)}}</span>
+                  </li>
+                  <li *ngIf="reciept.paymentTypeName == 'Cheque'">
+                    <span class="left">Cheque Clear</span>
+                    <span class="right">{{reciept.isChequeOrDDClear}}</span>
+                  </li>
+                  <li *ngIf="reciept.paymentTypeName == 'DD'">
+                    <span class="left">DD No</span>
+                    <span class="right">{{reciept.onlineTransactionId}}</span>
+                  </li>
+                  <li *ngIf="reciept.paymentTypeName == 'DD'">
+                    <span class="left">DD Date</span>
+                    <span class="right">{{getFormattedDate(reciept.chequeDate)}}</span>
+                  </li>
+                  <li *ngIf="reciept.paymentTypeName == 'DD'">
+                    <span class="left">DD Clear</span>
+                    <span class="right">{{reciept.isChequeOrDDClear}}</span>
+                  </li>
+                 
+                </ul>
+  
+                <!-- <div class="text-end download">
+                  <a href="../../../../assets/thumbnail.pdf" download>
+                    <ion-icon name="attach-outline"></ion-icon> Reciept</a
+                  >
+                </div> -->
+              </ion-card-content>
+            </ion-card>
+          </ng-container>
+        </ion-list>
+      </div>
+    </ng-container>
+  
+    
+  </ion-content>
+  
+  
+  

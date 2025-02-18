@@ -1,0 +1,69 @@
+<ion-header collapse="fade" [translucent]="true">
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-button color="secondary" fill="outline" (click)="cancel()">
+        Cancel
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title color="light">
+      Filter
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button color="primary" fill="solid" (click)="apply()">
+        Apply
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="form-padding">
+    <form class="form-default m-0" [formGroup]="edit_profile_form" (submit)="submit()">
+
+    <ion-list-header class="ion-list-header-small px-0">
+      <ion-label>
+        <ion-text color="dark">Category</ion-text>
+      </ion-label>
+    </ion-list-header>
+
+    <ion-item fill="outline" class="animate__animated animate__fadeInUp  form-item mb-2">
+      <ion-label  position="floating">Select Role</ion-label>
+      <ion-select>
+        <ion-select-option value="apples">Admin</ion-select-option>
+        <ion-select-option value="oranges">Principal</ion-select-option>
+        <ion-select-option value="bananas">Teacher</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-list-header class="ion-list-header-small px-2 m-0">
+      <ion-label>
+        <ion-text color="data">Select Date</ion-text>
+      </ion-label>
+    </ion-list-header>
+
+    <ion-item fill="outline" id="open-modal2" class="animate__animated animate__fadeInUp  form-item">
+      <ion-label position="floating"> From Date</ion-label>
+      <ion-input color="dark" placeholder="From Date" formControlName="dateName"></ion-input>
+    </ion-item>
+    <ion-modal trigger="open-modal2"
+     [cssClass]="'bottom-end'" [keepContentsMounted]="true"
+     [initialBreakpoint]="0.65">
+      <ng-template>
+        <ion-datetime
+        formControlName="dateName"
+        displayFormat="DD.MM.YYYY"
+        presentation="date"
+        [(ngModel)]="dateExample"
+          size="cover"
+          [showDefaultButtons]="true"
+        ></ion-datetime>
+      </ng-template> 
+      </ion-modal>
+
+</form>
+  </div>
+
+</ion-content>

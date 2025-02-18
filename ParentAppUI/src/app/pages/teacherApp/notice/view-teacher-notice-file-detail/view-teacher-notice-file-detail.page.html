@@ -1,0 +1,83 @@
+<ion-header collapse="fade" [translucent]="true" class="modal-header">
+  <ion-toolbar>
+   
+
+    <ion-title color="dark-color" style="font-weight: bold;">Notice Details</ion-title>
+      
+  
+    <ion-buttons slot="end">
+      <ion-button color="primary" fill="solid" (click)="close()">
+        Close
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <!-- <ion-card-subtitle class="message-from">
+    <span class="bold-black-text">Notice To : &nbsp;</span>
+    <ion-text>{{noticeDetails.noticeTo}}</ion-text>
+  </ion-card-subtitle>
+  <br> -->
+  <ion-card-subtitle class="message-from">
+    <span class="bold-black-text">Notice Title : &nbsp;</span>
+    <ion-text>{{noticeDetails.noticeTitle}}</ion-text>
+  </ion-card-subtitle>
+  <br>
+  <ion-card-subtitle class="message-from">
+    <span class="bold-black-text">Start Date : &nbsp;</span>
+    <ion-text>{{ noticeDetails.startDate.format('DD-MMM-YYYY') }}</ion-text>
+  </ion-card-subtitle>
+  <br>
+  <ion-card-subtitle class="message-from">
+    <span class="bold-black-text">End Date : &nbsp;</span>
+    <ion-text>{{ noticeDetails.endDate.format('DD-MMM-YYYY') }}</ion-text>
+  </ion-card-subtitle>
+  <br>
+  <ion-card-subtitle class="message-from">
+    <span class="bold-black-text">Important Notice: &nbsp;</span>
+    <ion-text>{{ noticeDetails.isImportant ? 'Yes' : 'No' }}</ion-text>
+    <ion-icon *ngIf="noticeDetails.isImportant"></ion-icon>
+  </ion-card-subtitle>
+  <br>
+  <ion-card-subtitle class="message-from inline"  >
+    <span class="bold-black-text">Notice Description:&nbsp;</span>
+    <ion-text  [innerHTML]="noticeDetails.noticeDescription"></ion-text>
+  </ion-card-subtitle>
+   <div class="download">
+    <ion-card-subtitle class="message-from" *ngIf="noticeDetails.noticeTextFileArray && noticeDetails.noticeTextFileArray.length > 0">
+      <span class="bold-black-text">Event Files Download : &nbsp; </span>
+    </ion-card-subtitle>
+    <div class="uploaded-file-text">
+      <span class="file-thumb" *ngFor="let f of noticeDetails.noticeTextFileArray; let i = index">
+        <img *ngIf="getFileExtension(f.fileName) === 'png'" src="../../../../assets/img/img.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'jpeg'" src="../../../../assets/img/img.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'jpg'" src="../../../../assets/img/img.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'pdf'" src="../../../../assets/img/pdf.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'doc'" src="../../../../assets/img/doc.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'xls'" src="../../../../assets/img/xlsx.png.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'pptx'" src="../../../../assets/img/ppt.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'txt'" src="../../../../assets/img/txt.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'svg'" src="../../../../assets/img/svg.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'csv'" src="../../../../assets/img/csv.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'bmp'" src="../../../../assets/img/bmp.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'xlsx'" src="../../../../assets/img/xlsx.png" class="thumbnail-icon" (click)="showFile(f)" />
+      </span>
+    </div>
+  </div>
+  <br>
+
+  <div class="download" *ngIf="noticeDetails.videoText && hasNonEmptyVideoLinks()">
+    <ion-card-subtitle class="message-from">
+      <span class="bold-black-text">Notice Media File Download: </span>
+    </ion-card-subtitle>
+    <div class="videoText video-link-wrap">
+      <ul class="black-bullet">
+        <li *ngFor="let f of noticeDetails.videoText; let i = index">
+          <a [href]="f.contentUrl" target="_blank" id="contentUrl_{{i}}">
+            {{ f.contentUrl }}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</ion-content>

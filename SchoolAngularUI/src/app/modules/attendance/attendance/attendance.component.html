@@ -1,0 +1,210 @@
+<div class="container-fluid">
+  <div class="d-flex align-items-center page-heading-wrapper">
+    <h3 class="page-heading" translate>ATTENDANCE</h3>
+
+  </div>
+
+  <div class="card mb-2 d-md-block">
+    <div class="card-body search-body">
+      <form [formGroup]="attendanceForm" (ngSubmit)="onSubmit()" novalidate class="search-filter">
+        <div class="row">
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate class="required">CLASS <span>*</span></label>
+              <select (change)="resetSelectList(f,'classId')" class="form-control" [ngClass]="{
+            'is-invalid': submitted && f['classId'].errors
+          }" formControlName="classId">
+                <option [value]="null"><span translate>SELECT_CLASS</span></option>
+                <option *ngFor="let item of divisionGradeMapping" [value]="item.schoolGradeDivisionMatrixId">
+                  {{ item.className }}
+                </option>
+              </select>
+              <div *ngIf="submitted && f['classId'].errors" class="invalid-feedback">
+                <div *ngIf="f['classId'].errors['required']">
+                  <span translate>CLASS</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm">
+            <div class="form-group datepicker">
+              <label class="required" translate>ATTENDANCE_DATE <span>*</span></label>
+              <input type="text" class="form-control" placeholder="{{ 'ATTENDANCE_DATE' | translate }}"
+                [ngClass]="{ 'is-invalid': submitted && f['ngbAttendanceDate'].errors }" ngbDatepicker
+                [minDate]="{year: 1901, month: 1, day: 1}" [maxDate]="{year: 2100, month: 1, day: 1}" [readonly]="true"
+                #attendanceDate="ngbDatepicker" (click)="attendanceDate.toggle()" formControlName="ngbAttendanceDate" />
+              <div class="calendar" (click)="attendanceDate.toggle()">
+                <i class="bi bi-calendar3"></i>
+              </div>
+              <div *ngIf="submitted && f['ngbAttendanceDate'].errors" class="invalid-feedback">
+                <div *ngIf="f['ngbAttendanceDate'].errors['required']">
+                  <span translate>ATTENDANCE_DATE</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3 text-right">
+            <!-- <div class="col-sm text-right"></div> -->
+            <div class="form-group search-btns-mobile-margin">
+              <label class="d-none d-md-block">&nbsp;</label>
+              <button type="button" (click)="onReset()" class="btn btn-light" translate>
+                RESET
+              </button>
+              <button type="submit"
+                *ngIf="this.sharedPermissionServiceService.havePermission('Student Attendance','Read')"
+                class="btn btn-primary" translate>
+                SEARCH
+              </button>
+              <button type="button" container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                *ngIf="!this.sharedPermissionServiceService.havePermission('Student Attendance','Read')"
+                class="btn btn-primary btn-disabled " translate>
+                SEARCH
+              </button>
+            </div>
+          </div>
+          
+        </div>
+        <div class="row" *ngIf="errorMessage">
+          <div class="col-12 col-md-4">
+            <div
+              class="alert alert-warning alert-dismissible fade show"
+              role="alert"
+            >
+            <div class="d-flex align-items-center"><i class="bi bi-exclamation-triangle"></i> <span translate>{{errorMessage}}</span></div>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body table-body">
+      <!--table listing statrt-->
+      <form [formGroup]="saveAttendanceForm" (ngSubmit)="onSaveAttendanceDetail()" novalidate>
+        <div *ngIf="attendances.length > 0" id="no-more-tables">
+
+
+          <div *ngIf="isAttendanceTaken"
+          class="alert alert-warning alert-dismissible fade show"
+          role="alert"
+        >
+        <div class="d-flex align-items-center"><i class="bi bi-exclamation-triangle"></i> <span translate>ATTENDANCE_ALREADY_TAKEN_FOR_THIS_DATE</span></div>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+
+          <div *ngIf="!isAccess"
+          class="alert alert-warning alert-dismissible fade show"
+          role="alert"
+        >
+        <div class="d-flex align-items-center"><i class="bi bi-exclamation-triangle"></i> <span translate>YOU_ARE_NOT_AUTHORIZE_TO_SAVE_THE_ATTENDANCE</span></div>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+
+          <table id="table_id" class="display table table-bordered">
+            <thead>
+              <tr>
+                <th style="width: 5%;" translate>ROLL_NO</th>
+                <th translate>STUDENT</th>
+                <th style="width: 20%">
+                  <div class="new-checkbox new-checkbox2">
+                    <input type="checkbox" (change)="onSelectAllCheckbox($event)" id="attendance" />
+                    <label for="attendance" translate>ATTENDANCE</label>
+                  </div>
+                </th>
+
+                <th translate>IS_HALF_DAY</th>
+                <th style="width: 25%" translate>REASON</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="attendances" formArrayName="attendance">
+              <tr *ngFor="let studentAttendance of attendances; let i = index;let last=last;let first=first"
+                [formGroupName]=i>
+                <td [attr.data-title]="'ROLL_NO' | translate">
+                  {{studentAttendance.get('rollNumber')?.value}}
+                </td>
+                <td [attr.data-title]="'STUDENT' | translate">
+                  {{studentAttendance.get('fullName')?.value}}
+                </td>
+                <td [attr.data-title]="'ATTENDANCE' | translate">
+                  <div>
+                    <input type="checkbox" id="isFullDay{{i}}" name="status_{{i}}" formControlName="isFullDay" />
+                    <!-- <label translate></label> -->
+                  </div>
+                </td>
+                <td [attr.data-title]="'IS_HALF_DAY' | translate">
+                  <div>
+                    <input type="checkbox" id="isHalfDay{{i}}" name="status_{{i}}" formControlName="isHalfDay" />
+                    <!-- <label translate></label> -->
+                  </div>
+                </td>
+
+                <td [attr.data-title]="'REASON' | translate">
+                  <input type="text" class="form-control" placeholder="{{ 'REASON' | translate }}" maxlength="1000"
+                    formControlName="reason">
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate class="required">TEACHER <span>*</span></label>
+              <select formControlName="teacherId" class="form-control" [ngClass]="{
+                  'is-invalid': saveStudentsubmitted && f1['teacherId'].errors
+                }">
+                <option [value]="null">
+                  <span translate>SELECT_TEACHER</span>
+                </option>
+                <option *ngFor="let item of teacherDropdownList" [value]="item.teacherId">
+                  {{item.fullName}}
+                </option>
+              </select>
+              <div *ngIf="saveStudentsubmitted && f1['teacherId'].errors" class="invalid-feedback">
+                <div *ngIf="f1['teacherId'].errors['required']">
+                  <span translate>TEACHER</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>
+            </div>
+          </div> -->
+          <div class="text-center mt-2">
+            <button type="submit"
+              *ngIf="this.sharedPermissionServiceService.havePermission('Student Attendance','Create') || this.sharedPermissionServiceService.havePermission('Student Attendance','Create') "
+              class="btn btn-with-icon with-text btn-primary ms-auto" translate>
+              SAVE
+            </button>
+            <button type="button" container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+              *ngIf="!this.sharedPermissionServiceService.havePermission('Student Attendance','Create')|| !this.sharedPermissionServiceService.havePermission('Student Attendance','Create')  "
+              class="btn btn-primary ms-auto btn-disabled " translate>
+              SAVE
+            </button>
+          </div>
+
+
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

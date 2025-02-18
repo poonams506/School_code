@@ -1,0 +1,64 @@
+
+<div class="overlay"  (click)="sidebarToggle()"></div>
+<div class="sidebar">
+  <div class="side-nav-logo">
+    <a class="logo" href="javascript:void(0)" title="Logo">
+      <img src="./assets/img/logo-full.png" alt="Logo" />
+    </a>
+  </div>
+  <ul class="nav-links" id="nav-links">
+    <li routerLinkActive="active">
+        <div class="dropdown-title">
+            <a routerLink="/parent-app" (click)="sidebarToggle()">
+       
+                <span class="menu-left-icon"> 
+                    <i class="bi bi-arrow-up-right-square"></i>
+                </span>
+                <span class="link_name">Dashboard</span>
+              </a>
+           
+          </div>
+
+    </li>
+
+    <li routerLinkActive="active">
+        <div class="dropdown-title">
+            <a routerLink="/p" (click)="sidebarToggle()">
+           
+                <span class="menu-left-icon"> 
+                    <i class="bi bi-arrow-up-right-square"></i>
+                </span>
+                <span class="link_name">Settings</span>
+              </a>
+           
+          </div>
+
+    </li>
+  </ul>
+  <!-- <ul class="nav-links" id="nav-links">
+    <li *ngFor="let item of menuSidebar" #itemEl routerLinkActive="active">
+      <div *ngIf="item.sub_menu.length == 0" class="dropdown-title">
+        <a  [routerLink]="[item.link]">
+           
+          <span class="menu-left-icon"> <i [class]="item.icon"></i></span>
+          <span class="link_name">{{item.link_name}}</span>
+        </a>
+      </div>
+      <div *ngIf="item.sub_menu.length > 0" class="dropdown-title" (click)="showSubmenu(itemEl)">
+        <a>
+          <span class="menu-left-icon"> <i [class]="item.icon"></i></span>
+          <span class="link_name">{{item.link_name}}</span>
+        </a>
+        <i class='bi bi-chevron-down arrow'></i>
+      </div>
+      <ul class="sub-menu" [class.blank]="item.sub_menu.length == 0">
+        <li><a class="link_name">{{item.link_name}}</a></li>
+        <li *ngFor="let item_sub of item.sub_menu" routerLinkActive="active">
+          <a [routerLink]="[item_sub.link]">{{item_sub.link_name}}</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+    </li>
+  </ul> -->
+</div>

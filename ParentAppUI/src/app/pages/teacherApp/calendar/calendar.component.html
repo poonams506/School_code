@@ -1,0 +1,175 @@
+<ion-content class="light-content" [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ng-container *ngIf="!content_loaded">
+    <ion-list-header class="ion-list-header-small">
+      <ion-label><ion-skeleton-text animated
+          style="width: 50%"></ion-skeleton-text></ion-label>
+      <ion-note color="tertiary" class="ion-note-small">
+        <ion-skeleton-text animated style="width: 40px"></ion-skeleton-text>
+      </ion-note>
+    </ion-list-header>
+
+    <ion-list
+      class="list-custom animate__animated animate__fadeIn"
+      lines="full">
+      <ion-item
+        color="light"
+        button
+        detail="false"
+        *ngFor="let i of [].constructor(12)">
+        <ion-avatar slot="start" class="ion-avatar-default-icon">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-avatar>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 75%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+        <ion-skeleton-text
+          slot="end"
+          animated
+          style="width: 15%"></ion-skeleton-text>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+
+  <ng-container *ngIf="content_loaded">
+    <div class="white-space month" scroll-x="true">
+      <ion-chip [ngClass]="{'selected': currentDay.isSelected}"
+        *ngFor="let currentDay of lstCurrentMonthDays"
+        (click)="loadCalenderEventForDay(currentDay.day)">
+        <ion-label class="day">{{currentDay.day.format('ddd')}}</ion-label>
+        <ion-label class="date">{{currentDay.day.date()}}</ion-label>
+      </ion-chip>
+
+    </div>
+
+    <h6 class="mt-2">{{currentSelectedDate.format('LL')}}</h6>
+    <ion-list class="no-bg">
+      <ion-card
+        class="white-bg-color"
+        *ngFor="let currEvent of lstCurrentDayEvents"
+        (click)="openModal(currEvent)">
+        <ion-card-header>
+          <ion-card-subtitle *ngIf="currEvent.eventType=='Event'">
+            <ion-text *ngIf="currEvent.startTime && currEvent.endTime">
+              {{ currEvent.startTime?.format('hh:mm a') }} To<br>
+              {{ currEvent.endTime?.format('hh:mm a') }}
+            </ion-text>
+          </ion-card-subtitle>
+          <ion-card-subtitle class="no-event-time"  *ngIf="currEvent.eventType=='Event' && (!currEvent.startTime || !currEvent.endTime)">
+        
+            <ng-container *ngIf="currEvent.eventType=='Event' && (!currEvent.startTime || !currEvent.endTime)">Event</ng-container>
+
+          </ion-card-subtitle>
+          <ion-card-subtitle class="no-event-time" *ngIf="currEvent.eventType=='Holiday'">Holiday</ion-card-subtitle>
+          <ion-card-subtitle class="no-event-time" *ngIf="currEvent.eventType=='Vacation'">Vacation</ion-card-subtitle>
+          <ion-card-subtitle class="no-event-time" *ngIf="currEvent.eventType=='WeeklyOff'">WeeklyOff</ion-card-subtitle>
+
+        </ion-card-header>
+        
+
+        <ion-card-content>
+          <span class="text-start"
+            *ngIf="currEvent.eventType=='Event'">Event - {{currEvent.eventTitle}}</span>
+          <span class="text-start holiday-span"
+            *ngIf="currEvent.eventType=='Holiday'">Holiday - {{currEvent.holidayReason}}</span>
+            <span class="text-start vacation-span"
+            *ngIf="currEvent.eventType=='Vacation'">Vacation - {{currEvent.vacationName}}</span>
+            <span class="text-start WeeklyOff-span"
+            *ngIf="currEvent.eventType=='WeeklyOff'">WeeklyOff - {{currEvent.weeklyOffName}}</span>
+        </ion-card-content>
+      </ion-card>
+    </ion-list>
+
+  </ng-container>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button id="open-datepicker">
+      <ion-icon name="calendar-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
+
+<ion-modal
+  trigger="open-datepicker"
+  [cssClass]="'bottom-end'"
+  [keepContentsMounted]="true"
+  [initialBreakpoint]="0.45">
+  <ng-template>
+    <ion-datetime
+      (ionChange)="onMonthYearChange()"
+      displayFormat="MM.YYYY"
+      presentation="month-year"
+      [(ngModel)]="currentDate"
+      size="cover"
+      [showDefaultButtons]="true"></ion-datetime>
+  </ng-template>
+</ion-modal>
+
+<!-- <ion-modal cssClass="event-modal" [isOpen]="isModalOpen" backdropDismiss="false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar class="dark-toolbar">
+        <ion-title slot="start" class="main-title">Event</ion-title>
+        <ion-buttons slot="end">
+          <ion-button class="red-color" (click)="setOpen(false)">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding" *ngIf="selectedEvent">
+      <ion-grid class="p-0 my-2 mb-4 modal-text-header">
+        <ion-row>
+          <ion-col>
+            <ion-card-subtitle class="message-from">
+              <ion-title style="font-weight: bold; color: black;">Event Details</ion-title>
+            </ion-card-subtitle>
+            <br>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-card-subtitle class="message-from">
+        <span class="bold-black-text">Event Title: &nbsp;</span>
+        <ion-text>{{ selectedEvent.eventTitle }}</ion-text>
+      </ion-card-subtitle>
+      <br>
+      <ion-card-subtitle class="message-from">
+        <span class="bold-black-text">Event Date : &nbsp; </span>
+        <ion-text>{{ selectedEvent.startDate | date: 'dd-MMM-yyyy' }} <span class="to">to</span>  {{ selectedEvent.endDate | date:
+          'dd-MMM-yyyy' }}</ion-text>
+      </ion-card-subtitle>
+      <br>
+      <ng-container *ngIf="selectedEvent && selectedEvent.startTime && selectedEvent.endTime">
+        <ion-card-subtitle class="message-from">
+          <span class="bold-black-text">Event Time: &nbsp; </span>
+          <ion-text>
+            {{ selectedEvent.startTime | date: 'hh:mm a' }}
+            <span class="to">to</span> {{ selectedEvent.endTime | date: 'hh:mm a' }}
+          </ion-text>
+        </ion-card-subtitle>
+      </ng-container>
+      <br>
+      <ion-card-subtitle class="message-from inline">
+        <span class="bold-black-text">Event Description:&nbsp;</span>
+        <ion-text [innerHTML]="selectedEvent.eventDescription"></ion-text>
+      </ion-card-subtitle>
+      <ion-card-subtitle class="message-from">
+        <span class="bold-black-text">Event Coordinator: &nbsp;</span>
+        <ion-text>{{ selectedEvent.eventCoordinator }}</ion-text>
+      </ion-card-subtitle>
+      <br>
+      <ion-card-subtitle class="message-from"
+        *ngIf="selectedEvent.eventFess && selectedEvent.eventFess.length > 0 && selectedEvent.eventFess !== '0.0000'">
+        <span class="bold-black-text">Event Fees: &nbsp;</span>
+        <ion-text>{{ selectedEvent.eventFess }}</ion-text>
+      </ion-card-subtitle>
+
+    </ion-content>
+  </ng-template>
+</ion-modal> -->
+

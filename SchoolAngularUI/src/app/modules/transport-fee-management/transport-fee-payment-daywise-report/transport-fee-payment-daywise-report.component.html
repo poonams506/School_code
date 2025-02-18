@@ -1,0 +1,629 @@
+<div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>TRANSPORT_PAYMENT_COLLECTION_REPORT</h3>
+    </div>
+    <div class="card mb-4">
+      <div class="card-body table-body">
+        <form [formGroup]="transportPaymentReportForm" class="search-filter">
+          <div class="row mb-2">
+            <div class="col-12 col-md-3">
+              <div class="form-group datepicker mb-0">
+                <label translate> START_DATE</label>
+                <input type="text" formControlName="ngbStartDate" class="form-control"
+                  placeholder="{{ 'START_DATE' | translate }}" ngbDatepicker [minDate]="{year: 1901, month: 1, day: 1}" 
+                  [maxDate]="{year: 2100, month: 1, day: 1}" #startDateDatepicker="ngbDatepicker"
+                  (click)="startDateDatepicker.toggle()" />
+                <div class="calendar" (click)="startDateDatepicker.toggle()">
+                  <i class="bi bi-calendar3"></i>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-3">
+              <div class="form-group datepicker mb-0">
+                <label translate> END_DATE</label>
+                <input type="text" formControlName="ngbEndDate" class="form-control"
+                  placeholder="{{ 'END_DATE' | translate }}" ngbDatepicker [minDate]="{year: 1901, month: 1, day: 1}"
+                  [maxDate]="{year: 2100, month: 1, day: 1}" #endDateDatepicker="ngbDatepicker"
+                  (click)="endDateDatepicker.toggle()" />
+                <div class="calendar" (click)="endDateDatepicker.toggle()">
+                  <i class="bi bi-calendar3"></i>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-3 text-right">
+              <div class="form-group search-btns-mobile-margin mb-0">
+                <label class="d-none d-md-block">&nbsp;</label>
+                <button type="button" (click)="search()" class="btn btn-secondary" translate>
+                  SEARCH
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="payment-collection-accordion" id="no-more-tables" *ngIf="transportPaymentReportDaywiseDto != null">
+          <div ngbAccordion #accordion="ngbAccordion" [closeOthers]="true">
+            <div ngbAccordionItem="first" #first="ngbAccordionItem" [collapsed]="false">
+             <div class="payment-collection-accordion-header">
+              <h6 class="w-16" ngbAccordionHeader>
+                <b>CASH</b>
+              </h6>
+              <table class="collection-tables">
+
+              <tr *ngIf="transportPaymentReportDaywiseDto.cashDaywiseTransportPaymentReport.cashDaywiseTransportPaymentReportTotal">
+                <td>
+                  <b translate>TOTAL_COLLECTION</b>:
+                  <b>{{transportPaymentReportDaywiseDto.cashDaywiseTransportPaymentReport.cashDaywiseTransportPaymentReportTotal.totalPaymentAmount |currency : "INR"}}</b>
+
+                </td>
+                <td>
+                </td>
+              </tr>
+              </table>
+              <div class="right">
+  
+                <i (click)="accordion.toggle('first')" class="bi" [ngClass]="
+                                  first.collapsed
+                                    ? 'bi-plus-circle-fill'
+                                    : 'bi-dash-circle-fill'
+                                "></i>
+              </div>
+            </div>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <ng-template>
+                    <div id="no-more-tables">
+                      <table class="display table row-border hover">
+                        <thead>
+                          <tr>
+                            <th style="width: 2%" translate>INVOICE_NUMBER</th>
+                            <th style="width: 2%;" translate>FULL_NAME</th>
+                            <th style="width: 2%" translate>ACADEMIC_YEAR</th>
+                            <th style="width: 2%" translate>USER_TYPE</th>
+                            <th style="width: 2%" translate>PAYMENT_AMOUNT</th>
+                            <th style="width: 2%" translate>TRANSACTION_DATE</th>
+                            <th style="width: 2%" translate>PAYMENT_MODE</th>                                                
+                            <th style="width: 2%" translate>TRANSACTION_BY</th>
+                          </tr>
+                        </thead>
+                        <tbody
+                          *ngIf="transportPaymentReportDaywiseDto.cashDaywiseTransportPaymentReport && transportPaymentReportDaywiseDto.cashDaywiseTransportPaymentReport.cashDaywiseTransportPaymentReportList.length > 0">
+                          <tr
+                            *ngFor="let cashDaywiseTransportPaymentReport of transportPaymentReportDaywiseDto.cashDaywiseTransportPaymentReport.cashDaywiseTransportPaymentReportList; index as i">
+                            <td>
+                              {{ cashDaywiseTransportPaymentReport.invoiceNumber }}
+                            </td>
+                            <td>
+                              {{ cashDaywiseTransportPaymentReport.fullName }}
+                            </td>
+                            <td>
+                              {{ cashDaywiseTransportPaymentReport.academicYearName }}
+                            </td>
+                            <td>
+                              {{ cashDaywiseTransportPaymentReport.userType }}
+                            </td>
+                            <td>
+                              {{ cashDaywiseTransportPaymentReport.paymentAmount |currency : "INR"}}
+                            </td>
+                            <td>
+                              {{ cashDaywiseTransportPaymentReport.transactionDate.toDate() | date : 'dd-MM-yyyy'}}
+                            </td>
+                            <td>
+                              {{ cashDaywiseTransportPaymentReport.paymentMode }}
+                            </td>                       
+                            <td>
+                              {{ cashDaywiseTransportPaymentReport.transactionBy }}
+                            </td>
+                          </tr>
+                          <tr *ngIf="transportPaymentReportDaywiseDto.cashDaywiseTransportPaymentReport.cashDaywiseTransportPaymentReportTotal">
+                            <td colspan="3" translate>
+                              <b translate>TOTAL_COLLECTION</b>
+                            </td>
+                            <td>
+                              <b>{{transportPaymentReportDaywiseDto.cashDaywiseTransportPaymentReport.cashDaywiseTransportPaymentReportTotal.totalPaymentAmount |currency : "INR"}}</b>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+            <div ngbAccordionItem="second" #second="ngbAccordionItem" [collapsed]="false">
+              <div class="payment-collection-accordion-header">
+              <h6 class="w-16" ngbAccordionHeader>
+                <b>CHEQUE</b>
+              </h6>
+              <table class="collection-tables">
+
+              <tr *ngIf="transportPaymentReportDaywiseDto.chequeDaywiseTransportPaymentReport.chequeDaywiseTransportPaymentReportTotal">
+                <td>
+                  <b translate>TOTAL_COLLECTION</b>:
+                  <b>{{transportPaymentReportDaywiseDto.chequeDaywiseTransportPaymentReport.chequeDaywiseTransportPaymentReportTotal.totalPaymentAmount |currency : "INR"}}</b>
+                </td>
+            
+                <td>
+                  <b translate>CHEQUE_UNCLEARED_AMOUNT</b>:
+                  <b>{{transportPaymentReportDaywiseDto.chequeDaywiseTransportPaymentReport.chequeDaywiseTransportPaymentReportTotal.totalChequeUnclearedAmount |currency : "INR"}}</b>
+                </td>
+                
+              </tr>
+              </table>
+              <div class="right">
+                <i (click)="accordion.toggle('second')" class="bi" [ngClass]="
+                                second.collapsed
+                                  ? 'bi-plus-circle-fill'
+                                  : 'bi-dash-circle-fill'
+                              "></i>
+              </div>
+            </div>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <ng-template>
+                    <div id="no-more-tables">
+                      <table class="display table row-border hover">
+                        <thead>
+                          <tr>
+                            <th style="width: 2%" translate>INVOICE_NUMBER</th>
+                            <th style="width: 2%;" translate>FULL_NAME</th>
+                            <th style="width: 2%" translate>ACADEMIC_YEAR</th>
+                            <th style="width: 2%" translate>USER_TYPE</th>
+                            <th style="width: 2%" translate>PAYMENT_AMOUNT</th>
+                            <th style="width: 2%" translate>TRANSACTION_DATE</th>
+                            <th style="width: 2%" translate>PAYMENT_MODE</th>
+                            <th style="width: 2%" translate>CHEQUE_NO</th>
+                            <th style="width: 2%" translate>CHEQUE_DATE</th>
+                            <th style="width: 2%" translate>CHEQUE_BANK</th>
+                            <th style="width: 2%" translate>CHEQUE_UNCLEARED_AMOUNT</th>
+                            <th style="width: 2%" translate>TRANSACTION_BY</th>
+                          </tr>
+                        </thead>
+                        <tbody
+                          *ngIf="transportPaymentReportDaywiseDto.chequeDaywiseTransportPaymentReport && transportPaymentReportDaywiseDto.chequeDaywiseTransportPaymentReport.chequeDaywiseTransportPaymentReportList.length > 0">
+                          <tr
+                            *ngFor="let chequeDaywiseTransportPaymentReport of transportPaymentReportDaywiseDto.chequeDaywiseTransportPaymentReport.chequeDaywiseTransportPaymentReportList; index as i">
+                            <td>
+                              {{ chequeDaywiseTransportPaymentReport.invoiceNumber }}
+                            </td>
+                            <td>
+                              {{ chequeDaywiseTransportPaymentReport.fullName }}
+                            </td>
+                            <td>
+                              {{ chequeDaywiseTransportPaymentReport.academicYearName }}
+                            </td>
+                            <td>
+                              {{ chequeDaywiseTransportPaymentReport.userType }}
+                            </td>
+                            <td>
+                              {{ chequeDaywiseTransportPaymentReport.paymentAmount |currency : "INR"}}
+                            </td>
+                            <td>
+                              {{ chequeDaywiseTransportPaymentReport.transactionDate.toDate() | date : 'dd-MM-yyyy'}}
+                            </td>
+                            <td>
+                              {{ chequeDaywiseTransportPaymentReport.paymentMode }}
+                            </td>
+                            <td>
+                              {{ chequeDaywiseTransportPaymentReport.chequeNumber }}
+                            </td>
+                            <td>
+                              {{ chequeDaywiseTransportPaymentReport.chequeDate.toDate() | date : 'dd-MM-yyyy' }}
+                            </td>
+                            <td>
+                              {{ chequeDaywiseTransportPaymentReport.chequeBank }}
+                            </td>
+                            <td>
+                              {{ chequeDaywiseTransportPaymentReport.chequeUnclearedAmount |currency : "INR"}}
+                            </td>                 
+                            <td>
+                              {{ chequeDaywiseTransportPaymentReport.transactionBy }}
+                            </td>
+                          </tr>
+                          <tr *ngIf="transportPaymentReportDaywiseDto.chequeDaywiseTransportPaymentReport.chequeDaywiseTransportPaymentReportTotal">
+                            <td colspan="3" translate>
+                              <b translate>TOTAL_COLLECTION</b>
+                            </td>
+                            <td>
+                              <b>{{transportPaymentReportDaywiseDto.chequeDaywiseTransportPaymentReport.chequeDaywiseTransportPaymentReportTotal.totalPaymentAmount |currency : "INR"}}</b>
+                            </td>
+                            <td colspan="5" translate>
+                              <b translate>CHEQUE_UNCLEARED_AMOUNT</b>
+                            </td>
+                            <td>
+                              <b>{{transportPaymentReportDaywiseDto.chequeDaywiseTransportPaymentReport.chequeDaywiseTransportPaymentReportTotal.totalChequeUnclearedAmount |currency : "INR"}}</b>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+            <div ngbAccordionItem="third" #third="ngbAccordionItem" [collapsed]="false">
+              <div class="payment-collection-accordion-header">
+                <h6 class="w-16" ngbAccordionHeader>
+                  <b>DD</b>
+                </h6>
+                <table class="collection-tables">
+
+                <tr *ngIf="transportPaymentReportDaywiseDto.ddDaywiseTransportPaymentReport.ddDaywiseTransportPaymentReportTotal">
+                  <td>
+                    <b translate>TOTAL_COLLECTION</b>:
+                    <b>{{transportPaymentReportDaywiseDto.ddDaywiseTransportPaymentReport.ddDaywiseTransportPaymentReportTotal.totalPaymentAmount |currency : "INR"}}</b>
+                  </td>
+                  <td>
+                    <b translate>DD_UNCLEARED_AMOUNT</b>:
+                    <b>{{transportPaymentReportDaywiseDto.ddDaywiseTransportPaymentReport.ddDaywiseTransportPaymentReportTotal.totalChequeUnclearedAmount |currency : "INR"}}</b>
+                  </td>
+               
+                </tr>
+                </table>
+                <div class="right">
+                  <i (click)="accordion.toggle('third')" class="bi" [ngClass]="
+                                  third.collapsed
+                                    ? 'bi-plus-circle-fill'
+                                    : 'bi-dash-circle-fill'
+                                "></i>
+                </div>
+              </div>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <ng-template>
+                    <div id="no-more-tables">
+                      <table class="display table row-border hover">
+                        <thead>
+                          <tr>
+                            <th style="width: 2%" translate>INVOICE_NUMBER</th>
+                            <th style="width: 2%;" translate>FULL_NAME</th>
+                            <th style="width: 2%" translate>ACADEMIC_YEAR</th>
+                            <th style="width: 2%" translate>USER_TYPE</th>
+                            <th style="width: 2%" translate>PAYMENT_AMOUNT</th>
+                            <th style="width: 2%" translate>TRANSACTION_DATE</th>
+                            <th style="width: 2%" translate>PAYMENT_MODE</th>
+                            <th style="width: 2%" translate>DD_NO</th>
+                            <th style="width: 2%" translate>DD_DATE</th>
+                            <th style="width: 2%" translate>DD_BANK</th>
+                            <th style="width: 2%" translate>DD_UNCLEARED_AMOUNT</th>
+                            <th style="width: 2%" translate>TRANSACTION_BY</th>
+                          </tr>
+                        </thead>
+                        <tbody
+                          *ngIf="transportPaymentReportDaywiseDto.ddDaywiseTransportPaymentReport && transportPaymentReportDaywiseDto.ddDaywiseTransportPaymentReport.ddDaywiseTransportPaymentReportList.length > 0">
+                          <tr
+                            *ngFor="let ddDaywiseTransportPaymentReport of transportPaymentReportDaywiseDto.ddDaywiseTransportPaymentReport.ddDaywiseTransportPaymentReportList; index as i">
+                            <td>
+                              {{ ddDaywiseTransportPaymentReport.invoiceNumber }}
+                            </td>
+                            <td>
+                              {{ ddDaywiseTransportPaymentReport.fullName }}
+                            </td>
+                            <td>
+                              {{ ddDaywiseTransportPaymentReport.academicYearName }}
+                            </td>
+                            <td>
+                              {{ ddDaywiseTransportPaymentReport.userType }}
+                            </td>
+                            <td>
+                              {{ ddDaywiseTransportPaymentReport.paymentAmount  |currency : "INR"}}
+                            </td>
+                            <td>
+                              {{ ddDaywiseTransportPaymentReport.transactionDate.toDate() | date : 'dd-MM-yyyy'}}
+                            </td>
+                            <td>
+                              {{ ddDaywiseTransportPaymentReport.paymentMode }}
+                            </td>
+                            <td>
+                              {{ ddDaywiseTransportPaymentReport.chequeNumber }}
+                            </td>
+                            <td>
+                              {{ ddDaywiseTransportPaymentReport.chequeDate.toDate() | date : 'dd-MM-yyyy'}}
+                            </td>
+                            <td>
+                              {{ ddDaywiseTransportPaymentReport.chequeBank }}
+                            </td>
+                            <td>
+                              {{ ddDaywiseTransportPaymentReport.chequeUnclearedAmount |currency : "INR"}}
+                            </td>                   
+                            <td>
+                              {{ ddDaywiseTransportPaymentReport.transactionBy }}
+                            </td>
+                          </tr>
+                          <tr *ngIf="transportPaymentReportDaywiseDto.ddDaywiseTransportPaymentReport.ddDaywiseTransportPaymentReportTotal">
+                            <td colspan="3" translate>
+                              <b translate>TOTAL_COLLECTION</b>
+                            </td>
+                            <td>
+                              <b>{{transportPaymentReportDaywiseDto.ddDaywiseTransportPaymentReport.ddDaywiseTransportPaymentReportTotal.totalPaymentAmount |currency : "INR"}}</b>
+                            </td>
+                            <td colspan="5" translate>
+                              <b translate>DD_UNCLEARED_AMOUNT</b>
+                            </td>
+                            <td>
+                              <b>{{transportPaymentReportDaywiseDto.ddDaywiseTransportPaymentReport.ddDaywiseTransportPaymentReportTotal.totalChequeUnclearedAmount |currency : "INR"}}</b>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+            <div ngbAccordionItem="four" #four="ngbAccordionItem" [collapsed]="false">
+              <div class="payment-collection-accordion-header">
+                <h6 class="w-16" ngbAccordionHeader>
+                  <b>UPI Payment</b>
+                </h6>
+                <table class="collection-tables">
+
+                <tr *ngIf="transportPaymentReportDaywiseDto.upiPaymentDaywiseTransportPaymentReport.upiPaymentDaywiseTransportPaymentReportTotal">
+                  <td colspan="3" translate>
+                    <b translate>TOTAL_COLLECTION</b>:
+                    <b>{{transportPaymentReportDaywiseDto.upiPaymentDaywiseTransportPaymentReport.upiPaymentDaywiseTransportPaymentReportTotal.totalPaymentAmount |currency : "INR"}}</b>
+
+                  </td>
+                  <td>
+                  </td>
+                </tr>
+                </table>
+                <div class="right">
+                  <i (click)="accordion.toggle('four')" class="bi" [ngClass]="
+                                  four.collapsed
+                                    ? 'bi-plus-circle-fill'
+                                    : 'bi-dash-circle-fill'
+                                "></i>
+                </div>
+              </div>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <ng-template>
+                    <div id="no-more-tables">
+                      <table class="display table row-border hover">
+                        <thead>
+                          <tr>
+                            <th style="width: 2%" translate>INVOICE_NUMBER</th>
+                            <th style="width: 2%;" translate>FULL_NAME</th>
+                            <th style="width: 2%" translate>ACADEMIC_YEAR</th>
+                            <th style="width: 2%" translate>USER_TYPE</th>
+                            <th style="width: 2%" translate>PAYMENT_AMOUNT</th>
+                            <th style="width: 2%" translate>TRANSACTION_DATE</th>
+                            <th style="width: 2%" translate>PAYMENT_MODE</th>                     
+                            <th style="width: 2%" translate>TRANSACTION_ID</th>
+                            <th style="width: 2%" translate>TRANSACTION_BY</th>
+                          </tr>
+                        </thead>
+                        <tbody
+                          *ngIf="transportPaymentReportDaywiseDto.upiPaymentDaywiseTransportPaymentReport && transportPaymentReportDaywiseDto.upiPaymentDaywiseTransportPaymentReport.upiPaymentDaywiseTransportPaymentReportList.length > 0">
+                          <tr
+                            *ngFor="let upiPaymentTransportDaywisePaymentReport of transportPaymentReportDaywiseDto.upiPaymentDaywiseTransportPaymentReport.upiPaymentDaywiseTransportPaymentReportList; index as i">
+                            <td>
+                              {{ upiPaymentTransportDaywisePaymentReport.invoiceNumber }}
+                            </td>
+                            <td>
+                              {{ upiPaymentTransportDaywisePaymentReport.fullName }}
+                            </td>
+                            <td>
+                              {{ upiPaymentTransportDaywisePaymentReport.academicYearName }}
+                            </td>
+                            <td>
+                              {{ upiPaymentTransportDaywisePaymentReport.userType }}
+                            </td>
+                            <td>
+                              {{ upiPaymentTransportDaywisePaymentReport.paymentAmount |currency : "INR"}}
+                            </td>
+                            <td>
+                              {{ upiPaymentTransportDaywisePaymentReport.transactionDate.toDate() | date : 'dd-MM-yyyy'}}
+                            </td>
+                            <td>
+                              {{ upiPaymentTransportDaywisePaymentReport.paymentMode }}
+                            </td>
+                            <td>
+                              {{ upiPaymentTransportDaywisePaymentReport.transactionId }}
+                            </td>
+                            <td>
+                              {{ upiPaymentTransportDaywisePaymentReport.transactionBy }}
+                            </td>
+                          </tr>
+                          <tr *ngIf="transportPaymentReportDaywiseDto.upiPaymentDaywiseTransportPaymentReport.upiPaymentDaywiseTransportPaymentReportTotal">
+                            <td colspan="3" translate>
+                              <b translate>TOTAL_COLLECTION</b>
+                            </td>
+                            <td>
+                              <b>{{transportPaymentReportDaywiseDto.upiPaymentDaywiseTransportPaymentReport.upiPaymentDaywiseTransportPaymentReportTotal.totalPaymentAmount |currency : "INR"}}</b>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+            <div ngbAccordionItem="five" #five="ngbAccordionItem" [collapsed]="false">
+              <div class="payment-collection-accordion-header">
+                <h6 class="w-16" ngbAccordionHeader>
+                  <b>Net Banking</b>
+                </h6>
+                <table class="collection-tables">
+
+                <tr *ngIf="transportPaymentReportDaywiseDto.netBankingDaywiseTransportPaymentReport.netBankingDaywiseTransportPaymentReportTotal">
+                  <td>
+                    <b translate>TOTAL_COLLECTION</b>:
+                    <b>{{transportPaymentReportDaywiseDto.netBankingDaywiseTransportPaymentReport.netBankingDaywiseTransportPaymentReportTotal.totalPaymentAmount |currency : "INR"}}</b>
+
+                  </td>
+                  <td>
+                  </td>
+                </tr>
+                </table>
+                <div class="right">
+                  <i (click)="accordion.toggle('five')" class="bi" [ngClass]="
+                                  five.collapsed
+                                    ? 'bi-plus-circle-fill'
+                                    : 'bi-dash-circle-fill'
+                                "></i>
+                </div>
+              </div>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <ng-template>
+                    <div id="no-more-tables">
+                      <table class="display table row-border hover">
+                        <thead>
+                          <tr>
+                            <th style="width: 2%" translate>INVOICE_NUMBER</th>
+                            <th style="width: 2%;" translate>FULL_NAME</th>
+                            <th style="width: 2%" translate>ACADEMIC_YEAR</th>
+                            <th style="width: 2%" translate>USER_TYPE</th>
+                            <th style="width: 2%" translate>PAYMENT_AMOUNT</th>
+                            <th style="width: 2%" translate>TRANSACTION_DATE</th>
+                            <th style="width: 2%" translate>PAYMENT_MODE</th>                   
+                            <th style="width: 2%" translate>TRANSACTION_ID</th>
+                            <th style="width: 2%" translate>TRANSACTION_BY</th>
+                          </tr>
+                        </thead>
+                        <tbody
+                          *ngIf="transportPaymentReportDaywiseDto.netBankingDaywiseTransportPaymentReport && transportPaymentReportDaywiseDto.netBankingDaywiseTransportPaymentReport.netBankingDaywiseTransportPaymentReportList.length > 0">
+                          <tr
+                            *ngFor="let netBankingDaywiseTransportPaymentReport of transportPaymentReportDaywiseDto.netBankingDaywiseTransportPaymentReport.netBankingDaywiseTransportPaymentReportList; index as i">
+                            <td>
+                              {{ netBankingDaywiseTransportPaymentReport.invoiceNumber }}
+                            </td>
+                            <td>
+                              {{ netBankingDaywiseTransportPaymentReport.fullName }}
+                            </td>
+                            <td>
+                              {{ netBankingDaywiseTransportPaymentReport.academicYearName }}
+                            </td>
+                            <td>
+                              {{ netBankingDaywiseTransportPaymentReport.userType }}
+                            </td>
+                            <td>
+                              {{ netBankingDaywiseTransportPaymentReport.paymentAmount |currency : "INR" }}
+                            </td>
+                            <td>
+                              {{ netBankingDaywiseTransportPaymentReport.transactionDate.toDate() | date : 'dd-MM-yyyy'}}
+                            </td>
+                            <td>
+                              {{ netBankingDaywiseTransportPaymentReport.paymentMode }}
+                            </td>                       
+                            <td>
+                              {{ netBankingDaywiseTransportPaymentReport.transactionId }}
+                            </td>
+                            <td>
+                              {{ netBankingDaywiseTransportPaymentReport.transactionBy }}
+                            </td>
+                          </tr>
+                          <tr *ngIf="transportPaymentReportDaywiseDto.netBankingDaywiseTransportPaymentReport.netBankingDaywiseTransportPaymentReportTotal">
+                            <td colspan="3" translate>
+                              <b translate>TOTAL_COLLECTION</b>
+                            </td>
+                            <td>
+                              <b>{{transportPaymentReportDaywiseDto.netBankingDaywiseTransportPaymentReport.netBankingDaywiseTransportPaymentReportTotal.totalPaymentAmount |currency : "INR"}}</b>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+            <div ngbAccordionItem="six" #six="ngbAccordionItem" [collapsed]="false">
+              <div class="payment-collection-accordion-header">
+                <h6 class="w-16" ngbAccordionHeader>
+                  <b>Credit/Debit Card</b>
+                </h6>
+                <table class="collection-tables">
+
+                <tr *ngIf="transportPaymentReportDaywiseDto.cardDaywiseTransportPaymentReport.cardDaywiseTransportPaymentReportTotal">
+                  <td colspan="3" translate>
+                    <b translate>TOTAL_COLLECTION</b>:
+                    <b>{{transportPaymentReportDaywiseDto.cardDaywiseTransportPaymentReport.cardDaywiseTransportPaymentReportTotal.totalPaymentAmount |currency : "INR"}}</b>
+
+                  </td>
+                  <td>
+                  </td>
+                </tr>
+                </table>
+
+                <div class="right">
+                  <i (click)="accordion.toggle('six')" class="bi" [ngClass]="
+                                  six.collapsed
+                                    ? 'bi-plus-circle-fill'
+                                    : 'bi-dash-circle-fill'
+                                "></i>
+                </div>
+              </div>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <ng-template>
+                    <div id="no-more-tables">
+                      <table class="display table row-border hover">
+                        <thead>
+                          <tr>
+                            <th style="width: 2%" translate>INVOICE_NUMBER</th>
+                            <th style="width: 2%;" translate>FULL_NAME</th>
+                            <th style="width: 2%" translate>ACADEMIC_YEAR</th>
+                            <th style="width: 2%" translate>USER_TYPE</th>
+                            <th style="width: 2%" translate>PAYMENT_AMOUNT</th>
+                            <th style="width: 2%" translate>TRANSACTION_DATE</th>
+                            <th style="width: 2%" translate>PAYMENT_MODE</th>                        
+                            <th style="width: 2%" translate>TRANSACTION_ID</th>
+                            <th style="width: 2%" translate>TRANSACTION_BY</th>
+                          </tr>
+                        </thead>
+                        <tbody
+                          *ngIf="transportPaymentReportDaywiseDto.cardDaywiseTransportPaymentReport && transportPaymentReportDaywiseDto.cardDaywiseTransportPaymentReport.cardDaywiseTransportPaymentReportList.length > 0">
+                          <tr
+                            *ngFor="let cardDaywiseTransportPaymentReport of transportPaymentReportDaywiseDto.cardDaywiseTransportPaymentReport.cardDaywiseTransportPaymentReportList; index as i">
+                            <td>
+                              {{ cardDaywiseTransportPaymentReport.invoiceNumber }}
+                            </td>
+                            <td>
+                              {{ cardDaywiseTransportPaymentReport.fullName }}
+                            </td>
+                            <td>
+                              {{ cardDaywiseTransportPaymentReport.academicYearName }}
+                            </td>
+                            <td>
+                              {{ cardDaywiseTransportPaymentReport.userType }}
+                            </td>
+                            <td>
+                              {{ cardDaywiseTransportPaymentReport.paymentAmount |currency : "INR" }}
+                            </td>
+                            <td>
+                              {{ cardDaywiseTransportPaymentReport.transactionDate.toDate() | date : 'dd-MM-yyyy'}}
+                            </td>
+                            <td>
+                              {{ cardDaywiseTransportPaymentReport.paymentMode }}
+                            </td>                       
+                            <td>
+                              {{ cardDaywiseTransportPaymentReport.transactionId }}
+                            </td>
+                            <td>
+                              {{ cardDaywiseTransportPaymentReport.transactionBy }}
+                            </td>
+                          </tr>
+                          <tr *ngIf="transportPaymentReportDaywiseDto.cardDaywiseTransportPaymentReport.cardDaywiseTransportPaymentReportTotal">
+                            <td colspan="3" translate>
+                              <b translate>TOTAL_COLLECTION</b>
+                            </td>
+                            <td>
+                              <b>{{transportPaymentReportDaywiseDto.cardDaywiseTransportPaymentReport.cardDaywiseTransportPaymentReportTotal.totalPaymentAmount |currency : "INR"}}</b>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  </div>

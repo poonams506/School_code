@@ -1,0 +1,127 @@
+
+  
+  <div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>CAB_DRIVER</h3>
+      <button class="btn btn-with-icon with-text btn-primary ms-auto" (click)="addDriver()" *ngIf="this.sharedPermissionServiceService.havePermission('Cab Driver','Create')" translate>ADD_DRIVER</button>
+      <button container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}" class="btn btn-with-icon with-text btn-primary ms-auto btn-disabled"  *ngIf="!this.sharedPermissionServiceService.havePermission('Cab Driver','Create')" translate>ADD_DRIVER</button>
+  </div>
+
+  
+    <div class="card mb-4">
+      <div class="card-body table-body">
+        <!--table listing statrt-->
+        <div id="no-more-tables">
+        
+
+          <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="display table row-border hover">
+            <thead>
+              <tr>
+                <th style="width: 10%;" translate>FULL_NAME</th>
+                <th style="width: 10%;" translate>MOBILE_NUMBER</th>
+                <th style="width: 10%;" translate>ADDRESS</th>
+                <th style="width: 10%;" translate>EMAIL_ID</th>
+                <th style="width: 10%;" translate>APP_ACCESS_USER_ID</th>
+                <th style="width: 10%;" translate>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="drivers?.length != 0">
+              <tr *ngFor="let driver of drivers index as i">
+                  <td [attr.data-title]=" 'FULL_NAME' | translate">{{ driver.fullName }}</td>
+                  <td [attr.data-title]=" 'MOBILE_NUMBER' | translate">{{ driver.mobileNumber }}</td>
+                  <td [attr.data-title]=" 'ADDRESS' | translate">{{ driver.address }}</td>
+                  <td [attr.data-title]=" 'EMAIL_ID' | translate">{{ driver.emailId }}</td>
+                  <td [attr.data-title]=" 'AppAccessUserId' | translate">{{ driver.appAccessMobileNo }}</td>
+                  <td [attr.data-title]=" 'ACTIONS' | translate" class="action text-center actions-td">
+                    <div class="d-flex flex-wrap justify-content-end">
+                      <button *ngIf="this.sharedPermissionServiceService.havePermission('Cab Driver','Update')"
+                        type="button"
+                        class="btn btn-secondary action-btn"
+                        (click)="editDriver(driver)" 
+                      >
+                        <span
+                          placement="top"
+                          ngbTooltip="{{ 'VIEW_EDIT' | translate }}"
+                        >
+                          <i class="bi bi-pencil"></i>
+                        </span>
+                      </button>
+                      <button *ngIf="!this.sharedPermissionServiceService.havePermission('Cab Driver','Update')"
+                        type="button"
+                        class="btn btn-secondary action-btn btn-disabled"
+                      >
+                        <span
+                        container="body"
+                          placement="top"
+                          ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                        >
+                          <i class="bi bi-pencil"></i>
+                        </span>
+                      </button>
+    
+                      <button *ngIf="this.sharedPermissionServiceService.havePermission('Cab Driver','Update') && driver.appAccessMobileNo" 
+                      type="button"
+                      class="btn btn-secondary action-btn"
+                      (click)="resetPassword(driver)"
+                    >
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'Reset Password' | translate }}"
+                      >
+                        <i class="bi bi-bootstrap-reboot"></i>
+                      </span>
+                    </button>
+                    <button *ngIf="!this.sharedPermissionServiceService.havePermission('Cab Driver','Update') && driver.appAccessMobileNo" 
+                    type="button"
+                    class="btn btn-secondary action-btn btn-disabled"
+                  >
+                    <span
+                      placement="top"
+                      ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                    >
+                      <i class="bi bi-bootstrap-reboot"></i>
+                    </span>
+                  </button>
+
+                      <button  *ngIf="this.sharedPermissionServiceService.havePermission('Cab Driver','Delete')"
+                        type="button"
+                        class="btn btn-danger action-btn"
+                        (click)="confirmDriverDelete(driver)"
+                      >
+                        <span
+                          placement="top"
+                          ngbTooltip="{{ 'DELETE' | translate }}"
+                        >
+                          <i class="bi bi-trash"></i>
+                        </span>
+                      </button>
+                      <button *ngIf="!this.sharedPermissionServiceService.havePermission('Cab Driver','Delete')"
+                        type="button"
+                        class="btn btn-secondary action-btn btn-disabled"
+                      >
+                        <span
+                          placement="top"
+                          ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                        >
+                          <i class="bi bi-trash"></i>
+                        </span>
+                      </button>
+
+                      
+                    </div>
+                  </td>
+               
+              </tr>
+              <tr *ngIf="drivers?.length == 0">
+                <td colspan="7" class="no-data-available" translate>NO_RECORDS_FOUND</td>
+              </tr>
+            </tbody>
+  
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  

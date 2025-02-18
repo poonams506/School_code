@@ -1,0 +1,102 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title" *ngIf="f['examMasterId']?.value == 0" ngbAutofocus translate>
+    ADD_EXAM
+  </h4>
+  <h4 class="modal-title" id="modal-basic-title" *ngIf="f['examMasterId']?.value > 0" ngbAutofocus translate>
+    UPDATE_EXAM
+  </h4>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="examMasterForm" novalidate>
+    <div class="row">
+      <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+        <div class="form-group">
+          <label class="required" translate>EXAM_TYPE <span>*</span></label>
+          <select
+          (change)="resetSelectList(f,'examTypeId')"
+            formControlName="examTypeId"
+            class="form-control"
+            bindLabel='examTypeName'
+            [ngClass]="{
+              'is-invalid': submitted && f['examTypeId'].errors
+            }"
+          >
+            <option [value]= "null">
+              <span translate>SELECT_EXAM_TYPE</span>
+            </option>
+            <option *ngFor=  "let item of examTypeList" [value]="item.examTypeId">
+              <span translate>{{ item.examTypeName }}</span>
+            </option>
+          </select>
+          <div *ngIf="submitted && f['examTypeId'].errors" class="invalid-feedback">
+            <div *ngIf="f['examTypeId'].errors['required']">
+              <span translate>EXAM_TYPE</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-12 col-md-3">
+        <div class="form-group">
+          <label class="required" translate>TERM <span>*</span></label>
+          <select
+          (change)="resetSelectList(f,'termId')"
+            formControlName="termId"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid': submitted && f['termId'].errors
+            }"
+          >
+            <option [value]="null">
+              <span translate>SELECT_TERM</span>
+            </option>
+            <option *ngFor="let item of termList" [value]="item.termId">
+              <span translate>{{ item.termName }}</span>
+            </option>
+          </select>
+          <div *ngIf="submitted && f['termId'].errors" class="invalid-feedback">
+            <div *ngIf="f['termId'].errors['required']">
+              <span translate>TERM</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-3">
+        <div class="form-group">
+          <label class="required" translate>EXAM_NAME <span>*</span></label>
+          <input
+            type="text"
+            formControlName="examName"
+            class="form-control"
+            placeholder="{{ 'Exam Name' | translate }}"
+            [ngClass]="{ 'is-invalid': submitted && f['examName'].errors }"
+            maxlength="100"
+            (input)="clearErrorMessage()"
+            (input)="removeSpaces()"
+          />
+          
+          <div class="col-12 col-md-12 col-lg-12">
+            <span *ngIf="errorMessage" class="text-danger text-center">{{errorMessage}}</span>
+          </div>
+          <div *ngIf="submitted && f['examName'].errors" class="invalid-feedback">
+            <div *ngIf="f['examName'].errors['required']">
+              <span translate>EXAM_NAME</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <div class="form-group mb-0">
+    <button type="button" class="btn btn-primary" (click)="saveExamMasterData()" translate>SAVE</button>
+    <button class="btn btn-light" (click)="close()" translate>CANCEL</button>
+  </div>
+</div>

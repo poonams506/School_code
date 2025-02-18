@@ -1,0 +1,92 @@
+    .schoolholiday {
+        white-space: nowrap;
+        margin: 0;
+        border: none;
+        border-collapse: separate;
+        border-spacing: 0;
+        table-layout: fixed;
+        border: 1px solid var(--border-color);
+    }
+    
+    .schoolholiday select.form-control {
+        padding: 2px;
+    }
+    
+    .schoolholiday td,
+    .schoolholiday th {
+        padding: 0.5rem 1rem;
+    }
+    
+    .schoolholiday thead th {
+        padding: 3px;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        width: 16vw;
+        height: 35px;
+        background: var(--table-header-bg-color);
+    }
+    
+    .schoolholiday td {
+        background: var(--white-bg-color);
+        padding: 2px 2px;
+        text-align: center;
+    }
+    
+    .schoolholiday tbody th {
+        font-weight: 500;
+        text-align: left;
+        position: relative;
+    }
+    
+    .schoolholiday thead th:first-child {
+        position: sticky;
+        left: 0;
+        z-index: 2;
+    }
+    
+    .schoolholiday tbody th {
+        position: sticky;
+        left: 0;
+        background: var(--white-bg-color);
+        z-index: 1;
+    }
+    
+    .schoolholiday-wrapper {
+        width: 100%;
+        max-height: 60vh;
+        overflow: auto;
+    }
+    
+    .schoolholiday > :not(caption) > * > * {
+        border-width: 1px !important;
+    }
+    
+    .no-data-available {
+        text-align: center;
+      }
+      
+      
+      ::ng-deep table.dataTable td.dataTables_empty {
+        display: none;
+      }
+    
+      .day-wrap .label-title {
+        font-weight: 500;
+    }
+    
+    .day-wrap .day-list {
+        display: flex;
+        column-gap: 30px;
+    }
+    
+    .day-wrap .day-list .day {
+        display: flex;
+        align-items: center;
+        padding: 2px 7px;
+        background: #bdc6d178;
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+    
+      

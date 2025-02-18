@@ -1,0 +1,74 @@
+<form >
+    <div class="container-fluid">
+        <div class="d-flex align-items-center page-heading-wrapper">
+          <h3 class="page-heading" translate>TEACHER_SUBJECT_MAPPING</h3>
+        </div>
+        <div class="card mb-4">
+          <div class="card-body table-body">
+            <!--table listing statrt-->
+            <div id="no-more-tables">
+              <table
+                datatable
+                [dtOptions]="dtOptions"
+                [dtTrigger]="dtTrigger"
+                class="display table row-border hover">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;" translate>TEACHER_NAME</th>
+                    <th style="width: 12%;" translate>LECTURE_PER_WEEK</th>
+                    <th style="width: 68%" translate>SUBJECT_NAME</th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="teacherSubjectMappings?.length != 0">
+                  <tr *ngFor="let teacherSubjectMapping of teacherSubjectMappings index as i ">
+                        <td [attr.data-title]=" 'TEACHER_NAME' | translate">{{ teacherSubjectMapping.fullName }}</td>
+                        <td [attr.data-title]="'LECTURE_PER_WEEK' | translate" >
+                          <input type="text" 
+                          [ngModelOptions]="{standalone: true}"
+                          [(ngModel)]="teacherSubjectMapping.lecturePerWeek"
+                           class="form-control custom-input"
+                           (change)="onInputChange(teacherSubjectMapping.teacherId,teacherSubjectMapping.teacherSubjectList, teacherSubjectMapping.lecturePerWeek)"
+                           maxlength="3"
+                           pattern="[0-9]*"
+                           inputmode="numeric" 
+                           oninput="this.value = this.value.replace(/\D+/g, '')"
+                            />
+                          
+                      </td>
+                       <td [attr.data-title]=" 'SUBJECT_NAME' | translate">
+                        <ng-select
+                       [items]="subjectDropdownList"
+                       [multiple]="true"
+                       [clearable]="false" 
+                       [closeOnSelect]="false"
+                       bindLabel="subjectName"
+                       bindValue="subjectMasterId"
+                       placeholder="{{ 'SELECT_SUBJECT' | translate }}"
+                       [ngModelOptions]="{standalone: true}"
+                       [(ngModel)]="teacherSubjectMapping.teacherSubjectList"
+                       (remove)="onDropDownClose(teacherSubjectMapping, $event, teacherSubjectMapping.teacherId)" 
+                       (close)="onDropDownAdd(teacherSubjectMapping, $event, teacherSubjectMapping.teacherId)"   
+                       >
+    
+                       <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                        <span *ngIf="!isDisabled(item, teacherSubjectMapping.teacherId)" >
+                        <input
+                          id="item-{{ index }}"
+                          type="checkbox"
+                          [ngModelOptions]="{ standalone: true }"
+                          [ngModel]="item$.selected"
+                        />
+                        {{ item.subjectName }}
+                      </span>  
+                      </ng-template>
+                     </ng-select>
+                    </td> 
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    

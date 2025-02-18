@@ -1,0 +1,76 @@
+<div class="modal-header">
+  <h4  translate class="modal-title" id="modal-basic-title" *ngIf="schoolVacationId==0" ngbAutofocus translate>
+    ADD_SCHOOL_VACATION
+  </h4>
+  <h4  translate class="modal-title" id="modal-basic-title" *ngIf="schoolVacationId>0" ngbAutofocus translate>
+    EDIT_SCHOOL_VACATION
+  </h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="close()"></button>
+</div>
+
+  <div class="modal-body">
+    <form class="search-filter" [formGroup]="addSchoolVacationForm">
+      <div class="row">
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label for="vacationName" class="required" translate>VACATION <span>*</span></label>
+            <input id="vacationName" type="text" formControlName="vacationName" class="form-control"
+              placeholder="{{ 'VACATION' | translate }}" [ngClass]="{
+              'is-invalid': submitted && f['vacationName'].errors
+            }" maxlength="100"  />
+            <div *ngIf="submitted && f['vacationName'].errors" class="invalid-feedback">
+              <div *ngIf="f['vacationName'].errors['required']">
+                <span translate>VACATION</span>
+                <span translate> IS_REQUIRED</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group datepicker">
+            <label class="required" translate>START_DATE<span>*</span></label>
+            <input type="text" formControlName="ngbStartDate" class="form-control"
+              placeholder="{{ 'START_DATE' | translate }}"
+              [ngClass]="{ 'is-invalid': submitted && f['ngbStartDate'].errors }" ngbDatepicker [minDate]="minDate"
+              [maxDate]="maxDate" [readonly]="true" #startDateDatepicker="ngbDatepicker" (click)="startDateDatepicker.toggle()" />
+            <div class="calendar" (click)="startDateDatepicker.toggle()">
+              <i class="bi bi-calendar3"></i>
+            </div>
+            <div *ngIf="submitted && f['ngbStartDate'].errors" class="invalid-feedback">
+              <div *ngIf="f['ngbStartDate'].errors['required']">
+                <span translate>START_DATE</span>
+                <span translate> IS_REQUIRED</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group datepicker">
+            <label class="required" translate>END_DATE<span>*</span></label>
+            <input type="text" formControlName="ngbEndDate" class="form-control"
+              placeholder="{{ 'END_DATE' | translate }}" [ngClass]="{ 'is-invalid': submitted && f['ngbEndDate'].errors }"
+              ngbDatepicker [minDate]="minDate"  [readonly]="true" [maxDate]="maxDate" #endDateDatepicker="ngbDatepicker"
+              (click)="endDateDatepicker.toggle()" />
+            <div class="calendar" (click)="endDateDatepicker.toggle()">
+              <i class="bi bi-calendar3"></i>
+            </div>
+            <div *ngIf="submitted && f['ngbEndDate'].errors" class="invalid-feedback">
+              <div *ngIf="f['ngbEndDate'].errors['required']">
+                <span translate>END_DATE</span>
+                <span translate> IS_REQUIRED</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-primary"  (click)="saveSchoolVacationData()" translate>
+        SAVE
+      </button>
+      <button class="btn btn-light" (click)="close()" translate>
+        CANCEL
+      </button>
+  </div>
+  

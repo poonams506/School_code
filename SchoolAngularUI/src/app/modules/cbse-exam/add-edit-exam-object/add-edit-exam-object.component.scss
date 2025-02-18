@@ -1,0 +1,5 @@
+select[disabled] {
+    background-color: #e9ecef; /* Readonly-like background */
+    pointer-events: none; /* Prevent clicks */
+    opacity: 1; /* Keep it visible */
+  }

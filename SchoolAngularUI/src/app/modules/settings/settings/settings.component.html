@@ -1,0 +1,664 @@
+<div class="container-fluid">
+  <div class="d-flex align-items-center page-heading-wrapper">
+    <h3 class="page-heading" translate>SETTINGS</h3>
+    <!-- <a routerLink="/clerks" class="back-arrow"
+      ><i class="bi bi-arrow-left-circle"></i
+    ></a> -->
+  </div>
+  <form [formGroup]="schoolSettingForm" (ngSubmit)="onSubmit()">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title" translate> ACADEMIC</h4>
+      </div>
+      <div class="card-body card-body-form">
+       <div class="row">
+        <!-- <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group datepicker">
+            <label class="required" translate>ACADEMIC_YEAR<span>*</span></label>
+      
+            <select (change)="resetSelectList(f,'academicYearId')"
+            formControlName="academicYearId"
+            class="form-control"
+            
+            [ngClass]="{
+              'is-invalid': submitted && f['academicYearId'].errors
+            }"
+          >
+          <option [value]="null" >
+            <span translate>SELECT_ACADEMIC_YEAR</span>
+            </option>
+          <option *ngFor="let item of academicYearDropdownList" [value]="item.academicYearId" >
+            {{item.academicYearName}}
+          </option>
+          </select>
+          
+            <div
+              *ngIf="submitted && f['academicYearId'].errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f['academicYearId'].errors['required']">
+                <span translate>ACADEMIC_YEAR</span>
+                <span translate> IS_REQUIRED</span>
+              </div>
+            </div>
+          </div>
+        </div> -->
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group datepicker">
+            <label class="required" translate>ACADEMIC_YEAR_START_MONTH<span>*</span></label>
+            <input type="text" (change)="resetSelectList(f,'ngbAcademicYearStartMonth')" formControlName="ngbAcademicYearStartMonth" class="form-control"
+              placeholder="{{ 'ACADEMIC_YEAR_START_MONTH' | translate }}"
+              [ngClass]="{ 'is-invalid': submitted && f['ngbAcademicYearStartMonth'].errors }" ngbDatepicker [minDate]="minDate"
+              [maxDate]="maxDate"[readonly]="true" #startDateDatepicker="ngbDatepicker" (click)="startDateDatepicker.toggle()" />
+            <div class="calendar" (click)="startDateDatepicker.toggle()">
+              <i class="bi bi-calendar3"></i>
+            </div>
+  
+            <div *ngIf="submitted && f['ngbAcademicYearStartMonth'].errors" class="invalid-feedback">
+              <div *ngIf="f['ngbAcademicYearStartMonth'].errors['required']">
+                <span translate>ACADEMIC_YEAR_START_MONTH</span>
+                <span translate>IS_REQUIRED</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label class="required" translate>APPLICATION_LANGUAGE<span>*</span></label>
+      
+            <select  (change)="resetSelectList(f,'langaugeCode')"
+            formControlName="langaugeCode"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid': submitted && f['langaugeCode'].errors
+            }"
+          >
+            <option [value]="null"><span translate>SELECT_LANGUAGE</span></option>
+          <option *ngFor="let item of langaugeCodes" [value]="item.id">
+            {{item.value}}
+          </option>
+          </select>
+          
+            <div
+              *ngIf="submitted && f['langaugeCode'].errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f['langaugeCode'].errors['required']">
+                <span translate>APPLICATION_LANGUAGE</span>
+                <span translate> IS_REQUIRED</span>
+              </div>
+            </div>
+          </div>
+        </div>
+       </div>
+      </div>
+
+
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title" translate> RECEIPTS</h4>
+      </div>
+      <div class="card-body card-body-form">
+       <div class="row">
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label translate
+              >INVOICE_NO_PREFIX </label
+            >
+            <input
+              type="text"
+              formControlName="invoiceNoPrefix"
+              class="form-control"
+              placeholder="{{ 'INVOICE_NO_PREFIX' | translate }}"
+              [ngClass]="{
+                'is-invalid': submitted && f['invoiceNoPrefix'].errors
+              }"
+              maxlength="20"
+            />
+          </div>
+        </div>
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label  translate
+              >INVOICE_NO_START </label
+            >
+            <input
+              type="text"
+              formControlName="invoiceNoStartNumber"
+              class="form-control"
+              placeholder="{{ 'INVOICE_NO_START' | translate }}"
+              maxlength="10"
+              pattern="[0-9]*"
+              [ngClass]="{
+                'is-invalid': submitted && f['invoiceNoStartNumber'].errors
+              }"
+            />
+            <div
+              *ngIf="submitted && f['invoiceNoStartNumber'].errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f['invoiceNoStartNumber'].errors['pattern']">
+                <span translate>INVOICE_NO_START</span>
+                <span translate> MUST_BE_DIGITS</span>
+              </div>
+            </div>
+          </div>
+        
+        </div>
+      </div>
+        <div class="row">
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate
+                >TRANSPORT_INVOICE_NO_PREFIX </label
+              >
+              <input
+                type="text"
+                formControlName="transportInvoiceNoPrefix"
+                class="form-control"
+                placeholder="{{ 'TRANSPORT_INVOICE_NO_PREFIX' | translate }}"
+                maxlength="20"
+              />
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label  translate
+                >TRANSPORT_INVOICE_NO_START </label
+              >
+              <input
+                type="text"
+                formControlName="transportInvoiceNoStartNumber"
+                class="form-control"
+                placeholder="{{ 'TRANSPORT_INVOICE_NO_START' | translate }}"
+                maxlength="10"
+                pattern="[0-9]*"
+                [ngClass]="{
+                  'is-invalid': submitted && f['transportInvoiceNoStartNumber'].errors
+                }"
+              />
+              <div
+                *ngIf="submitted && f['transportInvoiceNoStartNumber'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['transportInvoiceNoStartNumber'].errors['pattern']">
+                  <span translate>TRANSPORT_INVOICE_NO_START</span>
+                  <span translate> MUST_BE_DIGITS</span>
+                </div>
+              </div>  
+            </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label translate
+              >ADDITIONAL_FEE_INVOICE_NO_PREFIX </label
+            >
+            <input
+              type="text"
+              formControlName="additionalFeeInvoiceNoPrefix"
+              class="form-control"
+              placeholder="{{ 'ADDITIONAL_FEE_INVOICE_NO_PREFIX' | translate }}"
+              [ngClass]="{
+                'is-invalid': submitted && f['additionalFeeInvoiceNoPrefix'].errors
+              }"
+              maxlength="20"
+            />
+          </div>
+        </div>
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label  translate
+              >ADDITIONAL_FEE_INVOICE_NO_START </label
+            >
+            <input
+              type="text"
+              formControlName="additionalFeeInvoiceNoStartNumber"
+              class="form-control"
+              placeholder="{{ 'ADDITIONAL_FEE_INVOICE_NO_START' | translate }}"
+              maxlength="10"
+              pattern="[0-9]*"
+              [ngClass]="{
+                'is-invalid': submitted && f['additionalFeeInvoiceNoStartNumber'].errors
+              }"
+            />
+            <div
+              *ngIf="submitted && f['additionalFeeInvoiceNoStartNumber'].errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f['additionalFeeInvoiceNoStartNumber'].errors['pattern']">
+                <span translate>ADDITIONAL_FEE_INVOICE_NO_START</span>
+                <span translate> MUST_BE_DIGITS</span>
+              </div>
+            </div>  
+          </div>
+        
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label translate
+              >SCHOOLKIT_INVOICE_NO_PREFIX </label
+            >
+            <input
+              type="text"
+              formControlName="schoolKitInvoiceNoPrefix"
+              class="form-control"
+              placeholder="{{ 'SCHOOLKIT_INVOICE_NO_PREFIX' | translate }}"
+              [ngClass]="{
+                'is-invalid': submitted && f['schoolKitInvoiceNoPrefix'].errors
+              }"
+              maxlength="20"
+            />
+          </div>
+        </div>
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label  translate
+              >SCHOOLKIT_INVOICE_NO_START </label
+            >
+            <input
+              type="text"
+              formControlName="schoolKitInvoiceNoStartNumber"
+              class="form-control"
+              placeholder="{{ 'SCHOOLKIT_INVOICE_NO_START' | translate }}"
+              maxlength="10"
+              pattern="[0-9]*"
+              [ngClass]="{
+                'is-invalid': submitted && f['schoolKitInvoiceNoStartNumber'].errors
+              }"
+            />
+            <div
+              *ngIf="submitted && f['schoolKitInvoiceNoStartNumber'].errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f['schoolKitInvoiceNoStartNumber'].errors['pattern']">
+                <span translate>SCHOOLKIT_INVOICE_NO_START</span>
+                <span translate> MUST_BE_DIGITS</span>
+              </div>
+            </div>  
+            
+          </div>
+        
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label translate
+              >REGISTRATION_INVOICE_NO_PREFIX </label
+            >
+            <input
+              type="text"
+              formControlName="registrationFeeInvoiceNoPrefix"
+              class="form-control"
+              placeholder="{{ 'REGISTRATION_INVOICE_NO_PREFIX' | translate }}"
+              [ngClass]="{
+                'is-invalid': submitted && f['registrationFeeInvoiceNoPrefix'].errors
+              }"
+              maxlength="20"
+            />
+          </div>
+        </div>
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label  translate
+              >REGISTRATION_INVOICE_NO_START </label
+            >
+            <input
+              type="text"
+              formControlName="registrationFeeInvoiceNoStartNumber"
+              class="form-control"
+              placeholder="{{ 'REGISTRATION_INVOICE_NO_START' | translate }}"
+              maxlength="10"
+              pattern="[0-9]*"
+              [ngClass]="{
+                'is-invalid': submitted && f['registrationFeeInvoiceNoStartNumber'].errors
+              }"
+            />
+            <div
+              *ngIf="submitted && f['registrationFeeInvoiceNoStartNumber'].errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f['registrationFeeInvoiceNoStartNumber'].errors['pattern']">
+                <span translate>REGISTRATION_INVOICE_NO_START</span>
+                <span translate> MUST_BE_DIGITS</span>
+              </div>
+            </div>  
+            
+          </div>
+        
+        </div>
+      </div>
+    </div>
+    </div>
+    
+    <!-- <div class="card">
+      <div class="card-header">
+        <h4 class="card-title" translate> ADDITIONAL_FEE</h4>
+      </div>
+      <div class="card-body card-body-form">
+       <div class="row">
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label translate
+              >ADDITIONAL_FEE_INVOICE_NO_PREFIX </label
+            >
+            <input
+              type="text"
+              formControlName="additionalFeeInvoiceNoPrefix"
+              class="form-control"
+              placeholder="{{ 'ADDITIONAL_FEE_INVOICE_NO_PREFIX' | translate }}"
+              [ngClass]="{
+                'is-invalid': submitted && f['additionalFeeInvoiceNoPrefix'].errors
+              }"
+              maxlength="20"
+            />
+          </div>
+        </div>
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label  translate
+              >ADDITIONAL_FEE_INVOICE_NO_START </label
+            >
+            <input
+              type="text"
+              formControlName="additionalFeeInvoiceNoStartNumber"
+              class="form-control"
+              placeholder="{{ 'ADDITIONAL_FEE_INVOICE_NO_START' | translate }}"
+            />
+            
+          </div>
+        
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title" translate> STATIONARY</h4>
+      </div>
+      <div class="card-body card-body-form">
+       <div class="row">
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label translate
+              >STATIONARY_INVOICE_NO_PREFIX </label
+            >
+            <input
+              type="text"
+              formControlName="stationaryInvoiceNoPrefix"
+              class="form-control"
+              placeholder="{{ 'STATIONARY_INVOICE_NO_PREFIX' | translate }}"
+              [ngClass]="{
+                'is-invalid': submitted && f['stationaryInvoiceNoPrefix'].errors
+              }"
+              maxlength="20"
+            />
+          </div>
+        </div>
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label  translate
+              >STATIONARY_INVOICE_NO_START </label
+            >
+            <input
+              type="text"
+              formControlName="stationaryInvoiceNoStartNumber"
+              class="form-control"
+              placeholder="{{ 'STATIONARY_INVOICE_NO_START' | translate }}"
+            />
+            
+          </div>
+        
+        </div>
+      </div>
+    </div>
+    </div> -->
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title" translate> BANK_DETAILS</h4>
+      </div>
+      <div class="card-body card-body-form">
+       <div class="row">
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label  translate
+              >ACCOUNT_NUMBER </label
+            >
+            <input
+              type="text"
+              formControlName="accountNumber"
+              class="form-control"
+              placeholder="{{ 'ACCOUNT_NUMBER' | translate }}"
+              [ngClass]="{
+                'is-invalid': submitted && f['accountNumber'].errors
+              }"
+              maxlength="50"
+            />
+            </div>
+        </div>
+     
+
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label translate
+              >ACCOUNT_TYPE </label
+            >
+            <select 
+             (change)="resetSelectList(f,'accountTypeId')"
+              formControlName="accountTypeId"
+              class="form-control"
+           
+            >
+              <option [value]="null" translate>SELECT_ACCOUNT_TYPE</option>
+              <option [value]="1">Saving</option>
+              <option [value]="2">Current</option>
+            </select>
+            
+          </div>
+        </div>
+     
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label translate
+              >IFSC_CODE </label
+            >
+            <input
+              type="text"
+              formControlName="ifscCode"
+              class="form-control"
+              placeholder="{{ 'IFSC_CODE' | translate }}"
+              [ngClass]="{
+                'is-invalid': submitted && f['ifscCode'].errors
+              }"
+              maxlength="50"
+            />
+            
+          </div>
+        </div>
+     
+        
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label  translate
+              >ACCOUNT_NAME </label
+            >
+            <input
+              type="text"
+              formControlName="accountName"
+              class="form-control"
+              placeholder="{{ 'ACCOUNT_NAME' | translate }}"
+              [ngClass]="{
+                'is-invalid': submitted && f['accountName'].errors
+              }"
+              maxlength="150"
+            />
+          </div>
+        </div>
+      </div>
+      
+      </div>
+    </div>
+
+    <div class="card ">
+      <div class="card-header">
+        <h4 class="card-title" translate> LEAVING_CERTIFICATE</h4>
+      </div>
+      <div class="card-body card-body-form">
+       <div class="row">
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label  translate
+              >SERIAL_NUMBER_START </label
+            >
+            <input
+              type="text"
+              formControlName="serialNoStartNumber"
+              class="form-control"
+              placeholder="{{ 'SERIAL_NUMBER_START' | translate }}"
+              maxlength="10"
+              pattern="[0-9]*"
+              [ngClass]="{
+                'is-invalid': submitted && f['serialNoStartNumber'].errors
+              }"
+            />
+            <div
+              *ngIf="submitted && f['serialNoStartNumber'].errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f['serialNoStartNumber'].errors['pattern']">
+                <span translate>SERIAL_NUMBER_START</span>
+                <span translate> MUST_BE_DIGITS</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-0">
+      <div class="card-header">
+        <h4 class="card-title" translate> TRANSPORT_SETTING</h4>
+      </div>
+      <div class="card-body card-body-form ">
+        <div class="day-wrap">
+       <div class="row ">
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <div class="custom-control custom-checkbox d-flex align-items-center">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="check1"
+                formControlName="isSharedTransport"
+                
+              />
+              <label class="custom-control-label ms-2" for="check1" translate
+                >IS_SHARED_TRANSPORT</label
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <div class="custom-control custom-checkbox d-flex align-items-center">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="check2"
+                formControlName="isFeeApplicableToStaff"
+                
+              />
+              <label class="custom-control-label ms-2" for="check2" translate
+                >IS_TRANSPORT_FEE_APPLICABLE_FOR_STAFF</label
+              >
+            </div>
+          </div>
+        </div>
+          <div class="form-group" formgroup>
+          <label class="required font-weight-bold mb-3" translate>APPLICABLE_TRASPORT_MONTHS</label>
+          <!-- <div class="day-list">
+          <div class="day">
+              <input type="checkbox" class="custom-control-input" [id]="'Jan'" formControlName="Jan" />
+              <label class="custom-control-label ms-2" [for]="'Jan'" translate>JAN</label>
+            </div>
+            <div class="day">
+              <input type="checkbox" class="custom-control-input" [id]="'Feb'" formControlName="Feb" />
+              <label class="custom-control-label ms-2" [for]="'Feb'" translate>FEB</label>
+            </div>
+            <div class="day">
+              <input type="checkbox" class="custom-control-input" [id]="'Mar'" formControlName="Mar" />
+              <label class="custom-control-label ms-2" [for]="'Mar'" translate>MAR</label>
+            </div>
+            <div class="day">
+              <input type="checkbox" class="custom-control-input" [id]="'Apr'" formControlName="Apr" />
+              <label class="custom-control-label ms-2" [for]="'Apr'" translate>APR</label>
+            </div>
+            <div class="day">
+              <input type="checkbox" class="custom-control-input" [id]="'May'" formControlName="May" />
+              <label class="custom-control-label ms-2" [for]="'May'" translate>MAY</label>
+            </div>
+            <div class="day">
+              <input type="checkbox" class="custom-control-input" [id]="'Jun'" formControlName="Jun" />
+              <label class="custom-control-label ms-2" [for]="'Jun'" translate>JUN</label>
+            </div>
+            <div class="day">
+              <input type="checkbox" class="custom-control-input" [id]="'Jul'" formControlName="Jul" />
+              <label class="custom-control-label ms-2" [for]="'Jul'" translate>JUL</label>
+            </div>
+            <div class="day">
+              <input type="checkbox" class="custom-control-input" [id]="'Aug'" formControlName="Aug" />
+              <label class="custom-control-label ms-2" [for]="'Aug'" translate>AUG</label>
+            </div>
+            <div class="day">
+              <input type="checkbox" class="custom-control-input" [id]="'Sep'" formControlName="Sep" />
+              <label class="custom-control-label ms-2" [for]="'Sep'" translate>SEP</label>
+            </div>
+            <div class="day">
+              <input type="checkbox" class="custom-control-input" [id]="'Oct'" formControlName="Oct" />
+              <label class="custom-control-label ms-2" [for]="'Oct'" translate>OCT</label>
+            </div>
+            <div class="day">
+              <input type="checkbox" class="custom-control-input" [id]="'Nov'" formControlName="Nov" />
+              <label class="custom-control-label ms-2" [for]="'Nov'" translate>NOV</label>
+            </div>
+            <div class="day">
+              <input type="checkbox" class="custom-control-input" [id]="'Dec'" formControlName="Dec" />
+              <label class="custom-control-label ms-2" [for]="'Dec'" translate>DEC</label>
+            </div> 
+          </div> -->
+           <div class="day-list">
+            <div class="day" *ngFor="let item of transportMonths">
+              <input type="checkbox" class="custom-control-input" [id]="item.month" [formControlName]="item.month" />
+              <label class="custom-control-label ms-2" [for]="item.month" translate>{{item.month}} {{item.year}}</label>
+            </div>
+          </div>
+        </div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group sticky-buttons">
+      <button
+        type="button"
+        (click)="onReset()"
+        class="btn btn-light float-right"
+        translate
+      >
+        RESET
+      </button>
+      <button type="submit"  *ngIf="this.sharedPermissionServiceService.havePermission('School Settings','Create') || this.sharedPermissionServiceService.havePermission('School Settings','Update') " 
+      class="btn btn-primary" translate>SAVE</button>
+      <button  type="button" container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}" *ngIf="!this.sharedPermissionServiceService.havePermission('School Settings','Create') && !this.sharedPermissionServiceService.havePermission('School Settings','Update') " 
+      class="btn btn-primary btn-disabled " translate>SAVE</button>
+    </div>
+  </form>
+</div>

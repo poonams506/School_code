@@ -1,0 +1,1151 @@
+
+<div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>LEAVING_CERTIFICATE</h3>
+      <button class="btn btn-with-icon with-text btn-primary ms-auto" (click)="viewLC()" translate>VIEW_HISTORY</button> 
+    </div>
+
+  
+    <div class="card mb-4 d-md-block">
+      <div class="card-body search-body">
+        <!--table search filter start-->
+        <form  [formGroup]="certificateForm" (ngSubmit)="onSearchCertificate()" class="search-filter">
+          <div class="row mb-2">
+            <div class="col-sm">
+              <div class="form-group">
+                <label translate class="required"
+                  >CLASS <span>*</span></label
+                >
+                <select (change)="resetSelectList(f,'classId')"
+                  formControlName="classId"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid': certificateSubmitted && f['classId'].errors
+                  }"
+                >
+                <option [value]="null">
+                  <span translate>SELECT_CLASS</span>
+                  </option>
+                <option *ngFor="let item of divisionGradeMapping" [value]="item.schoolGradeDivisionMatrixId" >
+                  {{item.className}}
+                </option>
+                </select>
+                <div
+                  *ngIf="certificateSubmitted && f['classId'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['classId'].errors['required']">
+                    <span translate>CLASS</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm">
+              <div class="form-group">
+                <label translate class="required"
+                  >STUDENT_NAME <span>*</span></label
+                ><select (change)="resetSelectList(f,'fullName')"
+                  formControlName="fullName"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid': certificateSubmitted && f['fullName'].errors
+                  }"
+                >
+                <option [value]="null">
+                  <span translate> SELECT_STUDENT_NAME</span>
+                  </option>
+                <option *ngFor="let item of studentDropdownList" [value]="item.studentId">
+                  {{item.fullName}}
+                </option>
+                </select>
+                <div
+                  *ngIf="certificateSubmitted && f['fullName'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['fullName'].errors['required']">
+                    <span translate>STUDENT_NAME</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+           
+            <div class="col-md-4 text-right">
+              <div class="form-group search-btns-mobile-margin">
+                <label for="city" class="d-none d-md-block">&nbsp;</label>
+                <button type="button" class="btn btn-light" translate (click)="onCertificateReset()">
+                  RESET
+                </button>
+                <button type="submit" class="btn btn-primary" *ngIf="this.sharedPermissionServiceService.havePermission('Leaving','Read')" translate>
+                  SEARCH
+                </button>
+                <button type="button" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}" class="btn btn-primary btn-disabled" *ngIf="!this.sharedPermissionServiceService.havePermission('Leaving','Read')" translate>
+                    SEARCH
+                  </button>
+                  <a type="button" target="_blank" routerLink="/students/add-edit-student/{{encyptedStudentId}}" class="btn btn-primary" *ngIf="this.sharedPermissionServiceService.havePermission('Leaving','Read') && 
+                  this.certificateForm.get('fullName')?.value && this.certificateForm.get('fullName')?.value != '' &&
+                  this.certificateForm.get('fullName')?.value != null && this.certificateForm.get('fullName')?.value != undefined" translate>
+                    Edit Student
+                </a>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <app-fee-pending-due-by-ac [currentAcademicYearInclude]="true" *ngIf="studentId > 0" [studentId]="studentId"></app-fee-pending-due-by-ac>
+  
+    <div class="card mb-4" *ngIf="leavingCertificateList && leavingCertificateList.length > 0" >
+      <div class="card-body table-body">
+        <!--table listing statrt-->
+        <div id="no-more-tables">
+      <table class="display table row-border hover">
+        <thead>
+          <tr>
+            <th style="width: 10%;" translate>SR_NO</th>
+            <th style="width: 20%;" translate>STUDENT_NAME</th>
+            <th style="width: 20%;" translate>Gen Reg No</th>
+            <th style="width: 10%;" translate>STATUS</th>
+            <th style="width: 10%;" translate>LC_TYPE</th>
+            <th style="width: 10%;" translate>Date</th>
+            <th style="width: 20%;" translate>ACTION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of leavingCertificateList; let first = first ; let last = last">
+            <td>{{item.serialNumber}}</td>
+            <td>{{item.studentName}}</td>
+            <td>{{item.generalRegistrationNo}}</td>
+            <td>
+              <span *ngIf="item.statusId == 0">Generated</span>
+              <span *ngIf="item.statusId == 1">Printed</span>
+              <span *ngIf="item.statusId >= 2">Completed</span>
+            </td>
+            <td>
+                <span *ngIf="item.statusId == 2">Original</span>
+                <span *ngIf="item.statusId == 3">Duplicate</span>
+                <span *ngIf="item.statusId == 4">Cancelled</span>
+              </td>
+              <td>
+                {{item.createdDate?.toDate() | date : "dd/MM/yyyy" }}
+              </td>
+            <td>
+              <button *ngIf="item.statusId < 2 && this.sharedPermissionServiceService.havePermission('Leaving','Print')"
+              type="button"
+              class="btn btn-secondary action-btn"
+              (click)="printPopup(item,1)"
+            >
+              <span
+                placement="top"
+                ngbTooltip="{{ 'Print' | translate }}"
+              >
+              <i class="bi bi-printer"></i>
+              </span>
+            </button>
+            <button *ngIf="item.statusId < 2 && !this.sharedPermissionServiceService.havePermission('Leaving','Print')"
+              type="button"
+              class="btn btn-secondary action-btn"
+            >
+              <span
+                placement="top"
+                ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}" 
+              >
+              <i class="bi bi-printer"></i>
+              </span>
+            </button>
+            <button *ngIf="item.statusId == 1 && !checkAnyDuplicateLCGiven()"
+              type="button"
+              class="btn btn-secondary action-btn"
+              (click)="markGiveAsOriginal(item,2)"
+            >
+              <span
+                placement="top"
+                ngbTooltip="{{ 'Mark as original' | translate }}"
+              >
+              <i class="bi bi-file-earmark"></i>
+              </span>
+            </button>
+            <button *ngIf="item.statusId == 1 && this.sharedPermissionServiceService.havePermission('Leaving','Update') "
+              type="button"
+              class="btn btn-secondary action-btn"
+              (click)="markGiveAsDuplicate(item,3)"
+            >
+              <span
+                placement="top"
+                ngbTooltip="{{ 'Mark as duplicate' | translate }}"
+              >
+              <i class="bi bi-copy"></i>
+              </span>
+            </button>
+            <button *ngIf="item.statusId == 1 && !this.sharedPermissionServiceService.havePermission('Leaving','Update') "
+            type="button"
+            class="btn btn-secondary action-btn"
+          >
+            <span
+              placement="top"
+              ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+            >
+            <i class="bi bi-copy"></i>
+            </span>
+          </button>
+            <button *ngIf="this.sharedPermissionServiceService.havePermission('Leaving','Create') && !anyDocGenerated(item.leavingCertificateAuditsId) && (item.statusId == 2 || item.statusId == 3)"
+              type="button"
+              class="btn btn-secondary action-btn"
+              (click)="createAsDuplicate(item)"
+            >
+              <span
+                placement="top"
+                ngbTooltip="{{ 'Create duplicate' | translate }}"
+              >
+              <i class="bi bi-copy"></i>
+              </span>
+            </button>
+            <button *ngIf="!this.sharedPermissionServiceService.havePermission('Leaving','Create') && !anyDocGenerated(item.leavingCertificateAuditsId) && (item.statusId == 2 || item.statusId == 3)"
+              type="button"
+              class="btn btn-secondary action-btn btn-disabled"
+            >
+              <span
+                placement="top"
+                ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+              >
+              <i class="bi bi-copy"></i>
+              </span>
+            </button>
+            <button *ngIf="item.statusId == 1 && this.sharedPermissionServiceService.havePermission('Leaving','Delete')"
+              type="button"
+              class="btn btn-secondary action-btn"
+              (click)="markAsCancelled(item,4)"
+            >
+              <span
+                placement="top"
+                ngbTooltip="{{ 'Mark as cancel' | translate }}"
+              >
+              <i class="bi bi-file-earmark-break"></i>
+              </span>
+            </button>
+            <button *ngIf="item.statusId == 1 && !this.sharedPermissionServiceService.havePermission('Leaving','Delete')"
+            type="button"
+            class="btn btn-secondary action-btn"
+          >
+            <span
+              placement="top"
+              ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+            >
+            <i class="bi bi-file-earmark-break"></i>
+            </span>
+          </button>
+          </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+    </div>
+
+    <div class="card mb-4" *ngIf="certificateDto && certificateDto.leavingCertificateDetails && showStatus == 1">
+      <div class="card-body table-body">
+        <div id="leavingc" class="wrapper-width" style="margin: 13px auto; border: 2px solid gray;">
+    
+            <app-print-common-header></app-print-common-header>
+     
+             <div style="padding:0px 10px 10px 10px;">
+                 <div>
+                     <div class="text-center" style="font-size:20px; text-decoration:underline; text-align:center; font-weight:bold;">
+                             <span translate>SCHOOL_LEAVING_CERTIFICATE</span>
+                     </div>
+                     <div>
+                         <div style="float:left;font-weight:bold;font-size:13px;"><span translate>SR_NO</span> : {{certificateDto.leavingCertificateDetails.serialNumber}} <span ngbTooltip="{{ 'SERIAL_NUMBER_WILL_BE_SHOWN_AFTER_LC_GENERATE' | translate }}" *ngIf="(certificateDto.leavingCertificateDetails.serialNumber && certificateDto.leavingCertificateDetails.serialNumber <= 0) || certificateDto.leavingCertificateDetails.serialNumber == undefined || certificateDto.leavingCertificateDetails.serialNumber == null"><i class="bi bi-info-circle-fill"></i></span></div>
+                         <div style="float:right;font-weight:bold;font-size:13px;padding-right: 12px;"><span translate>G_R_NO</span> : {{certificateDto.leavingCertificateDetails.generalRegistrationNo}} </div>
+                         <div style="clear:both;"></div>
+                     </div>
+                     <div>
+                         <div style="float:left;font-weight:bold;font-size:13px;"><span translate>STUDENT_ID</span> : {{certificateDto.leavingCertificateDetails.cbscStudentId}} </div>
+                         <div style="float:right; font-weight:bold;font-size:13px;padding-right: 12px;"><span translate>UID_NO</span> : {{certificateDto.leavingCertificateDetails.adharNo}}</div>
+                         <div style="clear:both;"></div>
+                     </div>
+                     <table style="width:100%;margin-top:10px;">
+                         <tbody>
+                             <tr>
+                                 <td style="width:30%; font-weight:bold;font-size:13px;"> 1. <span translate>FULL_NAME_OF_STUDENT</span> :</td>
+                                 <td style="width:70%;">
+                                     <table style="width:100%;">
+                                             <tbody>
+                                                 <tr>
+                                                     <td style="width:30%;">{{certificateDto.leavingCertificateDetails.firstName}}</td>
+                                                     <td style="width:30%;">{{certificateDto.leavingCertificateDetails.middleName}}</td>
+                                                     <td style="width:30%;">{{certificateDto.leavingCertificateDetails.lastName}}</td>
+                                                 </tr>
+                                                 <tr>
+                                                     <td style="width:30%;" translate>(<span translate>FIRST_NAME</span>)</td>
+                                                     <td style="width:30%;" translate>(<span translate>MIDDLE_NAME</span>)</td>
+                                                     <td style="width:30%;" translate>(<span translate>LAST_NAME</span>)</td>
+                                                 </tr>
+                                             </tbody>
+                                     </table>
+                                 </td>
+                             </tr>
+                         </tbody>
+                 </table>
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody>
+                             <tr>
+                                 <td style="width:31%; font-weight:bold;font-size:13px;">2. <span translate>MOTHERS_NAME</span> :</td>
+                                 <td style="width:11%;">{{certificateDto.leavingCertificateDetails.motherName}}</td>
+                                 <td style="width:69%;">
+                                     <table style="width:100%;">
+                                             <tbody>
+                                                 <tr>
+                                                     <td style="width:30%;"></td>
+                                                     <td style="width:30%;"></td>
+                                                     <td style="width:30%;"></td>
+                                                 </tr>
+                                             </tbody>
+                                     </table>
+                                 </td>
+                             </tr>
+                          </tbody>
+                     </table>
+     
+                     <table style="width:100%;margin-top:10px;">
+                         <tbody>
+                             <tr>
+                             <td style="width:50%;">
+                                 <table style="width:100%;">
+                                     <tbody>
+                                         <tr>
+                                         <td style="width:60%; font-weight:bold;font-size:13px;">3. <span translate>NATIONALITY</span> :</td>
+                                         <td style="width:40%;">{{certificateDto.leavingCertificateDetails.nationality}}</td>
+                                     </tr>
+                                 </tbody>
+                             </table>
+                             </td>
+     
+                             <td style="width:50%;">
+                                 <table style="width:100%;">
+                                     <tbody>
+                                         <tr>
+                                         <td style="width:40%; font-weight:bold;font-size:13px;"> 4. <span translate>MOTHER_TONGUE</span> :</td>
+                                         <td style="width:60%;">{{certificateDto.leavingCertificateDetails.motherTounge}}</td>
+                                     </tr>
+                                 </tbody>
+                             </table>
+                             </td>
+                         </tr>
+                     </tbody>
+                 </table>
+     
+                     <table style="width:100%;margin-top:10px;">
+                         <tbody>
+                             <tr>
+                             <td style="width:50%;">
+                                 <table style="width:100%;">
+                                     <tbody><tr>
+                                         <td style="width:60%; font-weight:bold;font-size:13px;">5. <span translate>RELIGION</span> :</td>
+                                         <td style="width:40%;"> {{certificateDto.leavingCertificateDetails.religion}}</td>
+                                     </tr>
+                                 </tbody>
+                             </table>
+                             </td>
+     
+                             <td style="width:50%;">
+                                 <table style="width:100%;">
+                                     <tbody>
+                                         <tr>
+                                             <td style="width:22%;"><span style="font-weight:bold;font-size:13px;" translate>CASTE</span> : </td>
+                                             <td style="width:28%;">{{certificateDto.leavingCertificateDetails.cast}}</td>
+                                             <td style="margin-left:5%;"><span style="font-weight:bold;font-size:13px;" translate>SUB_CASTE</span> : {{certificateDto.leavingCertificateDetails.subCast}}</td>
+                                     </tr>
+                                 </tbody>
+                             </table>
+                             </td>
+                         </tr>
+                     </tbody>
+                 </table>
+     
+     
+                     <table style="width:100%;margin-top:10px;">
+                         <tbody>
+                             <tr>
+                             <td style="width:50%;">
+                                 <table style="width:100%;">
+                                     <tbody><tr>
+                                         <td style="width:60%; font-weight:bold;font-size:13px;">6. <span translate>PLACE_OF_BIRTH_VILLAGE_CITY</span> :</td>
+                                         <td style="width:40%;">{{certificateDto.leavingCertificateDetails.birthPlace}}</td>
+                                     </tr>
+                                 </tbody>
+                             </table>
+                             </td>
+     
+                             <td style="width:50%;">
+                                 <table style="width:100%;">
+                                     <tbody><tr>
+                                         <td style="width:14%; font-weight:bold;font-size:13px;"> <span translate>TALUKA</span></td>
+                                         <td style="width:11%;">{{certificateDto.leavingCertificateDetails.birthTalukaName}}</td>
+     
+                                         <td style="width:20%;margin-left:5%; font-weight:bold;font-size:13px;"> <span translate>DISTRICT</span> :</td>
+                                         <td style="width:25%;">{{certificateDto.leavingCertificateDetails.birthDistrictName}}</td>
+                                     </tr>
+     
+                                     <tr>
+                                         <td style="width:20%; font-weight:bold;font-size:13px;"> <span translate>STATE</span> :</td>
+                                         <td style="width:25%;">{{certificateDto.leavingCertificateDetails.birthStateName}}</td>
+     
+                                         <td style="width:20%;margin-left:5%; font-weight:bold;font-size:13px;"> <span translate>COUNTRY</span> :</td>
+                                         <td style="width:25%;">{{certificateDto.leavingCertificateDetails.birthCountryName}}</td>
+                                     </tr>
+                                 </tbody>
+                             </table>
+                             </td>
+     
+                         </tr>
+                     </tbody>
+                 </table>
+     
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody>
+                             <tr>
+                             <td style="width:31%;font-weight:bold;font-size:13px;text-indent: -14px;padding-left: 16px;">7. <span translate>DATE_OF_BIRTH_CHISTIAN_ERA</span> :</td>
+                             <td style="width:69%;"><span>{{certificateDto.leavingCertificateDetails.birthDate?.toDate() | date : 'dd/MM/yyyy'}}</span>
+                             </td>
+                         </tr>
+     
+                         <tr>
+                             <td style="width:31%; padding-left:16px; font-weight:bold;font-size:13px;"> <span translate>DATE_OF_BIRTH_IN_WORDS</span> :</td>
+                             <td style="width:69%;">{{certificateDto.leavingCertificateDetails.birthDateInWords}}</td>
+                         </tr>
+                     </tbody>
+                 </table>
+     
+     
+     
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody>
+                             <tr>
+                             <td style="width:31%; font-weight:bold;font-size:13px;">8. <span translate>PREVIOUS_SCHOOL_STD</span>.:</td>
+                             <td style="width:69%;">{{certificateDto.leavingCertificateDetails.lastSchoolAttended}} - {{certificateDto.leavingCertificateDetails.lastSchoolStandard}}</td>
+                         </tr>
+                     </tbody>
+                 </table>
+     
+     
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody><tr>
+                             <td style="width:31%; font-weight:bold;font-size:13px;">9. <span translate>DATE_OF_ADMISSION</span> :</td>
+                             <td style="width:20%;">{{certificateDto.leavingCertificateDetails.dateOfAdmission?.toDate() | date : 'dd/MM/yyyy'}}</td>
+     
+                             <td style="width:5%; font-weight:bold;font-size:13px;">
+                                <span translate>STD</span> :</td>
+                             <td style="width:44%;">{{certificateDto.leavingCertificateDetails.gradeNameAdmission}}</td>
+                         </tr>
+                     </tbody>
+                 </table>
+     
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody><tr>
+                             <td style="width:31%; font-weight:bold;font-size:13px;">10. <span translate>PROGRESS</span> :</td>
+                         <td style="width: 69%;">
+                            <input style="width: 100%;" [(ngModel)]="certificateDto.leavingCertificateDetails.progressCurrent" class="input" id="process" name="process" type="text">
+                         </td>
+                            </tr>
+                     </tbody>
+                 </table>
+     
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody><tr>
+                             <td style="width:31%;font-weight:bold;font-size:13px;">11. <span translate>CONDUCT</span> :</td>
+                             <td  style="width: 69%;">
+                                <input style="width: 100%;" [(ngModel)]="certificateDto.leavingCertificateDetails.conductCurrent" class="input" id="conduct" name="conduct" type="text">
+                             </td>
+                         </tr>
+                     </tbody></table>
+     
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody>
+                             <tr>
+                             <td class="form-group datepicker" style="width: 31%;font-weight:bold;font-size:13px;">12. <span translate>DATE_OF_LEAVING_SCHOOL</span> :
+                              
+                            </td>
+                            <td style="width: 69%;" class="certificate-date">
+                                <div class="date-input">
+                                    <input style="width: 100%;"
+                                class="input"
+                                type="text"
+                                [(ngModel)]="certificateDto.leavingCertificateDetails.ngbDateOfLeavingSchoolCurrent"
+                                placeholder="{{ 'DD/MM/YYYY' | translate }}"
+                                ngbDatepicker [minDate]="{year: 1950, month: 1, day: 1}" [maxDate]="{year: 2100, month: 1, day: 1}" [readonly]="true"
+                                #dateOfLeavingSchoolDatepicker="ngbDatepicker"
+                                (click)="dateOfLeavingSchoolDatepicker.toggle()"
+                              />
+                                    <i class="bi bi-calendar"></i>
+                                </div>
+                                
+                            </td>
+                         </tr>
+                     </tbody>
+                 </table>
+                     
+     
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody><tr>
+                             <td style="width: 31%;text-indent: -20px;padding-left: 21px;"><span style="font-weight:bold;font-size:13px;">13.</span>&nbsp;<span style="font-weight:bold;font-size:13px;" translate>STD_IN_WHICH_STUDYING_AND_SINCE_WHEN</span>&nbsp;<span style="font-weight:bold;font-size:13px;" translate>IN_WORDS_AND_FIGURES</span>&nbsp;:</td>
+                             <td style="width: 69%;"><input style="width: 100%" [(ngModel)]="certificateDto.leavingCertificateDetails.standardInWhichStudyingCurrent" class="input" id="StandardInWhichStudying" name="StandardInWhichStudying" type="text"></td>
+                         </tr>
+                     </tbody></table>
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody><tr>
+                             <td style="width:31%; font-weight:bold;font-size:13px;">14. <span translate>REASON_OF_LEAVING_SCHOOL</span><td>
+                             <td style="width:69%;">
+                                 
+     <textarea [(ngModel)]="certificateDto.leavingCertificateDetails.reasonOfLeavingSchoolCurrent" class="input" cols="20" id="ReasonOfLeavingSchool" name="ReasonOfLeavingSchool" row="2" rows="2" style="font-size:14px; width: 100%;"></textarea>                            
+                             </td>
+                         </tr>
+                     </tbody></table>
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody>
+                        <tr>
+                             <td style="width:31%; font-weight:bold;font-size:13px;">15. <span translate>REMARK</span> :</td>
+                             <td style="width:69%;"><input style="width: 100%;" [(ngModel)]="certificateDto.leavingCertificateDetails.remarkCurrent" class="input" id="remarkofleaving" name="remarkofleaving" type="text">                            </td>
+                         </tr>
+                     </tbody></table>
+                     <br>
+                     <div style="text-align:center; font-weight:bold;font-size:13px;" translate>
+                         LEAVING_CERTIFICATE_NOTE
+                     </div>
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody><tr>
+                             <td style="width:30%;" class="form-group datepicker certificate-date">
+                                 <span style="font-weight:bold;font-size:13px;" translate>DATE</span> &nbsp;
+                                 <div class="date-input" style="display: inline-block;">
+                                 <input
+                                type="text" class="input" style="width: 100%;"
+                                [(ngModel)]="certificateDto.leavingCertificateDetails.ngbDateSignCurrent"
+                                placeholder="{{ 'DD/MM/YYYY' | translate }}"
+                                ngbDatepicker [minDate]="{year: 1950, month: 1, day: 1}" [maxDate]="{year: 2100, month: 1, day: 1}" [readonly]="true"
+                                #dateSignDatepicker="ngbDatepicker"
+                                (click)="dateSignDatepicker.toggle()"
+                              />
+                              <i class="bi bi-calendar"></i>
+                              </div>
+                             </td>
+                         </tr>
+                     </tbody>
+                 </table>
+     
+                     <table style="width:100%; margin-top:70px;">
+                         <tbody>
+                             <tr>
+                             <td style="width:30%; font-weight:bold;font-size:13px;" translate>CLASS_TEACHER</td>
+                             <td style="width:30%; font-weight:bold;" translate>
+                                 CLERK
+                             </td>
+                             <td style="width:30%; font-weight:bold;font-size:13px;"translate>HEAD_MASTER_SING_STAMP</td>
+                         </tr>
+                     </tbody>
+                 </table>
+     
+                     <div class="row col-sm-12" style="font-size:11px;border-top:1px solid #000000;margin-top:10px"><span style="font-weight:bold;font-size:14px;margin-top:5px;font-size:13px;"><span translate>NOTE</span> :-</span><span style="font-size:12px" translate> LEAVING_CERTIFICATE_NOTE1</span></div>
+     
+                 </div>
+             </div>
+             <div style="clear:both;"></div>
+     
+         </div>
+ 
+         <div class="text-center">
+             <button id="printdivid" (click)="Generate()" class="btn btn-primary" *ngIf="this.sharedPermissionServiceService.havePermission('Leaving','Create')" translate>GENERATE</button>
+             <button  class="btn btn-with-icon with-text btn-primary ms-auto btn-disabled" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}" *ngIf="!this.sharedPermissionServiceService.havePermission('Leaving','Create')" translate>GENERATE</button>
+         </div>
+      </div>
+    </div>
+
+    <div class="card mb-4" *ngIf="certificateDto && certificateDto.leavingCertificateDetails && showStatus == 2">
+      <div class="card-body table-body">
+        <div id="print-section" class="wrapper-width" style="margin: 13px auto; border: 2px solid gray;">
+    
+            <app-print-common-header></app-print-common-header>
+     
+             <div style="padding:0px 10px 10px 10px;">
+                 <div>
+                     <div class="text-center" style="font-size:20px; text-decoration:underline; text-align:center; font-weight:bold;">
+                             <span translate>SCHOOL_LEAVING_CERTIFICATE</span>
+                     </div>
+                     <div>
+                         <div style="float:left;font-weight:bold;font-size:13px;"><span translate>SR_NO</span> : {{certificateDto.leavingCertificateDetails.serialNumber}} <span ngbTooltip="{{ 'SERIAL_NUMBER_WILL_BE_SHOWN_AFTER_LC_GENERATE' | translate }}" *ngIf="(certificateDto.leavingCertificateDetails.serialNumber && certificateDto.leavingCertificateDetails.serialNumber <= 0) || certificateDto.leavingCertificateDetails.serialNumber == undefined || certificateDto.leavingCertificateDetails.serialNumber == null"><i class="bi bi-info-circle-fill"></i></span></div>
+                         <div style="float:right;font-weight:bold;font-size:13px;padding-right: 12px;"><span translate>G_R_NO</span> : {{certificateDto.leavingCertificateDetails.generalRegistrationNo}} </div>
+                         <div style="clear:both;"></div>
+                     </div>
+                     <div>
+                         <div style="float:left;font-weight:bold;font-size:13px;"><span translate>STUDENT_ID</span> : {{certificateDto.leavingCertificateDetails.cbscStudentId}} </div>
+                         <div style="float:right; font-weight:bold;font-size:13px;padding-right: 12px;"><span translate>UID_NO</span> : {{certificateDto.leavingCertificateDetails.adharNo}}</div>
+                         <div style="clear:both;"></div>
+                     </div>
+                     <table style="width:100%;margin-top:10px;">
+                         <tbody>
+                             <tr>
+                                 <td style="width:30%; font-weight:bold;font-size:13px;"> 1. <span translate>FULL_NAME_OF_STUDENT</span> :</td>
+                                 <td style="width:70%;">
+                                     <table style="width:100%;">
+                                             <tbody>
+                                                 <tr>
+                                                     <td style="width:30%;">{{certificateDto.leavingCertificateDetails.firstName}}</td>
+                                                     <td style="width:30%;">{{certificateDto.leavingCertificateDetails.middleName}}</td>
+                                                     <td style="width:30%;">{{certificateDto.leavingCertificateDetails.lastName}}</td>
+                                                 </tr>
+                                                 <tr>
+                                                     <td style="width:30%;">(FirstName)</td>
+                                                     <td style="width:30%;">(MiddleName)</td>
+                                                     <td style="width:30%;">(LastName)</td>
+                                                 </tr>
+                                             </tbody>
+                                     </table>
+                                 </td>
+                             </tr>
+                         </tbody>
+                 </table>
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody>
+                             <tr>
+                                 <td style="width:30%; font-weight:bold;font-size:13px;">2. <span translate>MOTHER_NAME</span> :</td>
+                                 <td style="width:11%;">{{certificateDto.leavingCertificateDetails.motherName}}</td>
+                                 <td style="width:70%;">
+                                     <table style="width:100%;">
+                                             <tbody>
+                                                 <tr>
+                                                     <td style="width:30%;"></td>
+                                                     <td style="width:30%;"></td>
+                                                     <td style="width:30%;"></td>
+                                                 </tr>
+                                             </tbody>
+                                     </table>
+                                 </td>
+                             </tr>
+                          </tbody>
+                     </table>
+     
+                     <table style="width:100%;margin-top:10px;">
+                         <tbody>
+                             <tr>
+                             <td style="width:50%;">
+                                 <table style="width:100%;">
+                                     <tbody>
+                                         <tr>
+                                         <td style="width:60%; font-weight:bold;font-size:13px;">3. <span translate>NATIONALITY</span> :</td>
+                                         <td style="width:40%;">{{certificateDto.leavingCertificateDetails.nationality}}</td>
+                                     </tr>
+                                 </tbody>
+                             </table>
+                             </td>
+     
+                             <td style="width:50%;">
+                                 <table style="width:100%;">
+                                     <tbody>
+                                         <tr>
+                                         <td style="width:40%; font-weight:bold;font-size:13px;"> 4. <span translate>MOTHER_TONGUE</span> :</td>
+                                         <td style="width:60%;">{{certificateDto.leavingCertificateDetails.motherTounge}}</td>
+                                     </tr>
+                                 </tbody>
+                             </table>
+                             </td>
+                         </tr>
+                     </tbody>
+                 </table>
+     
+                     <table style="width:100%;margin-top:10px;">
+                         <tbody>
+                             <tr>
+                             <td style="width:50%;">
+                                 <table style="width:100%;">
+                                     <tbody><tr>
+                                         <td style="width:60%; font-weight:bold;font-size:13px;">5. <span translate>RELIGION</span> :</td>
+                                         <td style="width:40%;"> {{certificateDto.leavingCertificateDetails.religion}}</td>
+                                     </tr>
+                                 </tbody>
+                             </table>
+                             </td>
+     
+                             <td style="width:50%;">
+                                 <table style="width:100%;">
+                                     <tbody>
+                                         <tr>
+                                             <td style="width:22%;"><span style="font-weight:bold;font-size:13px;" translate>CASTE</span> : </td>
+                                             <td style="width:28%;">{{certificateDto.leavingCertificateDetails.cast}}</td>
+                                             <td style="margin-left:5%;"><span style="font-weight:bold;font-size:13px;" translate>SUB_CASTE</span> : {{certificateDto.leavingCertificateDetails.subCast}}</td>
+                                     </tr>
+                                 </tbody>
+                             </table>
+                             </td>
+                         </tr>
+                     </tbody>
+                 </table>
+     
+     
+                     <table style="width:100%;margin-top:10px;">
+                         <tbody>
+                             <tr>
+                             <td style="width:50%;">
+                                 <table style="width:100%;">
+                                     <tbody><tr>
+                                         <td style="width:60%; font-weight:bold;font-size:13px;">6. <span translate>PLACE_OF_BIRTH_VILLAGE_CITY</span> :</td>
+                                         <td style="width:40%;">{{certificateDto.leavingCertificateDetails.birthPlace}}</td>
+                                     </tr>
+                                 </tbody>
+                             </table>
+                             </td>
+     
+                             <td style="width:50%;">
+                                 <table style="width:100%;">
+                                     <tbody><tr>
+                                         <td style="width:14%; font-weight:bold;font-size:13px;"> <span translate>TALUKA</span></td>
+                                         <td style="width:11%;">{{certificateDto.leavingCertificateDetails.birthTalukaName}}</td>
+     
+                                         <td style="width:20%;margin-left:5%; font-weight:bold;font-size:13px;"> <span translate>DISTRICT</span> :</td>
+                                         <td style="width:25%;">{{certificateDto.leavingCertificateDetails.birthDistrictName}}</td>
+                                     </tr>
+     
+                                     <tr>
+                                         <td style="width:20%; font-weight:bold;font-size:13px;"> <span translate>STATE</span> :</td>
+                                         <td style="width:25%;">{{certificateDto.leavingCertificateDetails.birthStateName}}</td>
+     
+                                         <td style="width:20%;margin-left:5%; font-weight:bold;font-size:13px;"> <span translate>COUNTRY</span> :</td>
+                                         <td style="width:25%;">{{certificateDto.leavingCertificateDetails.birthCountryName}}</td>
+                                     </tr>
+                                 </tbody>
+                             </table>
+                             </td>
+     
+                         </tr>
+                     </tbody>
+                 </table>
+     
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody>
+                             <tr>
+                             <td style="width:30%;font-weight:bold;font-size:13px;">7. <span translate>DATE_OF_BIRTH_CHISTIAN_ERA</span> :</td>
+                             <td style="width:70%;"><span>{{certificateDto.leavingCertificateDetails.birthDate?.toDate() | date : 'dd/MM/yyyy'}}</span>
+                             </td>
+                         </tr>
+     
+                         <tr>
+                             <td style="width:30%; margin-left:10%; font-weight:bold;font-size:13px;"> <span translate>DATE_OF_BIRTH_IN_WORDS</span> :</td>
+                             <td style="width:70%;">{{certificateDto.leavingCertificateDetails.birthDateInWords}}</td>
+                         </tr>
+                     </tbody>
+                 </table>
+     
+     
+     
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody>
+                             <tr>
+                             <td style="width:30%; font-weight:bold;font-size:13px;">8. <span translate>PREVIOUS_SCHOOL_STD</span>.:</td>
+                             <td style="width:70%;">{{certificateDto.leavingCertificateDetails.lastSchoolAttended}} - {{certificateDto.leavingCertificateDetails.lastSchoolStandard}}</td>
+                         </tr>
+                     </tbody>
+                 </table>
+     
+     
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody><tr>
+                             <td style="width:30%; font-weight:bold;font-size:13px;">9. <span translate>DATE_OF_ADMISSION</span> :</td>
+                             <td style="width:20%;">{{certificateDto.leavingCertificateDetails.dateOfAdmission?.toDate() | date : 'dd/MM/yyyy'}}</td>
+     
+                             <td style="width:5%; font-weight:bold;font-size:13px;"><span translate>STD</span> :</td>
+                             <td style="width:45%;">{{certificateDto.leavingCertificateDetails.gradeNameAdmission}}</td>
+                         </tr>
+                     </tbody>
+                 </table>
+     
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody><tr>
+                             <td><span style="font-weight:bold;font-size:13px;">10. </span><span style="font-weight:bold;font-size:13px;" translate>PROGRESS</span> :&nbsp;&nbsp;<span style="font-size:13px;">{{certificateDto.leavingCertificateDetails.progressCurrent}}</span></td>
+                         </tr>
+                     </tbody>
+                 </table>
+     
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody><tr>
+                             <td><span style="font-weight:bold;font-size:13px;">11. </span><span style="font-weight:bold;font-size:13px;" translate>CONDUCT</span> :&nbsp;&nbsp;{{certificateDto.leavingCertificateDetails.conductCurrent}}</td>
+                         </tr>
+                     </tbody></table>
+     
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody>
+                             <tr>
+                             <td class="form-group datepicker"><span style="font-weight:bold;font-size:13px;">12. </span><span style="font-weight:bold;font-size:13px;" translate>DATE_OF_LEAVING_SCHOOL</span> :&nbsp;&nbsp;
+                              {{certificateDto.leavingCertificateDetails.dateOfLeavingSchoolCurrent?.toDate() | date : 'dd/MM/yyyy'}}
+                            </td>
+                         </tr>
+                     </tbody>
+                 </table>
+                     
+     
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody><tr>
+                             <td><span style="font-weight:bold;font-size:13px;">13.</span>&nbsp;<span style="font-weight:bold;font-size:13px;" translate>STD_IN_WHICH_STUDYING_AND_SINCE_WHEN</span>&nbsp;<span style="font-weight:bold;font-size:13px;" translate>IN_WORDS_AND_FIGURES</span> :&nbsp;&nbsp;{{certificateDto.leavingCertificateDetails.standardInWhichStudyingCurrent}}</td>
+                         </tr>
+                     </tbody></table>
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody><tr>
+                             <td style="width:30%; font-weight:bold;font-size:13px;">14. <span translate>REASON_OF_LEAVING_SCHOOL</span><td>
+                             <td style="width:70%;">
+                                 
+     {{certificateDto.leavingCertificateDetails.reasonOfLeavingSchoolCurrent}}
+                             </td>
+                         </tr>
+                     </tbody></table>
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody><tr>
+                             <td style="width:30%; font-weight:bold;font-size:13px;">15. <span translate>REMARK</span> :</td>
+                             <td style="width:70%;">
+                              {{certificateDto.leavingCertificateDetails.remarkCurrent}}
+                                                      </td>
+                         </tr>
+                     </tbody></table>
+                     <br>
+                     <div style="text-align:center; font-weight:bold;font-size:13px;" translate>
+                         LEAVING_CERTIFICATE_NOTE
+                     </div>
+                     <table style="width:100%; margin-top:10px;">
+                         <tbody><tr>
+                             <td style="width:30%;" class="form-group datepicker">
+                                 <span style="font-weight:bold;font-size:13px;" translate>DATE</span> &nbsp;
+                                 {{certificateDto.leavingCertificateDetails.dateSignCurrent?.toDate() | date : 'dd/MM/yyyy'}}
+                             </td>
+                         </tr>
+                     </tbody>
+                 </table>
+     
+                     <table style="width:100%; margin-top:70px;">
+                         <tbody>
+                             <tr>
+                             <td style="width:30%; font-weight:bold;font-size:13px;" translate>CLASS_TEACHER</td>
+                             <td style="width:30%; font-weight:bold;" translate>
+                                 CLERK
+                             </td>
+                             <td style="width:30%; font-weight:bold;font-size:13px;" translate>HEAD_MASTER_SING_STAMP</td>
+                         </tr>
+                     </tbody>
+                 </table>
+     
+                     <div class="row col-sm-12" style="font-size:11px;border-top:1px solid #000000;margin-top:10px"><span style="font-weight:bold;font-size:14px;margin-top:5px;font-size:13px;"><span translate>NOTE</span> :-</span><span style="font-size:12px" translate> LEAVING_CERTIFICATE_NOTE1</span></div>
+     
+                 </div>
+             </div>
+             <div style="clear:both;"></div>
+     
+         </div>
+ 
+         <div class="text-center">
+            <button type="button" class="btn btn-primary" *ngIf="this.sharedPermissionServiceService.havePermission('Leaving','Print')"
+            [useExistingCss]="true" ngxPrint printSectionId="print-section" (click)="print(certificateDto.leavingCertificateDetails)"
+            translate><i class="bi bi-printer"></i> PRINT</button>
+            <button type="button"  *ngIf="!this.sharedPermissionServiceService.havePermission('Leaving','Print')"
+            ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}" class=" btn btn-primary ms-auto btn-disabled bi bi-printer"
+            translate> PRINT</button>
+         </div>
+      </div>
+    </div>
+
+    <div class="card mb-4" *ngIf="certificateDto && certificateDto.leavingCertificateDetails && showStatus == 3">
+        <div class="card-body table-body">
+          <div id="print-section" class="wrapper-width" style="margin: 13px auto; border: 2px solid gray;">
+      
+              <app-print-common-header></app-print-common-header>
+       
+               <div style="padding:0px 10px 10px 10px;">
+                   <div>
+                       <div class="text-center" style="font-size:20px; text-decoration:underline; text-align:center; font-weight:bold;">
+                               <span translate>SCHOOL_LEAVING_CERTIFICATE</span>
+                       </div>
+                       <div>
+                           <div style="float:left;font-weight:bold;font-size:13px;"><span translate>SR_NO</span> : {{certificateDto.leavingCertificateDetails.serialNumber}} <span ngbTooltip="{{ 'SERIAL_NUMBER_WILL_BE_SHOWN_AFTER_LC_GENERATE' | translate }}" *ngIf="(certificateDto.leavingCertificateDetails.serialNumber && certificateDto.leavingCertificateDetails.serialNumber <= 0) || certificateDto.leavingCertificateDetails.serialNumber == undefined || certificateDto.leavingCertificateDetails.serialNumber == null"><i class="bi bi-info-circle-fill"></i></span></div>
+                           <div style="float:right;font-weight:bold;font-size:13px;padding-right: 12px;"><span translate>G_R_NO</span> : {{certificateDto.leavingCertificateDetails.generalRegistrationNo}} </div>
+                           <div style="clear:both;"></div>
+                       </div>
+                       <div>
+                           <div style="float:left;font-weight:bold;font-size:13px;"><span translate>STUDENT_ID</span> : {{certificateDto.leavingCertificateDetails.cbscStudentId}} </div>
+                           <div style="float:right; font-weight:bold;font-size:13px;padding-right: 12px;"><span translate>UID_NO</span> : {{certificateDto.leavingCertificateDetails.adharNo}}</div>
+                           <div style="clear:both;"></div>
+                       </div>
+                       <table style="width:100%;margin-top:10px;">
+                           <tbody>
+                               <tr>
+                                   <td style="width:30%; font-weight:bold;font-size:13px;"> 1. <span translate>FULL_NAME_OF_STUDENT</span> :</td>
+                                   <td style="width:70%;">
+                                       <table style="width:100%;">
+                                               <tbody>
+                                                   <tr>
+                                                       <td style="width:30%;">{{certificateDto.leavingCertificateDetails.firstName}}</td>
+                                                       <td style="width:30%;">{{certificateDto.leavingCertificateDetails.middleName}}</td>
+                                                       <td style="width:30%;">{{certificateDto.leavingCertificateDetails.lastName}}</td>
+                                                   </tr>
+                                                   <tr>
+                                                       <td style="width:30%;">(FirstName)</td>
+                                                       <td style="width:30%;">(MiddleName)</td>
+                                                       <td style="width:30%;">(LastName)</td>
+                                                   </tr>
+                                               </tbody>
+                                       </table>
+                                   </td>
+                               </tr>
+                           </tbody>
+                   </table>
+                       <table style="width:100%; margin-top:10px;">
+                           <tbody>
+                               <tr>
+                                   <td style="width:30%; font-weight:bold;font-size:13px;"> 2.<span translate>MOTHER_NAME</span> :</td>
+                                   <td style="width:11%;">{{certificateDto.leavingCertificateDetails.motherName}}</td>
+                                   <td style="width:70%;">
+                                       <table style="width:100%;">
+                                               <tbody>
+                                                   <tr>
+                                                       <td style="width:30%;"></td>
+                                                       <td style="width:30%;"></td>
+                                                       <td style="width:30%;"></td>
+                                                   </tr>
+                                               </tbody>
+                                       </table>
+                                   </td>
+                               </tr>
+                            </tbody>
+                       </table>
+       
+                       <table style="width:100%;margin-top:10px;">
+                           <tbody>
+                               <tr>
+                               <td style="width:50%;">
+                                   <table style="width:100%;">
+                                       <tbody>
+                                           <tr>
+                                           <td style="width:60%; font-weight:bold;font-size:13px;">3. <span translate>NATIONALITY</span> :</td>
+                                           <td style="width:40%;">{{certificateDto.leavingCertificateDetails.nationality}}</td>
+                                       </tr>
+                                   </tbody>
+                               </table>
+                               </td>
+       
+                               <td style="width:50%;">
+                                   <table style="width:100%;">
+                                       <tbody>
+                                           <tr>
+                                           <td style="width:40%; font-weight:bold;font-size:13px;"> 4. <span translate>Mother-Tongue</span> :</td>
+                                           <td style="width:60%;">{{certificateDto.leavingCertificateDetails.motherTounge}}</td>
+                                       </tr>
+                                   </tbody>
+                               </table>
+                               </td>
+                           </tr>
+                       </tbody>
+                   </table>
+       
+                       <table style="width:100%;margin-top:10px;">
+                           <tbody>
+                               <tr>
+                               <td style="width:50%;">
+                                   <table style="width:100%;">
+                                       <tbody><tr>
+                                           <td style="width:60%; font-weight:bold;font-size:13px;">5. <span translate>RELIGION</span> :</td>
+                                           <td style="width:40%;"> {{certificateDto.leavingCertificateDetails.religion}}</td>
+                                       </tr>
+                                   </tbody>
+                               </table>
+                               </td>
+       
+                               <td style="width:50%;">
+                                   <table style="width:100%;">
+                                       <tbody>
+                                           <tr>
+                                               <td style="width:22%;"><span style="font-weight:bold;font-size:13px;" translate>CASTE</span> : </td>
+                                               <td style="width:28%;">{{certificateDto.leavingCertificateDetails.cast}}</td>
+                                               <td style="margin-left:5%;"><span style="font-weight:bold;font-size:13px;" translate>SUB_CASTE</span> : {{certificateDto.leavingCertificateDetails.subCast}}</td>
+                                       </tr>
+                                   </tbody>
+                               </table>
+                               </td>
+                           </tr>
+                       </tbody>
+                   </table>
+       
+       
+                       <table style="width:100%;margin-top:10px;">
+                           <tbody>
+                               <tr>
+                               <td style="width:50%;">
+                                   <table style="width:100%;">
+                                       <tbody><tr>
+                                           <td style="width:60%; font-weight:bold;font-size:13px;">6. <span translate>PLACE_OF_BIRTH_VILLAGE_CITY</span> :</td>
+                                           <td style="width:40%;">{{certificateDto.leavingCertificateDetails.birthPlace}}</td>
+                                       </tr>
+                                   </tbody>
+                               </table>
+                               </td>
+       
+                               <td style="width:50%;">
+                                   <table style="width:100%;">
+                                       <tbody><tr>
+                                           <td style="width:14%; font-weight:bold;font-size:13px;"> <span translate>TALUKA</span></td>
+                                           <td style="width:11%;">{{certificateDto.leavingCertificateDetails.birthTalukaName}}</td>
+       
+                                           <td style="width:20%;margin-left:5%; font-weight:bold;font-size:13px;"> <span translate>DISTRICT</span> :</td>
+                                           <td style="width:25%;">{{certificateDto.leavingCertificateDetails.birthDistrictName}}</td>
+                                       </tr>
+       
+                                       <tr>
+                                           <td style="width:20%; font-weight:bold;font-size:13px;"> <span translate>STATE</span> :</td>
+                                           <td style="width:25%;">{{certificateDto.leavingCertificateDetails.birthStateName}}</td>
+       
+                                           <td style="width:20%;margin-left:5%; font-weight:bold;font-size:13px;"> <span translate>COUNTRY</span> :</td>
+                                           <td style="width:25%;">{{certificateDto.leavingCertificateDetails.birthCountryName}}</td>
+                                       </tr>
+                                   </tbody>
+                               </table>
+                               </td>
+       
+                           </tr>
+                       </tbody>
+                   </table>
+       
+                       <table style="width:100%; margin-top:10px;">
+                           <tbody>
+                               <tr>
+                               <td style="width:30%;font-weight:bold;font-size:13px;text-indent: -20px;padding-left: 21px;">7. <span translate>DATE_OF_BIRTH_CHISTIAN_ERA</span> :</td>
+                               <td style="width:70%;"><span>{{certificateDto.leavingCertificateDetails.birthDate?.toDate() | date : 'dd/MM/yyyy'}}</span>
+                               </td>
+                           </tr>
+       
+                           <tr>
+                               <td style="width:30%; margin-left:10%; font-weight:bold;font-size:13px;"> <span translate>DATE_OF_BIRTH_IN_WORDS</span> :</td>
+                               <td style="width:70%;">{{certificateDto.leavingCertificateDetails.birthDateInWords}}</td>
+                           </tr>
+                       </tbody>
+                   </table>
+       
+       
+       
+                       <table style="width:100%; margin-top:10px;">
+                           <tbody>
+                               <tr>
+                               <td style="width:30%; font-weight:bold;font-size:13px;">8. <span translate>PREVIOUS_SCHOOL_STD</span>.:</td>
+                               <td style="width:70%;">{{certificateDto.leavingCertificateDetails.lastSchoolAttended}} - {{certificateDto.leavingCertificateDetails.lastSchoolStandard}}</td>
+                           </tr>
+                       </tbody>
+                   </table>
+       
+       
+                       <table style="width:100%; margin-top:10px;">
+                           <tbody><tr>
+                               <td style="width:30%; font-weight:bold;font-size:13px;">9. <span translate>DATE_OF_ADMISSION</span> :</td>
+                               <td style="width:20%;">{{certificateDto.leavingCertificateDetails.dateOfAdmission?.toDate() | date : 'dd/MM/yyyy'}}</td>
+       
+                               <td style="width:5%; font-weight:bold;font-size:13px;"><span translate>STD</span> :</td>
+                               <td style="width:45%;">{{certificateDto.leavingCertificateDetails.gradeNameAdmission}}</td>
+                           </tr>
+                       </tbody>
+                   </table>
+       
+                       <table style="width:100%; margin-top:10px;">
+                           <tbody><tr>
+                               <td style="font-weight:bold;font-size:13px;">10. <span translate>PROGRESS</span> :&nbsp;&nbsp;{{certificateDto.leavingCertificateDetails.progressCurrent}}</td>
+                           </tr>
+                       </tbody>
+                   </table>
+       
+                       <table style="width:100%; margin-top:10px;">
+                           <tbody><tr>
+                               <td style="font-weight:bold;font-size:13px;">11. <span translate>CONDUCT</span> :&nbsp;&nbsp;{{certificateDto.leavingCertificateDetails.conductCurrent}}</td>
+                           </tr>
+                       </tbody></table>
+       
+                       <table style="width:100%; margin-top:10px;">
+                           <tbody>
+                               <tr>
+                               <td class="form-group datepicker" style="font-weight:bold;font-size:13px;">12. <span translate>DATE_OF_LEAVING_SCHOOL</span> :&nbsp;&nbsp;
+                                {{certificateDto.leavingCertificateDetails.dateOfLeavingSchoolCurrent?.toDate() | date : 'dd/MM/yyyy'}}
+                              </td>
+                           </tr>
+                       </tbody>
+                   </table>
+                       
+       
+                       <table style="width:100%; margin-top:10px;">
+                           <tbody><tr>
+                               <td><span style="font-weight:bold;font-size:13px;">13.</span>&nbsp;<span style="font-weight:bold;font-size:13px;" translate>STD_IN_WHICH_STUDYING_AND_SINCE_WHEN</span>&nbsp;<span style="font-weight:bold;font-size:13px;" translate>IN_WORDS_AND_FIGURES</span> :&nbsp;&nbsp;{{certificateDto.leavingCertificateDetails.standardInWhichStudyingCurrent}}</td>
+                           </tr>
+                       </tbody></table>
+                       <table style="width:100%; margin-top:10px;">
+                           <tbody><tr>
+                               <td style="width:30%; font-weight:bold;font-size:13px;">14. <span translate>REASON_OF_LEAVING_SCHOOL</span><td>
+                               <td style="width:70%;">
+                                   
+       {{certificateDto.leavingCertificateDetails.reasonOfLeavingSchoolCurrent}}
+                               </td>
+                           </tr>
+                       </tbody></table>
+                       <table style="width:100%; margin-top:10px;">
+                           <tbody><tr>
+                               <td style="width:30%; font-weight:bold;font-size:13px;">15. <span translate>REMARK</span> :</td>
+                               <td style="width:70%;">
+                                {{certificateDto.leavingCertificateDetails.remarkCurrent}}
+                                                        </td>
+                           </tr>
+                       </tbody></table>
+                       <br>
+                       <div style="text-align:center; font-weight:bold;font-size:13px;" translate>
+                           LEAVING_CERTIFICATE_NOTE
+                       </div>
+                       <table style="width:100%; margin-top:10px;">
+                           <tbody><tr>
+                               <td style="width:30%;" class="form-group datepicker">
+                                   <span style="font-weight:bold;font-size:13px;" translate>DATE</span> &nbsp;
+                                   {{certificateDto.leavingCertificateDetails.dateSignCurrent?.toDate() | date : 'dd/MM/yyyy'}}
+                               </td>
+                           </tr>
+                       </tbody>
+                   </table>
+       
+                       <table style="width:100%; margin-top:70px;">
+                           <tbody>
+                               <tr>
+                               <td style="width:30%; font-weight:bold;font-size:13px;" translate>CLASS_TEACHER</td>
+                               <td style="width:30%; font-weight:bold;" translate>
+                                   CLERK
+                               </td>
+                               <td style="width:30%; font-weight:bold;font-size:13px;"translate>HEAD_MASTER_SING_STAMP</td>
+                           </tr>
+                       </tbody>
+                   </table>
+       
+                       <div class="row col-sm-12" style="font-size:11px;border-top:1px solid #000000;margin-top:10px"><span style="font-weight:bold;font-size:14px;margin-top:5px;font-size:13px;"><span translate>NOTE</span> :-</span><span style="font-size:12px" translate> LEAVING_CERTIFICATE_NOTE1</span></div>
+       
+                   </div>
+               </div>
+               <div style="clear:both;"></div>
+       
+           </div>
+   
+           <div class="text-center">
+            <button id="printdivid" (click)="GenerateAsDuplicate(certificateDto.leavingCertificateDetails)" class="btn btn-primary" *ngIf="this.sharedPermissionServiceService.havePermission('Leaving','Create')"translate>GENERATE DUPLICATE</button>
+            <button id="printdivid" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}" class="btn btn-primary ms-auto btn-disabled" *ngIf="!this.sharedPermissionServiceService.havePermission('Leaving','Create')"translate>GENERATE DUPLICATE</button>
+           </div>
+        </div>
+      </div>
+    
+  </div>
+
+
+
+
+  <style>
+    @media print {
+      .card .card-header {
+        padding-left: 0 !important;
+      }
+  }
+  </style>
+  
+
+
+
+    

@@ -1,0 +1,136 @@
+<div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>CHARACTER_CERTIFICATE</h3>
+      <!-- <button class="btn btn-with-icon with-text btn-primary ms-auto" (click)="openLg(contentLg)" translate>ADD</button> -->
+    </div>
+  
+    <div class="card mb-4 d-md-block">
+      <div class="card-body search-body">
+        <!--table search filter start-->
+        <form  [formGroup]="certificateForm" (ngSubmit)="onGenerateCertificate()" class="search-filter">
+          <div class="row mb-2">
+            <div class="col-sm">
+              <div class="form-group">
+                <label translate class="required"
+                  >CLASS <span>*</span></label
+                >
+                <select (change)="resetSelectList(f,'classId')"
+                  formControlName="classId"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid': certificateSubmitted && f['classId'].errors
+                  }"
+                >
+                <option [value]="null">
+                  <span translate>SELECT_CLASS</span>
+                  </option>
+                <option *ngFor="let item of divisionGradeMapping" [value]="item.schoolGradeDivisionMatrixId" >
+                  {{item.className}}
+                </option>
+                </select>
+                <div
+                  *ngIf="certificateSubmitted && f['classId'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['classId'].errors['required']">
+                    <span translate>CLASS</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm">
+              <div class="form-group">
+                <label translate class="required"
+                  >STUDENT_NAME <span>*</span></label
+                ><select (change)="resetSelectList(f,'fullName')"
+                  formControlName="fullName"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid': certificateSubmitted && f['fullName'].errors
+                  }"
+                >
+                <option [value]="null">
+                  <span translate> SELECT_STUDENT_NAME</span>
+                  </option>
+                <option *ngFor="let item of studentDropdownList" [value]="item.studentId">
+                  {{item.fullName}}
+                </option>
+                </select>
+                <div
+                  *ngIf="certificateSubmitted && f['fullName'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['fullName'].errors['required']">
+                    <span translate>STUDENT_NAME</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+           
+            <div class="col-md-3 text-right">
+              <div class="form-group search-btns-mobile-margin">
+                <label for="city" class="d-none d-md-block">&nbsp;</label>
+                <button type="button" class="btn btn-light" translate (click)="onCertificateReset()">
+                  RESET
+                </button>
+                <button type="submit" class="btn btn-primary"  *ngIf="this.sharedPermissionServiceService.havePermission('Character','Create')" translate>
+                  GENERATE
+                </button>
+                <button type="button" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}" class="btn btn-primary btn-disabled"  *ngIf="!this.sharedPermissionServiceService.havePermission('Character','Create')" translate>
+                  GENERATE
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+<div *ngIf="certificateDto && certificateDto.characterCertificateDetails">
+<div id="print-section" class="wrapper-width" style="border:2px solid gray; background-color: #fff;">
+  <app-print-common-header></app-print-common-header>
+  <div class="text-center" style="font-size:24px; text-decoration:underline; text-align:center; font-weight:bold;"> <span translate>CHARACTER_CERTIFICATE_C </span></div>
+
+    <ng-container *ngIf="certificateDto.characterCertificateDetails.gender === 'M'">
+    <div style="font-size:13px; padding:15px;">
+        <span translate>CHARATCTER_C_TEXT <span class="genderclass31" translate>MR</span>. </span> <span><span id="sname2" style="font-weight:bold;">{{certificateDto.characterCertificateDetails.studentName}}</span> <span translate> SON</span> &nbsp;</span>
+        <span translate>MR</span>. 
+        <span id="fatername3" style="font-weight: bold;">{{certificateDto.characterCertificateDetails.parentName}}</span>.
+        <span> <br> <span translate>RESIDENT_OF <span id="address3" style="font-weight:bold;">{{ certificateDto.characterCertificateDetails.studentAddress }}</span></span> 
+        <span translate>FOR_LAST</span> <span style="font-weight:bold;"> {{ certificateDto.characterCertificateDetails.totalDayCount }}. </span> </span>   
+        <br><span translate>MR</span>. <span id="sname2" style="font-weight:bold;">{{certificateDto.characterCertificateDetails.studentName}}</span> <span id="sname3" style="font-weight:bold;"></span> <span translate>CHARATCTER_C_TEX2 </span >
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="certificateDto.characterCertificateDetails.gender === 'F'">
+    <div style="font-size:13px; padding:10px;">
+      <span translate>CHARATCTER_C_TEXT3 <span class="genderclass31" translate>MISS</span>. </span> <span><span id="sname2" style="font-weight:bold;">{{certificateDto.characterCertificateDetails.studentName}}</span> <span translate> DAUGHTER</span> &nbsp;</span>      
+      <span translate>MR</span>.
+      <span id="fatername3" style="font-weight: bold;">{{certificateDto.characterCertificateDetails.parentName}}</span>.
+      <span><br> <span translate>RESIDENT_OF <span id="address3" style="font-weight:bold;">{{ certificateDto.characterCertificateDetails.studentAddress }}</span> </span> 
+      <span translate>FOR_LAST</span> <span style="font-weight:bold;">{{certificateDto.characterCertificateDetails.totalDayCount}}. </span> </span>
+      <br><span translate>MISS</span>. <span id="sname2" style="font-weight:bold;">{{certificateDto.characterCertificateDetails.studentName}}</span> <span id="sname3" style="font-weight:bold;"></span> <span translate>CHARATCTER_C_TEX4</span>
+  </div>
+ </ng-container>
+
+    <table style="width: 100%; margin-top:50px; margin-bottom: 20px;">
+        <tr>
+            <td style="width: 50%; text-align: left;"><span style="font-weight: bold;" translate>PLACE</span>: {{certificateDto.characterCertificateDetails.place }}</td>
+            <td style="width: 50%; text-align: right;"><span style="font-weight: bold;" translate>DATE</span>: <span id="currentDate3">{{currentDate }}</span></td>
+        </tr>
+    </table>
+    
+</div>
+</div>
+<div class="text-center">
+  <br>
+  <button type="button" class="btn btn-primary" *ngIf="this.sharedPermissionServiceService.havePermission('Character','Print')"
+  [useExistingCss]="true" ngxPrint printSectionId="print-section"
+  translate><i class="bi bi-printer"></i> PRINT</button>
+  <button type="button"  *ngIf="!this.sharedPermissionServiceService.havePermission('Character','Print')"
+    ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}" class=" btn btn-primary ms-auto btn-disabled bi bi-printer" translate> PRINT</button>
+</div>
+
+</div>

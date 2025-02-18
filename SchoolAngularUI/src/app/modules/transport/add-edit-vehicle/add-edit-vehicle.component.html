@@ -1,0 +1,603 @@
+<div class="container-fluid">
+  <div class="d-flex align-items-center page-heading-wrapper">
+    <h3 class="modal-title" id="modal-basic-title" *ngIf="f['vehicleId']?.value == 0 && !isViewMode" ngbAutofocus translate> 
+      ADD_VEHICLE </h3>
+    <h3 class="modal-title" id="modal-basic-title" *ngIf="f['vehicleId']?.value>0  && !isViewMode" ngbAutofocus translate>
+      EDIT_VEHICLE</h3>
+     <h3 class="modal-title"  id="modal-basic-title"  *ngIf="isViewMode"  ngbAutofocus  translate> 
+      VIEW_VEHICLE
+  </h3>
+    <a routerLink="/transport/vehicle" class="back-arrow"><i class="bi bi-arrow-left-circle"></i></a>
+  </div>
+  <form [formGroup]="vehicleForm" (ngSubmit)="saveVehicleData()">
+    <div class="card">
+      <div class="card-body card-body-form pt-4">
+        <div class="row">
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate>VEHICLE_NUMBER</label>
+              <input type="text"
+                formControlName="vehicleNumber"
+                class="form-control"
+                placeholder="{{ 'VEHICLE_NUMBER' | translate }}"
+                [ngClass]="{
+                  'is-invalid': submitted && f['vehicleNumber'].errors
+                }" 
+                (input)="clearErrorMessage()"
+                maxlength="10"
+                 />
+                 <div *ngIf="errorMessage" class="text-danger" translate>
+                  {{ errorMessage }}
+                </div>
+            </div>
+          </div>
+
+            <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label class="required" translate>TOTAL_SEATS <span>*</span></label>
+              <input type="text"
+                formControlName="totalSeats"
+                class="form-control"
+                placeholder="{{ 'TOTAL_SEATS' | translate }}"
+                [ngClass]="{
+                  'is-invalid': submitted && f['totalSeats'].errors
+                }" 
+                maxlength="3"
+                pattern="[0-9]*"
+                inputmode="numeric" 
+                oninput="this.value = this.value.replace(/\D+/g, '')"
+                 />
+                 <div *ngIf="submitted && f['totalSeats'].errors"
+                 class="invalid-feedback">
+                 <div *ngIf="f['totalSeats'].errors['required']">
+                   <span translate>TOTAL_SEATS</span>
+                   <span translate> IS_REQUIRED</span>
+                 </div>
+               </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label class="required" translate>REGISTRATION_NO <span>*</span></label>
+              <input type="text"
+                formControlName="ragistrationNumber"
+                class="form-control"
+                placeholder="{{ 'REGISTRATION_NO' | translate }}"
+                [ngClass]="{
+                  'is-invalid': submitted && f['ragistrationNumber'].errors
+                }" 
+                maxlength="20"
+                (keypress)="preventSpaceAndDot($event)" />
+
+                <div *ngIf="submitted && f['ragistrationNumber'].errors"
+                class="invalid-feedback">
+                <div *ngIf="f['ragistrationNumber'].errors['required']">
+                  <span translate>REGISTRATION_NO</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate>CHASSIS_NUMBER</label>
+              <input type="text"
+                formControlName="chassisNumber"
+                class="form-control"
+                placeholder="{{ 'CHASSIS_NUMBER' | translate }}" 
+                maxlength="100" />
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate>OWNER_NAME </label>
+              <input type="text"
+                formControlName="ownerName"
+                class="form-control"
+                placeholder="{{ 'OWNER_NAME' | translate }}"
+                maxlength="100" />
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate>FINANCER_NAME </label>
+              <input type="text"
+                formControlName="financerName" class="form-control"
+                placeholder="{{ 'FINANCER_NAME' | translate }}"
+                maxlength="100" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate>ENGINE_NUMBER </label>
+              <input type="text"
+                formControlName="enginNumber"
+                class="form-control"
+                placeholder="{{ 'ENGINE_NUMBER' | translate }}" 
+                maxlength="100" />
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate>COMPANY_NAME </label>
+              <input type="text"
+                formControlName="companyName"
+                class="form-control"
+                placeholder="{{ 'COMPANY_NAME' | translate }}"
+                maxlength="100" />
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate>TANK_CAPACITY </label>
+              <input type="text"
+                formControlName="tankCapacity"
+                class="form-control"
+                placeholder="{{ 'TANK_CAPACITY' | translate }}"
+                maxlength="100" />
+            </div>
+          </div>
+
+        </div>
+        <div class="row">
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate>MODEL </label>
+              <input type="text"
+                formControlName="model"
+                class="form-control"
+                placeholder="{{ 'MODEL' | translate }}"
+                maxlength="100" />
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label class="required" translate>TYPE <span>*</span></label>
+              <input type="text"
+                formControlName="type"
+                class="form-control"
+                placeholder="{{ 'TYPE' | translate }}"
+                [ngClass]="{
+                  'is-invalid': submitted && f['type'].errors
+                }" 
+                maxlength="100" />
+
+                <div *ngIf="submitted && f['type'].errors"
+                class="invalid-feedback">
+                <div *ngIf="f['type'].errors['required']">
+                  <span translate>TYPE</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate>FUEL_TYPE </label>
+              <input type="text"
+                formControlName="fuelType"
+                class="form-control"
+                placeholder="{{ 'FUEL_TYPE' | translate }}"
+                maxlength="100" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label class="required" translate>CAB_DRIVER <span>*</span></label>
+              <select
+              (change)="resetSelectList(f,'cabDriverId')"
+                formControlName="cabDriverId"
+                class="form-control"
+                [ngClass]="{
+                  'is-invalid': submitted && f['cabDriverId'].errors
+                }">
+                <option [value]="null">
+                  <span translate>SELECT_CAB_DRIVER</span>
+                </option>
+                <option *ngFor="let item of cabDriverDropdownList" [value]="item.cabDriverId"
+                  >
+                  <span translate>{{item.cabDriverName}}</span>
+                </option>
+              </select>
+              <div
+              *ngIf="submitted && f['cabDriverId'].errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f['cabDriverId'].errors['required']">
+                <span translate>CAB_DRIVER</span>
+                <span translate> IS_REQUIRED</span>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate>CONDUCTOR </label>
+              <input type="text"
+                formControlName="conductor"
+                class="form-control"
+                placeholder="{{ 'CONDUCTOR' | translate }}"
+                maxlength="100" />
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate>DEVICE_ID </label>
+              <input type="text"
+                formControlName="deviceId"
+                class="form-control"
+                placeholder="{{ 'DEVICE_ID' | translate }}"
+                maxlength="100" />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-lg-4">
+              <div class="form-group">
+                  <label translate>PROVIDER_NAME</label>
+                  <input type="text"
+                         formControlName="providerName"
+                         class="form-control"
+                         placeholder="{{ 'PROVIDER_NAME' | translate }}"
+                         maxlength="100" />
+              </div>
+          </div>
+      
+          <div class="col-12 col-lg-4">
+              <div class="form-group">
+                  <label for="isActive" translate>IS_ACTIVE</label>
+                  <div class="custom-control custom-checkbox d-flex align-items-center">
+                    <input type="checkbox"
+                     class="custom-control-input"
+                     id="isActive"
+                     formControlName="isActive" 
+                     style="width: 20px; height: 20px;" />
+                  </div>
+              </div>
+          </div>
+      </div>
+      
+
+        <div class="row">
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group datepicker">
+              <label translate>VEHICLE_REGISTRATION_START_DATE</label>
+              <input type="text"
+                formControlName="ngbVehicleRegistrationStartDate"
+                class="form-control"
+                placeholder="{{ 'VEHICLE_REGISTRATION_START_DATE' | translate }}"
+                [ngClass]="{ 'is-invalid': submitted && f['ngbVehicleRegistrationStartDate'].errors }"
+                #vehicleRegistrationStartDateDatepicker="ngbDatepicker"
+                ngbDatepicker
+                [minDate]="minDate"
+                [maxDate]="maxDate"
+                [readonly]="true"
+                (click)="vehicleRegistrationStartDateDatepicker.toggle()" />
+              <div class="calendar"
+                (click)="vehicleRegistrationStartDateDatepicker.toggle()">
+                <i class="bi bi-calendar3"></i>
+              </div>
+
+              <div
+                *ngIf="submitted && f['ngbVehicleRegistrationStartDate'].errors"
+                class="invalid-feedback">
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group datepicker">
+              <label translate>VEHICLE_REGISTRATION_END_DATE</label>
+              <input type="text"
+                formControlName="ngbVehicleRegistrationEndDate"
+                class="form-control"
+                placeholder="{{ 'VEHICLE_REGISTRATION_END_DATE' | translate }}"
+                [ngClass]="{ 'is-invalid': submitted && f['ngbVehicleRegistrationEndDate'].errors }"
+                #vehicleRegistrationEndDateDatepicker="ngbDatepicker"
+                ngbDatepicker
+                [minDate]="minDate"
+                [maxDate]="maxDate"
+                [readonly]="true"
+                (click)="vehicleRegistrationEndDateDatepicker.toggle()" />
+              <div class="calendar"
+                (click)="vehicleRegistrationEndDateDatepicker.toggle()">
+                <i class="bi bi-calendar3"></i>
+              </div>
+              <div
+                *ngIf="submitted && f['ngbVehicleRegistrationEndDate'].errors"
+                class="invalid-feedback">
+              </div>
+            </div>
+          </div>
+</div>
+          <div class="row">
+            <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+              <div class="form-group datepicker">
+                <label translate>VEHICLE_PERMIT_START_DATE</label>
+                <input type="text"
+                  formControlName="ngbVehiclePermitStartDate"
+                  class="form-control"
+                  placeholder="{{ 'VEHICLE_PERMIT_START_DATE' | translate }}"
+                  [ngClass]="{ 'is-invalid': submitted && f['ngbVehiclePermitStartDate'].errors }"
+                  #vehiclePermitStartDateDatepicker="ngbDatepicker"
+                  ngbDatepicker
+                  [minDate]="minDate"
+                  [maxDate]="maxDate"
+                  [readonly]="true" 
+                  (click)="vehiclePermitStartDateDatepicker.toggle()" />
+                <div class="calendar"
+                  (click)="vehiclePermitStartDateDatepicker.toggle()">
+                  <i class="bi bi-calendar3"></i>
+                </div>
+                <div *ngIf="submitted && f['ngbVehiclePermitStartDate'].errors"
+                  class="invalid-feedback">
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+              <div class="form-group datepicker">
+                <label translate>VEHICLE_PERMIT_END_DATE</label>
+                <input type="text"
+                  formControlName="ngbVehiclePermitEndDate"
+                  class="form-control"
+                  placeholder="{{ 'VEHICLE_PERMIT_END_DATE' | translate }}"
+                  [ngClass]="{ 'is-invalid': submitted && f['ngbVehiclePermitEndDate'].errors }"
+                  #vehiclePermitEndDateDatepicker="ngbDatepicker"
+                  ngbDatepicker
+                  [minDate]="minDate" [maxDate]="maxDate"
+                  [readonly]="true"
+                  (click)="vehiclePermitEndDateDatepicker.toggle()" />
+                <div class="calendar"
+                  (click)="vehiclePermitEndDateDatepicker.toggle()">
+                  <i class="bi bi-calendar3"></i>
+                </div>
+                <div *ngIf="submitted && f['ngbVehiclePermitEndDate'].errors"
+                  class="invalid-feedback">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+              <div class="form-group datepicker">
+                <label translate>VEHICLE_INSURANCE_START_DATE</label>
+                <input type="text"
+                  formControlName="ngbVehicleInsuranceStartDate"
+                  class="form-control"
+                  placeholder="{{ 'VEHICLE_INSURANCE_START_DATE' | translate }}"
+                  [ngClass]="{ 'is-invalid': submitted && f['ngbVehicleInsuranceStartDate'].errors }"
+                  #vehicleInsuranceStartDateDatepicker="ngbDatepicker"
+                  ngbDatepicker
+                  [minDate]="minDate"
+                  [maxDate]="maxDate"
+                  [readonly]="true"
+                  (click)="vehicleInsuranceStartDateDatepicker.toggle()" />
+                <div class="calendar"
+                  (click)="vehicleInsuranceStartDateDatepicker.toggle()">
+                  <i class="bi bi-calendar3"></i>
+                </div>
+                <div
+                  *ngIf="submitted && f['ngbVehicleInsuranceStartDate'].errors"
+                  class="invalid-feedback">
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+              <div class="form-group datepicker">
+                <label translate>VEHICLE_INSURANCE_END_DATE</label>
+                <input type="text"
+                  formControlName="ngbVehicleInsuranceEndDate"
+                  class="form-control"
+                  placeholder="{{ 'VEHICLE_INSURANCE_END_DATE' | translate }}"
+                  [ngClass]="{ 'is-invalid': submitted && f['ngbVehicleInsuranceEndDate'].errors }"
+                  #vehicleInsuranceEndDateDatepicker="ngbDatepicker"
+                  ngbDatepicker
+                  [minDate]="minDate" 
+                  [maxDate]="maxDate"
+                  [readonly]="true"
+                  (click)="vehicleInsuranceEndDateDatepicker.toggle()" />
+                <div class="calendar"
+                  (click)="vehicleInsuranceEndDateDatepicker.toggle()">
+                  <i class="bi bi-calendar3"></i>
+                </div>
+                <div *ngIf="submitted && f['ngbVehicleInsuranceEndDate'].errors"
+                  class="invalid-feedback">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+              <div class="form-group datepicker">
+                <label translate>VEHICLE_POLLUTION_START_DATE</label>
+                <input type="text"
+                  formControlName="ngbVehiclePollutionStartDate"
+                  class="form-control"
+                  placeholder="{{ 'VEHICLE_POLLUTION_START_DATE' | translate }}"
+                  [ngClass]="{ 'is-invalid': submitted && f['ngbVehiclePollutionStartDate'].errors }"
+                  #vehiclePollutionStartDateDatepicker="ngbDatepicker"
+                  ngbDatepicker
+                  [minDate]="minDate"
+                  [maxDate]="maxDate"
+                  [readonly]="true"
+                  (click)="vehiclePollutionStartDateDatepicker.toggle()" />
+                <div class="calendar"
+                  (click)="vehiclePollutionStartDateDatepicker.toggle()">
+                  <i class="bi bi-calendar3"></i>
+                </div>
+                <div
+                  *ngIf="submitted && f['ngbVehiclePollutionStartDate'].errors"
+                  class="invalid-feedback">
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+              <div class="form-group datepicker">
+                <label translate>VEHICLE_POLLUTION_END_DATE</label>
+                <input type="text"
+                  formControlName="ngbVehiclePollutionEndDate"
+                  class="form-control"
+                  placeholder="{{ 'VEHICLE_POLLUTION_END_DATE' | translate }}"
+                  [ngClass]="{ 'is-invalid': submitted && f['ngbVehiclePollutionEndDate'].errors }"
+                  #vehiclePollutionEndDateDatepicker="ngbDatepicker"
+                  ngbDatepicker
+                  [minDate]="minDate"
+                  [maxDate]="maxDate"
+                  [readonly]="true"
+                  (click)="vehiclePollutionEndDateDatepicker.toggle()" />
+                <div class="calendar"
+                  (click)="vehiclePollutionEndDateDatepicker.toggle()">
+                  <i class="bi bi-calendar3"></i>
+                </div>
+                <div *ngIf="submitted && f['ngbVehiclePollutionEndDate'].errors"
+                  class="invalid-feedback">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+              <div class="form-group datepicker">
+                <label translate>VEHICLE_ROAD_TAX_START_DATE</label>
+                <input type="text"
+                  formControlName="ngbVehicleRoadTaxStartDate"
+                  class="form-control"
+                  placeholder="{{ 'VEHICLE_ROAD_TAX_START_DATE' | translate }}"
+                  [ngClass]="{ 'is-invalid': submitted && f['ngbVehicleRoadTaxStartDate'].errors }"
+                  #vehicleRoadTaxStartDateDatepicker="ngbDatepicker"
+                  ngbDatepicker
+                  [minDate]="minDate"
+                  [maxDate]="maxDate"
+                  [readonly]="true"
+                  (click)="vehicleRoadTaxStartDateDatepicker.toggle()" />
+                <div class="calendar"
+                  (click)="vehicleRoadTaxStartDateDatepicker.toggle()">
+                  <i class="bi bi-calendar3"></i>
+                </div>
+                <div *ngIf="submitted && f['ngbVehicleRoadTaxStartDate'].errors"
+                  class="invalid-feedback">
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+              <div class="form-group datepicker">
+                <label translate>VEHICLE_ROAD_TAX_END_DATE</label>
+                <input type="text"
+                  formControlName="ngbVehicleRoadTaxEndDate"
+                  class="form-control"
+                  placeholder="{{ 'VEHICLE_ROAD_TAX_END_DATE' | translate }}"
+                  [ngClass]="{ 'is-invalid': submitted && f['ngbVehicleRoadTaxEndDate'].errors }"
+                  #vehicleRoadTaxEndDateDatepicker="ngbDatepicker"
+                  ngbDatepicker
+                  [minDate]="minDate"
+                  [maxDate]="maxDate"
+                  [readonly]="true"
+                  (click)="vehicleRoadTaxEndDateDatepicker.toggle()" />
+                <div class="calendar"
+                  (click)="vehicleRoadTaxEndDateDatepicker.toggle()">
+                  <i class="bi bi-calendar3"></i>
+                </div>
+                <div *ngIf="submitted && f['ngbVehicleRoadTaxEndDate'].errors"
+                  class="invalid-feedback">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group datepicker">
+              <label translate>VEHICLE_FITNESS_START_DATE</label>
+              <input type="text"
+                formControlName="ngbVehicleFitnessStartDate"
+                class="form-control"
+                placeholder="{{ 'VEHICLE_FITNESS_START_DATE' | translate }}"
+                [ngClass]="{ 'is-invalid': submitted && f['ngbVehicleFitnessStartDate'].errors }"
+                #vehicleFitnessStartDateDatepicker="ngbDatepicker"
+                ngbDatepicker
+                [minDate]="minDate"
+                [maxDate]="maxDate"
+                [readonly]="true"
+                (click)="vehicleFitnessStartDateDatepicker.toggle()" />
+              <div class="calendar"
+                (click)="vehicleFitnessStartDateDatepicker.toggle()">
+                <i class="bi bi-calendar3"></i>
+              </div>
+              <div *ngIf="submitted && f['ngbVehicleFitnessStartDate'].errors"
+                class="invalid-feedback">
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group datepicker">
+              <label translate>VEHICLE_FITNESS_END_DATE</label>
+              <input type="text"
+                formControlName="ngbVehicleFitnessEndDate"
+                class="form-control"
+                placeholder="{{ 'VEHICLE_FITNESS_END_DATE' | translate }}"
+                [ngClass]="{ 'is-invalid': submitted && f['ngbVehicleFitnessEndDate'].errors }"
+                #vehicleeFitnessEndDateDatepicker="ngbDatepicker"
+                ngbDatepicker
+                [minDate]="minDate"
+                [maxDate]="maxDate"
+                [readonly]="true"
+                (click)="vehicleeFitnessEndDateDatepicker.toggle()" />
+              <div class="calendar"
+                (click)="vehicleeFitnessEndDateDatepicker.toggle()">
+                <i class="bi bi-calendar3"></i>
+              </div>
+              <div *ngIf="submitted && f['ngbVehicleFitnessEndDate'].errors"
+                class="invalid-feedback">
+              </div>
+            </div>
+          </div>
+</div>
+          <div class="row">
+            <div class="col-12 col-lg-8">
+              <div class="form-group">
+                <label translate>DESCRIPTION </label>
+                <input type="text" formControlName="description"
+                  class="form-control"
+                  placeholder="{{ 'DESCRIPTION' | translate }}"
+                  maxlength="500" />
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="form-group sticky-buttons">
+      <button type="button"  *ngIf="!isViewMode" (click)="onReset()" class="btn btn-light float-right" translate>
+        RESET
+      </button>
+      <button type="button"  *ngIf="!isViewMode" class="btn btn-primary" (click)="saveVehicleData()"
+        translate>SAVE</button>
+    </div>
+    </form>
+</div>

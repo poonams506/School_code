@@ -1,0 +1,109 @@
+<div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>EXAM_OBJECT</h3>
+      <button class="btn btn-with-icon with-text btn-primary ms-auto" (click)="addExamObject()" *ngIf="this.sharedPermissionServiceService.havePermission('Area Management','Create')" translate>ADD_EXAM_OBJECT</button>
+      <button container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"  *ngIf="!this.sharedPermissionServiceService.havePermission('Area Management','Create')"  class="btn btn-with-icon with-text btn-primary ms-auto btn-disabled" translate>ADD_EXAM_OBJECT</button>
+    </div>
+  
+    <div class="card mb-4">
+      <div class="card-body table-body">
+        <!--table listing statrt-->
+        <div id="no-more-tables">
+           
+          <table  datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="display table row-border hover">
+            <thead>
+              <tr> 
+                <th translate>EXAM_NAME</th>
+                <th translate>SUBJECT_NAME</th>
+                <th translate>OBJECT_NAME</th>
+                <th style="width: 10%" class="text-end" translate>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="examObjectList?.length != 0">
+              <tr *ngFor="let examObject of examObjectList index as i">
+                <td [attr.data-title]=" 'NAME' | translate">{{ examObject.name }}</td>
+                <td [attr.data-title]=" 'SUBJECT_NAME' | translate">{{ examObject.subjectName }}</td>
+                  <td [attr.data-title]=" 'EXAM_NAME' | translate">{{ examObject.objectName }}</td>
+
+                  <td [attr.data-title]=" 'ACTIONS' | translate" class="action text-center actions-td">
+                    <div class="d-flex flex-wrap justify-content-end">
+                      <button type="button" *ngIf="this.sharedPermissionServiceService.havePermission('Notice','Read')"
+                      class="btn btn-secondary action-btn" (click)="viewExamObjectDescription(examObject)"
+                      translate>
+                      <span placement="top" ngbTooltip="{{ 'VIEW' | translate }}">
+                        <i class="bi bi-eye"></i>
+                      </span>
+                    </button>
+                    <button type="button" class="btn btn-secondary action-btn btn-disabled"
+                      *ngIf="!this.sharedPermissionServiceService.havePermission('Notice','Read')" translate>
+                      <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                        <i class="bi bi-eye"></i>
+                      </span>
+                    </button>
+
+
+                      <button *ngIf="this.sharedPermissionServiceService.havePermission('Area Management','Update')" 
+                        type="button"
+                        class="btn btn-secondary action-btn"
+                        (click)="editExamObject(examObject)"
+                      >
+                        <span
+                          placement="top"
+                          ngbTooltip="{{ 'VIEW_EDIT' | translate }}"
+                        >
+                          <i class="bi bi-pencil"></i>
+                        </span>
+                      </button>
+                      <button *ngIf="!this.sharedPermissionServiceService.havePermission('Area Management','Update')" 
+                      type="button"
+                      class="btn btn-secondary action-btn btn-disabled"
+                    >
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                      >
+                        <i class="bi bi-pencil"></i>
+                      </span>
+                    </button>
+    
+                      <button *ngIf="this.sharedPermissionServiceService.havePermission('Area Management','Delete')" 
+                        type="button"
+                        class="btn btn-danger action-btn"
+                        (click)="confirmExamObjectDelete(examObject.examMasterId, examObject.subjectMasterId)" 
+                      >
+                        <span
+                          placement="top"
+                          ngbTooltip="{{ 'DELETE' | translate }}"
+                        >
+                          <i class="bi bi-trash"></i>
+                        </span>
+                      </button>
+                      <button *ngIf="!this.sharedPermissionServiceService.havePermission('Area Management','Delete')" 
+                      type="button"
+                      class="btn btn-secondary action-btn btn-disabled"
+                    >
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                      >
+                        <i class="bi bi-trash"></i>
+                      </span>
+                    </button>
+                    </div>
+                  </td>
+  
+              </tr>
+              <tr *ngIf="examObjectList?.length == 0">
+                <td colspan="7" class="no-data-available" translate>NO_RECORDS_FOUND</td>
+              
+              </tr>
+            </tbody>
+  
+          </table>
+        </div>
+      
+      </div>
+    </div>
+  </div>
+  
+  

@@ -1,0 +1,398 @@
+
+  
+  <ion-content [fullscreen]="true" class="light-content">
+    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+        <ion-segment class="dark-toolbar border-tab-btn" [(ngModel)]="type" (ionChange)="segmentChanged($event)" scrollable>
+          <ion-segment-button value="father" checked>
+            <ion-label>Father</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="mother">
+            <ion-label>Mother</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="guardian">
+              <ion-label>Guardian</ion-label>
+            </ion-segment-button>
+
+        </ion-segment>
+      
+      <div [ngSwitch]="type">
+          <ion-list *ngSwitchCase="'father'" class="pt-0">
+           
+            <ion-card class="ion-no-margin profile-card">
+              <ion-card-content>
+                <div class="profile-photos">
+                  <img src="{{fatherProfileImageUrl}}">
+                </div>
+          
+                <h1>
+                  {{fatherFullName}}
+                </h1>
+                <ion-button class="ion-button-small"
+                  (click)="updateFatherProfilePicture()">
+                  Update profile picture
+                </ion-button>
+              </ion-card-content>
+            </ion-card>
+               
+            <div class="form-padding">
+              <form class="form-default" novalidate [formGroup]="fatherProfileForm">
+                <ion-item lines="none">
+                  <ion-label position="stacked">
+                    First name <span class="star-required">*</span>
+                  </ion-label>
+                  <ion-input formControlName="firstName" placeholder="First name"></ion-input>
+                  <ion-note slot="error">First name is required.</ion-note>
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">
+                    Middle name <span class="star-required">*</span>
+                  </ion-label>
+                  <ion-input formControlName="middleName" placeholder="Middle name"></ion-input>
+                  <ion-note slot="error">Middle name is required.</ion-note>
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">
+                    Last name <span class="star-required">*</span>
+                  </ion-label>
+                  <ion-input formControlName="lastName" placeholder="Last name"></ion-input>
+                  <ion-note slot="error">Last name is required.</ion-note>
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">
+                    Address Line 1 
+                  </ion-label>
+                  <ion-input formControlName="addressLine1" placeholder="Address Line 1"></ion-input>
+                  <!-- <ion-note slot="error">Address Line 1 is required.</ion-note> -->
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">
+                    Address Line 2
+                  </ion-label>
+                  <ion-input formControlName="addressLine2" placeholder="Address Line 2"></ion-input>
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">Select Country </ion-label>
+                  <ion-select interface="action-sheet" cancelText="Cancel" 
+                  formControlName="countryId" (ion-change)="resetSelectList(ff,'countryId')" >
+                  <ion-select-option [value]="null" >Select Country</ion-select-option>
+                    <ion-select-option *ngFor="let country of countryDropdownList"
+                      [value]="country.countryId">{{country.countryName}}</ion-select-option>
+                  </ion-select>
+                  <!-- <div *ngIf="isFatherSubmitted && ff['countryId']?.errors">
+                    <ion-note *ngIf="ff['countryId'].errors['required']"  class="custom-error" >Country is required.</ion-note>
+                   </div> -->
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">Select State </ion-label>
+                  <ion-select interface="action-sheet" cancelText="Cancel" 
+                  formControlName="stateId" (ion-change)="resetSelectList(ff,'stateId')" >
+                  <ion-select-option [value]="null" >Select State</ion-select-option>
+                    <ion-select-option *ngFor="let state of stateFatherFilteredDropdownList"
+                      [value]="state.stateId">{{state.stateName}}</ion-select-option>
+                  </ion-select>
+                  <!-- <div *ngIf="isFatherSubmitted && ff['stateId']?.errors">
+                    <ion-note *ngIf="ff['stateId'].errors['required']"  class="custom-error" >State is required.</ion-note>
+                   </div> -->
+                </ion-item>
+          
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">Select District </ion-label>
+                  <ion-select interface="action-sheet" cancelText="Cancel"
+                   formControlName="districtId" (ion-change)="resetSelectList(ff,'districtId')" >
+                   <ion-select-option [value]="null" >Select District</ion-select-option>
+                    <ion-select-option *ngFor="let district of districtFatherFilteredDropdownList"
+                      [value]="district.districtId">{{district.districtName}}</ion-select-option>
+                  </ion-select>
+                  <!-- <div *ngIf="isFatherSubmitted && ff['districtId']?.errors">
+                    <ion-note *ngIf="ff['districtId'].errors['required']"  class="custom-error" >District is required.</ion-note>
+                   </div> -->
+                </ion-item>
+                <ion-item lines="none">
+                  <ion-label position="stacked">Select Taluka </ion-label>
+                  <ion-select interface="action-sheet" cancelText="Cancel" 
+                  formControlName="talukaId" (ion-change)="resetSelectList(ff,'talukaId')" >
+                  <ion-select-option [value]="null" >Select Taluka</ion-select-option>
+                    <ion-select-option *ngFor="let taluka of talukaFatherFilteredDropdownList"
+                      [value]="taluka.talukaId">{{taluka.talukaName}}</ion-select-option>
+          
+                  </ion-select>
+                  <!-- <div *ngIf="isFatherSubmitted && ff['talukaId']?.errors">
+                    <ion-note *ngIf="ff['talukaId'].errors['required']"  class="custom-error" >Taluka is required.</ion-note>
+                   </div> -->
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">Pincode </ion-label>
+                  <ion-input type="text" formControlName="pincode" placeholder="Pincode" formControlName="zipcode"></ion-input>
+                  <!-- <ion-note slot="error">Pincode is required.</ion-note> -->
+                </ion-item>
+          
+                <ion-button class="submit-form-btn" (click)="submitFather()">Submit</ion-button>
+          
+              </form>
+            </div>
+          </ion-list>
+      
+          <ion-list *ngSwitchCase="'mother'">
+            <ion-card class="ion-no-margin profile-card">
+              <ion-card-content>
+                <div class="profile-photos">
+                  <img src="{{motherProfileImageUrl}}">
+                </div>
+          
+                <h1>
+                  {{motherFullName}}
+                </h1>
+                <ion-button class="ion-button-small"
+                  (click)="updateMotherProfilePicture()">
+                  Update profile picture
+                </ion-button>
+              </ion-card-content>
+            </ion-card>
+          
+          
+            <div class="form-padding">
+              <form class="form-default" novalidate [formGroup]="motherProfileForm">
+                <ion-item lines="none">
+                  <ion-label position="stacked">
+                    First name <span class="star-required">*</span>
+                  </ion-label>
+                  <ion-input formControlName="firstName" placeholder="First name"></ion-input>
+                  <ion-note slot="error">First name is required.</ion-note>
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">
+                    Middle name <span class="star-required">*</span>
+                  </ion-label>
+                  <ion-input formControlName="middleName" placeholder="Middle name"></ion-input>
+                  <ion-note slot="error">Middle name is required.</ion-note>
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">
+                    Last name <span class="star-required">*</span>
+                  </ion-label>
+                  <ion-input formControlName="lastName" placeholder="Last name"></ion-input>
+                  <ion-note slot="error">Last name is required.</ion-note>
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">
+                    Address Line 1 
+                  </ion-label>
+                  <ion-input formControlName="addressLine1" placeholder="Address Line 1"></ion-input>
+                  <ion-note slot="error">Address Line 1 is required</ion-note>
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">
+                    Address Line 2
+                  </ion-label>
+                  <ion-input formControlName="addressLine2" placeholder="Address Line 2"></ion-input>
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">Select Country</ion-label>
+                  <ion-select interface="action-sheet" cancelText="Cancel"
+                   formControlName="countryId" (ion-change)="resetSelectList(fm,'countryId')">
+                   <ion-select-option [value]="null" >Select Country</ion-select-option>
+                    <ion-select-option *ngFor="let country of countryDropdownList"
+                      [value]="country.countryId">{{country.countryName}}</ion-select-option>
+                  </ion-select>
+                  <div *ngIf="isMotherSubmitted && fm['countryId']?.errors">
+                    <ion-note *ngIf="fm['countryId'].errors['required']"  class="custom-error" >Country is required.</ion-note>
+                   </div>
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">Select State</ion-label>
+                  <ion-select interface="action-sheet" cancelText="Cancel"
+                   formControlName="stateId"  (ion-change)="resetSelectList(fm,'stateId')" >
+                   <ion-select-option [value]="null" >Select State</ion-select-option>
+                    <ion-select-option *ngFor="let state of stateMotherFilteredDropdownList"
+                      [value]="state.stateId">{{state.stateName}}</ion-select-option>
+                  </ion-select>
+                  <div *ngIf="isMotherSubmitted && fm['stateId']?.errors">
+                    <ion-note *ngIf="fm['stateId'].errors['required']"  class="custom-error" >State is required.</ion-note>
+                   </div>
+                </ion-item>
+          
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">Select District</ion-label>
+                  <ion-select interface="action-sheet" cancelText="Cancel"
+                   formControlName="districtId"  (ion-change)="resetSelectList(fm,'districtId')"  >
+                   <ion-select-option [value]="null" >Select District</ion-select-option>
+                    <ion-select-option *ngFor="let district of districtMotherFilteredDropdownList"
+                      [value]="district.districtId">{{district.districtName}}</ion-select-option>
+                  </ion-select>
+                  <div *ngIf="isMotherSubmitted && fm['districtId']?.errors">
+                    <ion-note *ngIf="fm['districtId'].errors['required']"  class="custom-error" >District is required.</ion-note>
+                   </div>
+                </ion-item>
+                <ion-item lines="none">
+                  <ion-label position="stacked">Select Taluka</ion-label>
+                  <ion-select interface="action-sheet" cancelText="Cancel" 
+                  formControlName="talukaId" (ion-change)="resetSelectList(fm,'talukaId')"  >
+                  <ion-select-option [value]="null" >Select Taluka</ion-select-option>
+                    <ion-select-option *ngFor="let taluka of talukaMotherFilteredDropdownList"
+                      [value]="taluka.talukaId">{{taluka.talukaName}}</ion-select-option>
+          
+                  </ion-select>
+                  <div *ngIf="isMotherSubmitted && fm['talukaId']?.errors">
+                    <ion-note *ngIf="fm['talukaId'].errors['required']"  class="custom-error" >Taluka is required.</ion-note>
+                   </div>
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">Pincode </ion-label>
+                  <ion-input type="text" formControlName="pincode" placeholder="Pincode" formControlName="zipcode"></ion-input>
+                  <ion-note slot="error">Pincode is required.</ion-note>
+                </ion-item>
+          
+          
+                <ion-button class="submit-form-btn" (click)="submitMother()">Submit</ion-button>
+          
+              </form>
+          
+            </div>
+          </ion-list>
+
+          <ion-list *ngSwitchCase="'guardian'">
+            <ion-card class="ion-no-margin profile-card">
+              <ion-card-content>
+                <div class="profile-photos">
+                  <img src="{{guardianProfileImageUrl}}">
+                </div>
+          
+                <h1>
+                  {{guardianFullName}}
+                </h1>
+                <ion-button class="ion-button-small"
+                  (click)="updateGuardianProfilePicture()">
+                  Update profile picture
+                </ion-button>
+              </ion-card-content>
+            </ion-card>
+          
+          
+            <div class="form-padding">
+              <form class="form-default" novalidate [formGroup]="guardianProfileForm">
+                <ion-item lines="none">
+                  <ion-label position="stacked">
+                    First name <span class="star-required">*</span>
+                  </ion-label>
+                  <ion-input formControlName="firstName" placeholder="First name"></ion-input>
+                  <ion-note slot="error"> First name is required.</ion-note>
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">
+                    Middle name <span class="star-required">*</span>
+                  </ion-label>
+                  <ion-input formControlName="middleName" placeholder="Middle name"></ion-input>
+                  <ion-note slot="error">Middle name is required.</ion-note>
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">
+                    Last name <span class="star-required">*</span>
+                  </ion-label>
+                  <ion-input formControlName="lastName" placeholder="Last name"></ion-input>
+                  <ion-note slot="error">Last name is required.</ion-note>
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">
+                    Address Line 1 
+                  </ion-label>
+                  <ion-input formControlName="addressLine1" placeholder="Address Line 1"></ion-input>
+                  <ion-note slot="error">Address Line 1 is required.</ion-note>
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">
+                    Address Line 2
+                  </ion-label>
+                  <ion-input formControlName="addressLine2" placeholder="Address Line 2"></ion-input>
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">Select Country</ion-label>
+                  <ion-select interface="action-sheet" cancelText="Cancel" 
+                  formControlName="countryId" (ion-change)="resetSelectList(fg,'countryId')">
+                  <ion-select-option [value]="null" >Select Country</ion-select-option>
+                    <ion-select-option *ngFor="let country of countryDropdownList"
+                      [value]="country.countryId">{{country.countryName}}</ion-select-option>
+                  </ion-select>
+                  <div *ngIf="isMotherSubmitted && fg['countryId']?.errors">
+                    <ion-note *ngIf="fg['countryId'].errors['required']"  class="custom-error" >Country is required.</ion-note>
+                   </div>
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">Select State</ion-label>
+                  <ion-select interface="action-sheet" cancelText="Cancel" 
+                  formControlName="stateId" (ion-change)="resetSelectList(fg,'stateId')">
+                  <ion-select-option [value]="null" >Select State</ion-select-option>
+                    <ion-select-option *ngFor="let state of stateGuardianFilteredDropdownList"
+                      [value]="state.stateId">{{state.stateName}}</ion-select-option>
+                  </ion-select>
+                  <div *ngIf="isMotherSubmitted && fg['stateId']?.errors">
+                    <ion-note *ngIf="fg['stateId'].errors['required']"  class="custom-error" >State is required.</ion-note>
+                   </div>
+                </ion-item>
+          
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">Select District</ion-label>
+                  <ion-select interface="action-sheet" cancelText="Cancel"
+                   formControlName="districtId" (ion-change)="resetSelectList(fg,'districtId')" >
+                   <ion-select-option [value]="null" >Select District</ion-select-option>
+                    <ion-select-option *ngFor="let district of districtGuardianFilteredDropdownList"
+                      [value]="district.districtId">{{district.districtName}}</ion-select-option>
+                  </ion-select>
+                  <div *ngIf="isMotherSubmitted && fg['districtId']?.errors">
+                    <ion-note *ngIf="fg['districtId'].errors['required']"  class="custom-error" >District is required.</ion-note>
+                   </div>
+                </ion-item>
+                <ion-item lines="none">
+                  <ion-label position="stacked">Select Taluka</ion-label>
+                  <ion-select interface="action-sheet" cancelText="Cancel" 
+                  formControlName="talukaId" (ion-change)="resetSelectList(fg,'talukaId')">
+                  <ion-select-option [value]="null" >Select Taluka</ion-select-option>
+                    <ion-select-option *ngFor="let taluka of talukaGuardianFilteredDropdownList"
+                      [value]="taluka.talukaId">{{taluka.talukaName}}</ion-select-option>
+          
+                  </ion-select>
+                  <div *ngIf="isMotherSubmitted && fg['talukaId']?.errors">
+                    <ion-note *ngIf="fg['talukaId'].errors['required']"  class="custom-error" >Taluka is required.</ion-note>
+                   </div>
+                </ion-item>
+          
+                <ion-item lines="none">
+                  <ion-label position="stacked">Pincode </ion-label>
+                  <ion-input type="text" formControlName="pincode" placeholder="Pincode" formControlName="zipcode"></ion-input>
+                  <ion-note slot="error"> Pincode is required.</ion-note>
+                </ion-item>
+          
+          
+                <ion-button class="submit-form-btn" (click)="submitGuardian()">Submit</ion-button>
+          
+              </form>
+          
+            </div>
+          </ion-list>
+        </div>
+  </ion-content>
+  

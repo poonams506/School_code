@@ -1,0 +1,104 @@
+// .role-radio {
+//   ion-item {
+//     --background: #d8e3ff;
+//     --background-activated: green;
+//     --background-focused: green;
+//     --background-hover: currentColor;
+//     --background-activated-opacity: 1;
+//     --color:#fff;
+//     margin-bottom: 20px;
+//     --min-height:100px;
+//     ion-radio {
+//       --color:#fff;
+//       --color-checked:blue
+//     }
+//   }
+// }
+
+.roles-boxes {
+  display: block;
+  --background:#fff;
+  ion-segment-button {
+    background-color: #fff;
+    // border: 2px solid #b0b1b5;
+    // --color: #8a8d95;
+    border: 2px solid #3c5bac;
+    --color: #3c5bac;
+    margin-bottom: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    .inside {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      .image {
+        width: 70px;
+        margin-right: 30px;
+      }
+      .text {
+        font-size: 20px;
+        text-transform:initial;
+        text-align: left;
+        p {
+          font-size: 13px;
+          margin: 0;
+          letter-spacing: normal;
+        }
+      }
+    }
+    &.parent {
+      border: 2px solid #3075ff; 
+      --color: #3075ff;
+      &.segment-button-checked {
+        background-color: #d8e3ff;
+        border: 2px solid #3075ff; 
+        --indicator-color:#3075ff;
+        --color: #3075ff;
+        .text {
+          color: #3075ff;
+        }
+      }
+    }
+
+    &.teacher {
+      border: 2px solid #ea7322;
+      --color: #ea7322;
+      &.segment-button-checked {
+        background-color: #ffedbd;
+        border: 2px solid #ea7322;
+        --indicator-color:#ea7322;
+
+        --color: #ea7322;
+        .text {
+          color: #ea7322;
+        }
+      }
+      
+    }
+    &.driver {
+      border: 2px solid #009688;
+      --color: #009688;
+      &.segment-button-checked {
+        background-color: #c6ede9;
+        border: 2px solid #009688;
+        --indicator-color:#009688;
+        --color: #009688;
+        .text {
+          color: #009688;
+        }
+      }
+      
+    }
+   
+  }
+
+
+}
+
+.text-h1 {
+  text-align: center;
+  padding: 30px 0;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--dark-color);
+}

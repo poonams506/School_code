@@ -1,0 +1,23 @@
+.bold-black-text {
+    font-weight: bold;
+    color: black;
+    margin-right: 5px; 
+}
+
+.thumbnail-icon {
+    width: 60px;
+    height: 60px;
+  }
+  .to {
+    display: block;
+    text-align: center;
+    color: #000;
+    text-transform: capitalize;
+    font-size: 12px;
+    width: 50px;
+}
+
+ion-title {
+   
+  color: white;
+}

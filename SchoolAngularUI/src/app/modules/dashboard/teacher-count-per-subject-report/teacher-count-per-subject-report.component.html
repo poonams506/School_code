@@ -1,0 +1,20 @@
+<div class="charts-widgets charts-widgets2">
+  <div class="card">
+    <!-- <div class="card-header">
+      <h4>STAFFS</h4>
+    </div> -->
+    <div class="card-body" *ngIf="teacherCountList && teacherCountList.length > 0">
+      <canvas
+        baseChart
+        [type]="'bar'"
+        [datasets]="chartData"
+        [labels]="chartLabels"
+        [options]="chartOption"
+      >
+      </canvas>
+    </div>
+    <div class="redbg font16 px-3" *ngIf="!teacherCountList || teacherCountList.length === 0">
+      <i class="bi bi-exclamation-triangle"></i> <span class="ms-2" translate>VIEW_TEACHER_GRAPH</span>
+    </div>
+  </div>
+</div>

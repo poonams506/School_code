@@ -1,0 +1,211 @@
+<div class="card mb-4 d-md-block" *ngIf="academicYearId > 0">
+  <div class="card-header search-header">
+    <h4 class="float-left" translate>SCHOOL_HAS_WEEKLY_OFF_ON?</h4>
+  </div>
+  <div class="card-body search-body">
+    <!--table search filter start-->
+    <form class="search-filter" [formGroup]="weeklyDayOffForm" (ngSubmit)="saveWeeklyyDayOffData()">
+      <div class="day-wrap">
+        <div class="row mb-2">
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+
+            <div class="form-group" formgroup>
+              <label class="required font-weight-bold mb-3" translate>SELECT_DAY<span>*</span></label>
+              <div class="day-list">
+                <div class="day">
+                  <input type="checkbox" class="custom-control-input" [id]="'Sunday'" formControlName="Sunday" />
+                  <label class="custom-control-label ms-2" [for]="'Sunday'" translate>SUNDAY</label>
+                </div>
+                <div class="day">
+                  <input type="checkbox" class="custom-control-input" [id]="'Monday'" formControlName="Monday" />
+                  <label class="custom-control-label ms-2" [for]="'Monday'" translate>MONDAY</label>
+                </div>
+                <div class="day">
+                  <input type="checkbox" class="custom-control-input" [id]="'Tuesday'" formControlName="Tuesday" />
+                  <label class="custom-control-label ms-2" [for]="'Tuesday'" translate>TUESDAY</label>
+                </div>
+                <div class="day">
+                  <input type="checkbox" class="custom-control-input" [id]="'Wednesday'" formControlName="Wednesday" />
+                  <label class="custom-control-label ms-2" [for]="'Wednesday'" translate>WEDNESDAY</label>
+                </div>
+                <div class="day">
+                  <input type="checkbox" class="custom-control-input" [id]="'Thursday'" formControlName="Thursday" />
+                  <label class="custom-control-label ms-2" [for]="'Thursday'" translate>THURSDAY</label>
+                </div>
+                <div class="day">
+                  <input type="checkbox" class="custom-control-input" [id]="'Friday'" formControlName="Friday" />
+                  <label class="custom-control-label ms-2" [for]="'Friday'" translate>FRIDAY</label>
+                </div>
+                <div class="day">
+                  <input type="checkbox" class="custom-control-input" [id]="'Saturday'" formControlName="Saturday" />
+                  <label class="custom-control-label ms-2" [for]="'Saturday'" translate>SATURDAY</label>
+                </div>
+                
+              </div>
+            </div>
+          </div>
+
+
+          <div class="col-sm text-right">
+            <div class="form-group search-btns-mobile-margin d-flex justify-content-end">
+              <label for="city" class="d-none d-md-block">&nbsp;</label>
+              <button type="button" 
+                      class="btn btn-with-icon with-text btn-primary ms-auto"
+                      (click)="saveWeeklyyDayOffData()"
+                      *ngIf="this.sharedPermissionServiceService.havePermission('School Holiday','Update')" translate>SAVE
+              </button>
+              <button 
+                       container="body" 
+                       ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                       *ngIf="!this.sharedPermissionServiceService.havePermission('School Holiday','Update')"
+                       class="btn btn-with-icon with-text btn-primary ms-auto btn-disabled"
+                        translate>SAVE
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+  <div class="d-flex align-items-center page-heading-wrapper">
+    <h3 class="page-heading" translate>SCHOOL_VACATION</h3>
+    <button class="btn btn-with-icon with-text btn-primary ms-auto" (click)="addSchoolVacation()"
+      *ngIf="this.sharedPermissionServiceService.havePermission('School Holiday','Create')" translate>
+      ADD_SCHOOL_VACATION
+    </button>
+    <button container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+      *ngIf="!this.sharedPermissionServiceService.havePermission('School Holiday','Create')"
+      class="btn btn-with-icon with-text btn-primary ms-auto btn-disabled" translate>
+      ADD_SCHOOL_VACATION
+    </button>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body table-body">
+      <div id="no-more-tables">
+        <table datatable [dtOptions]="dtOptions1" [dtTrigger]="dtTrigger1" class="display table row-border hover">
+          <thead>
+            <tr>
+              <th style="width: 10%;" translate>VACATION</th>
+              <th style="width: 10%;" translate>START_DATE</th>
+              <th style="width: 10%;" translate>END_DATE</th>
+              <th style="width: 3%;" translate>ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="schoolVacationList?.length != 0">
+            <tr *ngFor="let item of schoolVacationList index as i">
+              <td [attr.data-title]="'VACATION' | translate">{{ item.vacationName }}</td>
+              <td [attr.data-title]="'START_DATE' | translate">
+                {{ formatDate(item.startDate) }}
+              </td>
+              <td [attr.data-title]="'END_DATE' | translate">
+                {{ formatDate(item.endDate) }}
+              </td>
+              <td [attr.data-title]="'ACTIONS' | translate" class="action text-center actions-td">
+                <div class="d-flex flex-wrap justify-content-end">
+
+                  <button type="button" *ngIf="this.sharedPermissionServiceService.havePermission('School Holiday','Update')"
+                  class="btn btn-secondary action-btn" (click)="editSchoolVacation(item.schoolVacationId)">
+                  <span placement="top" ngbTooltip="{{ 'EDIT' | translate }}">
+                    <i class="bi bi-pencil"></i>
+                  </span>
+                </button>
+                <button type="button" *ngIf="!this.sharedPermissionServiceService.havePermission('School Holiday','Update')"
+                  class="btn btn-secondary action-btn btn-disabled">
+                  <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                    <i class="bi bi-pencil"></i>
+                  </span>
+                </button>
+
+
+                  <button type="button"
+                    *ngIf="this.sharedPermissionServiceService.havePermission('School Holiday','Delete')"
+                    class="btn btn-danger action-btn" (click)="confirmSchoolVactionDelete(item.schoolVacationId)">
+                    <span placement="top" ngbTooltip="{{ 'DELETE' | translate }}">
+                      <i class="bi bi-trash"></i>
+                    </span>
+                  </button>
+                  <button type="button"
+                    *ngIf="!this.sharedPermissionServiceService.havePermission('School Holiday','Delete')"
+                    class="btn btn-secondary action-btn btn-disabled">
+                    <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                      <i class="bi bi-trash"></i>
+                    </span>
+                  </button> 
+
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="schoolVacationList?.length == 0">
+              <td colspan="4" class="no-data-available" translate>NO_RECORDS_FOUND</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>SCHOOL_HOLIDAY</h3>
+      <button class="btn btn-with-icon with-text btn-primary ms-auto" (click)="addSchoolHoliday()"
+        *ngIf="this.sharedPermissionServiceService.havePermission('School Holiday','Create')" translate>
+        ADD_SCHOOL_HOLIDAY
+      </button>
+      <button container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+        *ngIf="!this.sharedPermissionServiceService.havePermission('School Holiday','Create')"
+        class="btn btn-with-icon with-text btn-primary ms-auto btn-disabled" translate>
+        ADD_SCHOOLEVENT
+      </button>
+    </div>
+  
+
+
+  <div class="card mb-4">
+    <div class="card-body table-body">
+      <div id="no-more-tables">
+        <table datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger2" class="display table row-border hover">
+          <thead>
+            <tr>
+              <th style="width: 10%;" translate>HOLIDAY_DATE</th>
+              <th style="width: 10%;" translate>HOLIDAY_REASON</th>
+              <th style="width: 10%;" translate>HOLIDAY_DAY</th>
+              <th style="width: 3%;" translate>ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="schoolHolidayList?.length != 0">
+            <tr *ngFor="let item of schoolHolidayList index as i">
+              <td [attr.data-title]=" 'SELECTED_DAYS' | translate">{{ item.calendarDate | date : 'dd/MM/yyyy' }}</td>
+              <td [attr.data-title]=" 'HOLIDAY_REASON' | translate">{{ item.holidayReason }}</td>
+              <td [attr.data-title]=" 'TIME_TABLE_NAME' | translate">{{ item.calendarDate | date : 'EEEE' }}</td>
+              <td [attr.data-title]=" 'ACTIONS' | translate" class="action text-center actions-td">
+                <div class="d-flex flex-wrap justify-content-end">
+
+                  <button type="button"
+                    *ngIf="this.sharedPermissionServiceService.havePermission('School Holiday','Delete')"
+                    class="btn btn-danger action-btn" (click)="confirmSchoolHolidayDelete(item.schoolHolidayId)">
+                    <span placement="top" ngbTooltip="{{ 'DELETE' | translate }}">
+                      <i class="bi bi-trash"></i>
+                    </span>
+                  </button>
+                  <button type="button"
+                    *ngIf="!this.sharedPermissionServiceService.havePermission('School Holiday','Delete')"
+                    class="btn btn-secondary action-btn btn-disabled">
+                    <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                      <i class="bi bi-trash"></i>
+                    </span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="schoolHolidayList?.length == 0">
+              <td colspan="7" class="no-data-available" translate>NO_RECORDS_FOUND</td>
+            </tr>
+          </tbody>
+
+        </table>
+
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,65 @@
+* {
+    box-sizing: border-box;
+}
+
+/* Create three equal columns that floats next to each other */
+.column {
+    float: left;
+    width: 33.33%;
+    padding: 10px;
+    height: 130px;
+}
+
+.columnsIGN {
+    float: left;
+    width: 33.33%;
+    padding: 10px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+
+
+.print_helper {
+    display: block;
+    overflow: visible;
+    font-family: Menlo, "Deja Vu Sans Mono", "Bitstream Vera Sans Mono", Monaco, monospace;
+    white-space: pre;
+    white-space: pre-wrap;
+}
+
+table, td, th {
+    text-align:unset !important;
+}
+
+
+.wrapper-width {
+    width: 790px;
+}
+
+hr {
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+    border: 0 !important;
+    border-top: 2px solid black !important;
+}
+.input {
+    border: 1px solid #ccc;
+    padding: 6px;
+}
+
+@media (max-width: 541px) {
+    .wrapper-width {
+        width: 100%;
+    }
+  }
+
+  ngb-datepicker {
+    width: 250px;
+  }
+  

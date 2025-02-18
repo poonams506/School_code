@@ -1,0 +1,95 @@
+
+<ion-content [fullscreen]="true" class="light-content">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+    <ion-card class="ion-no-margin ion-card-chart animate__animated animate__fadeIn dark-bg-color">
+    <!-- Skeletons -->
+
+    <!-- Chart -->
+ <ng-container *ngIf="content_loaded">
+      <highcharts-chart [Highcharts]="highcharts" [options]="chartOptions" >
+      </highcharts-chart>
+  </ng-container>
+  </ion-card>
+
+  <ng-container *ngIf="!content_loaded">
+    <ion-list color="light" class="list-custom animate__animated animate__fadeIn" lines="full">
+      <ion-item color="light" button detail="false" *ngFor="let i of [].constructor(12);">
+        <ion-label>
+          <h3><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></h3>
+          <p><ion-skeleton-text animated style="width: 65%"></ion-skeleton-text></p>
+        </ion-label>
+        <ion-skeleton-text slot="end" animated style="width: 15%"></ion-skeleton-text>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+
+  <ng-container *ngIf="content_loaded">
+    
+    <ion-list class="mt-0 rounded-0">
+      <ion-item class="box-wrapper header">
+        <ion-label class="box">Date</ion-label>
+        <ion-label class="box">Day</ion-label>
+        <ion-label class="box">Status</ion-label>
+      </ion-item>
+
+      <ion-item class="box-wrapper white-bg-color"  *ngFor = "let item of studentAttendance">
+        <ion-label class="box">{{item.attendanceDateTime.format('DD-MM-YYYY')}}</ion-label>
+        <ion-label class="box">{{item.attendanceDateTime.format('dddd')}}</ion-label>
+        <div class="box">
+          <ion-badge color="success" *ngIf='item.statusId === 1'>Present</ion-badge>
+          <ion-badge color="secondary" *ngIf='item.statusId === 2'>HalF Day</ion-badge>
+          <ion-badge color="danger" *ngIf='item.statusId === 3'>Absent</ion-badge>
+          <ion-badge color="warning" *ngIf='item.statusId === -1'>Unmarked</ion-badge>
+        </div>
+      </ion-item>
+    </ion-list>
+    </ng-container>
+
+    <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+      <ion-fab-button  id="open-modal2">
+        <ion-icon name="calendar-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+</ion-content>
+
+
+
+
+<!-- <ion-modal
+  trigger="open-modal2"
+  [cssClass]="'bottom-end'"
+  [keepContentsMounted]="true"
+  [initialBreakpoint]="0.65"
+>
+  <ng-template>
+    <ion-datetime
+      (ionChange)="onMonthYearChange()"
+      displayFormat="MM.YYYY"
+      presentation="month-year"
+      [(ngModel)]="currentAttendanceDate"
+      size="cover"
+      [showDefaultButtons]="true"
+    ></ion-datetime>
+  </ng-template>
+</ion-modal> -->
+
+
+<ion-modal
+  trigger="open-modal2"
+  [cssClass]="'bottom-end'"
+  [keepContentsMounted]="true"
+  [initialBreakpoint]="0.40"
+>
+  <ng-template>
+    <ion-datetime
+      (ionChange)="onMonthYearChange()"
+      displayFormat="MM.YYYY"
+      presentation="month-year"
+       [showDefaultButtons]="true"
+      [(ngModel)]="currentAttendanceDate"
+      size="cover"
+    ></ion-datetime>
+  </ng-template>
+</ion-modal>

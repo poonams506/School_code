@@ -1,0 +1,179 @@
+<div class="container-fluid">
+  <div class="d-flex align-items-center page-heading-wrapper">
+    <h3 class="page-heading" translate>SURVEY</h3>
+    <div class="form-group mb-0 ms-5" *ngIf="roleId > 2">
+      <select class="form-control" (change)="rerender(true)" [(ngModel)]="surveyTypeTo">
+        <option value="1" translate>Sent</option>
+        <option value="2" translate>Received</option>
+      </select>
+    </div>
+    <button *ngIf="this.sharedPermissionServiceService.havePermission('Notice','Create')"
+      class="btn btn-with-icon with-text btn-primary ms-auto" (click)="addSurvey()" translate>
+      ADD_SURVEY
+    </button>
+    <button container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+      *ngIf="!this.sharedPermissionServiceService.havePermission('Notice','Create')"
+      class="btn btn-with-icon with-text btn-primary ms-auto btn-disabled" translate>
+      ADD_SURVEY
+    </button>
+  </div>
+
+
+
+  <div class="card mb-4">
+    <div class="card-body table-body">
+      <div id="no-more-tables">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="display table row-border hover">
+          <thead>
+            <tr>
+              <th translate>SURVEY_TITLE</th>
+              <th translate>SURVEY_TO</th>
+              <th translate>START_DATE</th>
+              <th translate>END_DATE</th>
+              <th translate>STATUS</th>
+              <th translate>CREATED_BY</th>
+              <th translate>CREATED_DATE</th>
+              <th translate>MODIFIED_BY</th>
+              <th translate>MODIFIED_DATE</th>
+              <th style="width: 16%" class="text-center" translate>ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="survey?.length != 0">
+            <tr *ngFor="let item of survey index as i">
+              <td [attr.data-title]="'SURVEY_TITLE' | translate">
+                {{ item.surveyTitle }}
+              </td>
+              <td [attr.data-title]="'SURVEY_TO_TYPE' | translate">
+                {{ getSurveyTypeNameById(item.surveyToType) }}
+              </td>
+              <td [attr.data-title]="'START_DATE' | translate">
+                {{ item.startDate | date : 'dd/MM/yyyy'}}
+              </td>
+              <td [attr.data-title]="'END_DATE' | translate">
+                {{ item.endDate | date : 'dd/MM/yyyy' }}
+              </td>
+              <td [attr.data-title]="'STATUS' | translate">
+                {{ item.status}}
+              </td>
+              <td [attr.data-title]="'CREATED_BY' | translate">
+                {{ item.createdBy}}
+              </td>
+              <td [attr.data-title]="'CREATED_DATE' | translate">
+                {{ item.createdDate | date : 'dd/MM/yyyy'}}
+              </td>
+              <td [attr.data-title]="'MODIFIED_BY' | translate">
+                {{ item.modifiedBy }}
+              </td>
+              <td [attr.data-title]="'MODIFIED_DATE' | translate">
+                {{ item.modifiedDate | date : 'dd/MM/yyyy'}}
+              </td>
+              <td [attr.data-title]=" 'ACTIONS' | translate" class="action text-center actions-td">
+                <div class="d-flex flex-wrap justify-content-end">
+
+                  <button type="button" *ngIf="this.sharedPermissionServiceService.havePermission('Notice','Read')"
+                    class="btn btn-secondary action-btn" (click)="viewSurveyDescription(item.surveyId)" translate>
+                    <span placement="top" ngbTooltip="{{ 'VIEW' | translate }}">
+                      <i class="bi bi-eye"></i>
+                    </span>
+                  </button>
+                  <button 
+                  type="button" 
+                  class="btn btn-secondary action-btn"
+                  (click)="SubmittedSurvey(item.surveyId)"
+                  translate>
+                  <span placement="top" ngbTooltip="{{ 'SUBMITTED' | translate }}">
+                    <i class="bi bi-check2-circle"></i>
+                  </span>
+              </button>
+              
+              
+
+                  <button type="button" class="btn btn-secondary action-btn btn-disabled"
+                    *ngIf="!this.sharedPermissionServiceService.havePermission('Notice','Read')" translate>
+                    <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                      <i class="bi bi-eye"></i>
+                    </span>
+                  </button>
+                  <button type="button" class="btn btn-secondary action-btn btn-disabled"
+                    *ngIf="!this.sharedPermissionServiceService.havePermission('Notice','Read')&&item.status!='UnPublished'"
+                    translate>
+                    <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                      <i class="bi bi-eye"></i>
+                    </span>
+                  </button>
+
+                  <button type="button" class="btn btn-secondary action-btn" translate
+                    (click)="publishSurvey(item.surveyId)"
+                    *ngIf="this.sharedPermissionServiceService.havePermission('Notice','Create')&&!item.isPublished &&  item.status==='Unpublished' && surveyTypeTo == 1">
+
+                    <span placement="top" ngbTooltip="{{'PUBLISH' | translate}}">
+                      <i class="bi bi-box-arrow-up"></i>
+                    </span>
+                  </button>
+                  <button type="button" class="btn btn-secondary action-btn btn-disabled" translate
+                    *ngIf="!this.sharedPermissionServiceService.havePermission('Notice','Create')&&!item.isPublished &&  item.status==='Unpublished' && surveyTypeTo == 1">
+
+                    <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                      <i class="bi bi-box-arrow-up"></i>
+                    </span>
+                  </button>
+
+                  <button type="button" class="btn btn-secondary action-btn" translate
+                    (click)="unPublishSurvey(item.surveyId)"
+                    *ngIf="this.sharedPermissionServiceService.havePermission('Notice','Create')&&item.isPublished && item.status==='Published' && surveyTypeTo == 1">
+
+                    <span placement="top" ngbTooltip="{{'UNPUBLISH' | translate}}">
+                      <i class="bi bi-x-circle"></i>
+                    </span>
+                  </button>
+
+                  <button type="button" class="btn btn-secondary action-btn btn-disabled " translate
+                    *ngIf="!this.sharedPermissionServiceService.havePermission('Notice','Create')&&item.isPublished && item.status==='Published' && surveyTypeTo == 1">
+
+                    <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                      <i class="bi bi-x-circle"></i>
+                    </span>
+                  </button>
+                  <button
+                    *ngIf="this.sharedPermissionServiceService.havePermission('Notice','Update') && surveyTypeTo == 1"
+                    type="button" class="btn btn-secondary action-btn" (click)="editSurvey(item.surveyId)">
+                    <span placement="top" ngbTooltip="{{ 'EDIT' | translate }}">
+                      <i class="bi bi-pencil"></i>
+                    </span>
+                  </button>
+
+                  <button
+                    *ngIf="!this.sharedPermissionServiceService.havePermission('Notice','Update') && surveyTypeTo == 1"
+                    type="button" class="btn btn-secondary action-btn btn-disabled">
+                    <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                      <i class="bi bi-pencil"></i>
+                    </span>
+                  </button>
+
+                  <button
+                    *ngIf="this.sharedPermissionServiceService.havePermission('Notice','Delete') && surveyTypeTo == 1"
+                    type="button" class="btn btn-danger action-btn" (click)="confirmSurveyDelete(item.surveyId)">
+                    <span placement="top" ngbTooltip="{{ 'DELETE' | translate }}">
+                      <i class="bi bi-trash"></i>
+                    </span>
+                  </button>
+                  <button
+                    *ngIf="!this.sharedPermissionServiceService.havePermission('Notice','Delete') && surveyTypeTo == 1"
+                    type="button" class="btn btn-secondary action-btn btn-disabled">
+                    <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                      <i class="bi bi-trash"></i>
+                    </span>
+                  </button>
+
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="survey?.length == 0">
+              <td colspan="12" class="no-data-available" translate>NO_RECORDS_FOUND</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

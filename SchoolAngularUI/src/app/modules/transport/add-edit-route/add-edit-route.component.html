@@ -1,0 +1,168 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title" 
+    *ngIf="f['routeId']?.value==0"
+    ngbAutofocus translate> ADD_ROUTE</h4>
+    <h4 class="modal-title" id="modal-basic-title"
+    *ngIf="f['routeId']?.value>0"
+     ngbAutofocus translate> UPDATE_ROUTE</h4>
+
+</div>
+<div class="modal-body">
+    <form [formGroup]="routeForm" novalidate>
+      <div class="row">
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label class="required" translate
+                >ROUTE_NAME <span>*</span></label
+              >
+              <input
+                type="text"
+                formControlName="routeName"
+                class="form-control"
+                placeholder="{{ 'ROUTE_NAME' | translate }}"
+                [ngClass]="{
+                  'is-invalid': submitted && f['routeName'].errors
+                }"
+                maxlength="100"
+                
+              />
+              <div
+                *ngIf="submitted && f['routeName'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['routeName'].errors['required']">
+                  <span translate>ROUTE_NAME</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate class="required" 
+                >VEHICLE <span>*</span> </label
+              >
+              <select
+                formControlName="vehicleId"
+                class="form-control"
+                [ngClass]="{
+                  'is-invalid': submitted && f['vehicleId'].errors
+                }"
+              >
+              <option [value]="null">
+                <span translate>SELECT_VEHICLE</span>
+              </option>
+              <option *ngFor="let item of vehicleList" [value]="item.vehicleId" >
+                <span translate>{{item.ragistrationNumber}}</span>
+              </option>
+              </select>
+              <div
+              *ngIf="submitted && f['vehicleId'].errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f['vehicleId'].errors['required']">
+                <span translate>VEHICLE</span>
+                <span translate> IS_REQUIRED</span>
+              </div>
+            </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+              <label  translate
+              >CO_ORDINATOR </label
+            >
+            <select
+            (change)="resetSelectList(f,'coOrdinatorId')"
+              class="form-control"
+              formControlName="coOrdinatorId"
+            >
+            <option [value]="null">
+              <span translate>SELECT_COORDINATOR</span>
+            </option>
+              <option
+                *ngFor="let item of staffList" [value]="item.staffId"
+              >
+                {{ item.staffName }}
+              </option>
+            </select>
+          </div>
+        </div> 
+          <div class="col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+                <label class="required" translate>FIRST_PICKUP_TIME <span>*</span></label>
+                <ngb-timepicker
+                  [meridian]="true"
+                  formControlName="ngbFirstPickUpTime"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['ngbFirstPickUpTime'].errors
+                  }"
+                ></ngb-timepicker>  
+                <div
+                *ngIf="submitted && f['ngbFirstPickUpTime'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['ngbFirstPickUpTime'].errors['required']">
+                  <span translate>FIRST_PICKUP_TIME</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>           
+            </div>
+          </div>
+          <div class="col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+                <label class="required" translate>LAST_PICKUP_TIME <span>*</span></label>
+                <ngb-timepicker
+                  [meridian]="true"
+                  formControlName="ngbLastPickUpTime"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['ngbLastPickUpTime'].errors
+                  }"
+                ></ngb-timepicker>  
+                <div
+                *ngIf="submitted && f['ngbLastPickUpTime'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['ngbLastPickUpTime'].errors['required']">
+                  <span translate>LAST_PICKUP_TIME</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>          
+            </div>
+            </div>
+
+            
+          <div *ngIf="isSharedTransport" class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label class="d-none d-md-block">&nbsp;</label>
+
+              <div class="custom-control custom-checkbox d-flex align-items-center mt-0 mt-md-4">
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="check1"
+                  formControlName="isSharedVehicle"
+                  
+                />
+                <label class="custom-control-label ms-2" for="check1" translate
+                  >IS_SHARED_VEHICLE</label
+                >
+              </div>
+            </div>
+          </div>
+           
+   </div>
+    </form>
+</div>
+<div class="modal-footer">
+  <div class="form-group mb-0">
+  
+    <button type="button" class="btn btn-primary" (click)="saveAreaData()"
+    translate
+    >SAVE</button>
+    <button class="btn btn-light" (click)="close()" translate
+    >CANCEL</button>
+
+  </div>
+  
+</div>

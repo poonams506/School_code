@@ -1,0 +1,83 @@
+.time-table {
+    white-space: nowrap;
+    margin: 0;
+    border: none;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    border: 1px solid var(--border-color);
+    select.form-control {
+padding: 2px;
+    }
+  }
+  .time-table td,
+  .time-table  th {
+    padding: 0.5rem 1rem;
+  }
+  .time-table  thead th {
+    padding: 3px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    width: 16vw;
+    height: 35px;
+    background: var(--table-header-bg-color);
+  }
+  .time-table  td {
+    background: var(--white-bg-color);
+    padding: 2px 2px;
+    text-align: center;
+  }
+  
+  .time-table  tbody th {
+    font-weight: 500;
+    text-align: left;
+    position: relative;
+  }
+  .time-table  thead th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+  }
+  .time-table  tbody th {
+    position: sticky;
+    left: 0;
+    background: var(--white-bg-color);
+    z-index: 1;
+  }
+
+  .time-table-wrapper {
+    width: 100%;
+    max-height: 60vh;
+    overflow: auto;
+  }
+
+  .time-table  > :not(caption) > * > * {
+    border-width: 1px !important;
+}
+
+.day-wrap {
+  .label-title {
+    font-weight: 500;
+  }
+  .day-list {
+    display: flex;
+    column-gap: 30px;
+    .day {
+      display: flex;
+      align-items: center;
+      padding: 4px 7px;
+      background: #bdc6d178;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.hour {
+  border-radius: 4px;
+  padding: 3px;
+  border: 1px solid #eb6b23;
+  color: #eb6b23;
+  font-size: 12px;
+}

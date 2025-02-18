@@ -1,0 +1,22 @@
+.no-data-available {
+    text-align: center;
+  }
+  
+  
+  ::ng-deep table.dataTable td.dataTables_empty {
+    display: none;
+  }
+  .custom-input {
+    width: 50px; 
+  }
+  .no-data-available {
+    text-align: center;
+  }
+  
+  
+  ::ng-deep table.dataTable td.dataTables_empty {
+    display: none;
+  }
+  
+
+  ::ng-deep div:empty { display: none !important }

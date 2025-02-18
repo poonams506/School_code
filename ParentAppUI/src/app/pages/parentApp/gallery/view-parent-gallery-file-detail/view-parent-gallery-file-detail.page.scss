@@ -1,0 +1,384 @@
+:host {
+    ion-card {
+        box-shadow: none !important;
+    }
+
+}
+
+ion-list {
+    padding-top: 0;
+    background-color: #fff !important;
+    --background: #fff !important;
+    border-radius: 0;
+    --border-radius: 0;
+    ion-card-subtitle {
+        font-size: 18px;
+    }
+    &.gallery-card {
+        ion-item {
+            border-bottom: 0;
+            --background: transparent;
+            border-radius:4px;
+            margin-bottom: 5px;
+            align-items: flex-start;
+
+            ion-avatar {
+                span {
+                    color: green;
+                }
+            }
+            &.admin {
+                background-color: #badee2;
+            }
+            &.teacher {
+                background-color: #eac0d4;
+                ion-avatar {
+                    span {
+                        color: red;
+                    }
+                }
+            }
+            &.principal {
+                background-color: #eae9c0;
+                ion-avatar {
+                    span {
+                        color: #da9513;
+                    }
+                }
+            }
+            &:last-child {
+                border-bottom: 0 !important;
+            }
+            ion-avatar {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: #fff;
+                width: 45px;
+                height: 45px;
+                margin-right: 5px;
+                span {
+                    font-size: 20px;
+                    font-weight: bold;
+                }
+            }
+            ion-label {
+                font-size: 13px;
+                font-weight: 400;
+            }
+
+            &.important {
+               
+                background: blue;
+              
+                --background: red;
+              }
+              
+              @media (prefers-color-scheme: dark) {
+                &.important {
+                  --background: green;
+                }
+              }
+        }
+        }
+}
+
+
+.download {
+margin-top: 20px;
+   a {
+    text-decoration: none;
+    border: 1px solid #000;
+    border-radius: 4px;
+    background-color: var(--ion-color-dark);
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    ion-icon {
+        font-size: 24px;
+    }
+   }
+}
+
+
+.modal-text-header {
+    ion-card-subtitle {
+        font-size: 16px;
+        ion-text {
+            font-size: 14px;
+            display: block;
+            color: #000;
+        }
+    }
+}
+
+.uploaded-file-text {
+    margin: 10px 0;
+    font-size: 12px;
+    border: 0;
+    display: flex;
+    .file-thumb {
+        width: 64px;
+        height: 64px;
+        border: 1px solid #ccc;
+        padding: 5px;
+        border-radius: 4px;
+        display: flex;
+        position: relative;
+        margin-right: 10px;
+        img {
+            width: 100%;
+        }
+      
+    }
+
+}
+.bold-black-text {
+    font-weight: bold;
+    color: #000000; /* Black text color */
+    background-color: transparent; /* Default background color */
+}
+
+.plain-input {
+   
+    background-color: #fff;
+    border: none;
+    padding: 8px;
+  }
+
+  .bold-black-text {
+    font-weight: bold;
+    color: black;
+  }
+  
+  .video-link-wrap {
+    margin-top: 10px;
+  }
+  
+  .videoText a {
+    display: block;
+    margin-bottom: 25px; /* Add space between links */
+    color: black; /* Or any preferred color */
+    text-decoration: none;
+    word-break: break-all; /* Ensures long URLs wrap within the container */
+  }
+  
+  .videoText a:hover {
+    text-decoration: underline;
+  }
+
+  .black-bullet {
+    list-style-type: none; /* Remove default bullet */
+    padding-left: 0; /* Optional: adjust padding to align with your design */
+    margin: 0; /* Remove default margin */
+  }
+  
+  .black-bullet li {
+    position: relative; /* For the pseudo-element */
+    padding-left: 20px; /* Space for the bullet */
+    color: black; /* This ensures the bullet points themselves are black */
+  }
+  
+  .black-bullet li::before {
+    content: '•'; /* Bullet character */
+    position: absolute;
+    left: 0;
+    color: black; /* Ensures the bullet color is black */
+  }
+  
+  .black-bullet li a {
+    text-decoration: none;
+    color: inherit; /* Ensures the link color matches the text color */
+  }
+
+  ion-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  ion-card {
+    width: 100%; // Ensure the card takes the full width of the slide
+    max-width: 300px; // Adjust based on your design needs
+  }
+  
+  ion-img {
+    width: 100%; // Ensure the image fits the card
+    height: auto; // Maintain aspect ratio
+    border-radius: 8px; // Optional: Add border radius for rounded corners
+  }
+  
+  .image-list-thumb {
+    padding: 2px 2px 2px 2px;
+    height: 150px;
+  }
+  
+  .image-modal {
+    width: 100% !important;
+    height: 100%;
+    top: 0 !important;
+    left: 0 !important;
+  }
+  
+  .transparent {
+    background: rgba(0, 0, 0, 0.7);
+  }
+  
+  .slider {
+    width: 100%;
+    height: 100%;
+  }
+  
+  .image {
+    width: 100%;
+    height: 600px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center, center;
+  }
+  /* Container styling for the gallery sections */
+.container {
+  padding: 0 15px;
+}
+
+/* Image and video section styling */
+.images-section,
+.videos-section {
+  margin-bottom: 30px; /* Spacing between sections */
+}
+
+/* Title styling for sections */
+.images-section h3,
+.videos-section h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333; /* Darker text color for better readability */
+}
+
+/* Swiper styling */
+swiper {
+  display: block;
+  // width: 500px;
+  // height: 500px; /* Ensure swiper takes full height of its container */
+}
+
+swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0; /* Light background for slides */
+  border-radius: 8px; /* Rounded corners for slides */
+  overflow: hidden; /* Hide overflow content */
+}
+
+/* Image styling */
+img {
+  max-width: 400px; /* Ensure images do not exceed container width */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 8px; /* Rounded corners for images */
+}
+
+/* Video styling */
+video {
+  max-width: 300px; /* Ensure videos do not exceed container width */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 8px; /* Rounded corners for videos */
+}
+
+/* Specific size for gallery sections */
+.images-section,
+.videos-section {
+  height: 400px; /* Set a fixed height for consistency */
+}
+
+.swiper-slide img,
+.swiper-slide video {
+  max-height: 100%; /* Ensure content does not exceed container height */
+}
+
+.media-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.swiper-pagination {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: 10;
+}
+
+.center {
+  text-align: center;
+  width: 100%;
+  margin: 0; /* Remove any margins */
+  font-size: 1.5rem; /* Prominent font size */
+  font-weight: bold; /* Bold text for emphasis */
+  color: #333; /* Darker color for better visibility */
+  background-color: #f0f0f0; /* Light background color for header */
+  border-radius: 8px; /* Rounded corners if desired */
+}
+
+.media-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 400px; /* Consistent height */
+  margin: 0; /* Remove margin */
+  padding: 0; /* Remove padding */
+}
+
+.media-wrapper img,
+.media-wrapper iframe {
+  max-width: 500px; /* Max width for media */
+  max-height: 300px; /* Max height for media */
+  border-radius: 8px; /* Rounded corners for media */
+}
+
+.swiper-slide img,
+.swiper-slide iframe {
+  max-width: 500px; /* Consistent size for images and videos */
+  max-height: 300px; /* Consistent height */
+  border-radius: 8px; /* Rounded corners */
+}
+
+/* Ensure there is no space between the header and the media */
+.center + .media-wrapper {
+  margin: 0;
+  padding: 0;
+}
+
+.media-wrapper img,
+.media-wrapper iframe {
+  margin-top: 0; /* Ensure images are flush with the header */
+}
+
+
+  
+  
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+
+
+  
+  
+  
+  

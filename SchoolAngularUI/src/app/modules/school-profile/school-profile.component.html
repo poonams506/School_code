@@ -1,0 +1,784 @@
+<form [formGroup]="schoolProfileForm" (ngSubmit)="onSubmit()">
+  <div class="container-fluid form-page">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>SCHOOLPROFILE</h3>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title" translate>BASIC_DETAILS</h4>
+      </div>
+      <div class="card-body card-body-form">
+        <div class="row">
+          <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+            <div
+              class="profile-dropzone"
+              [compress]="true"
+              ngx-dropzone
+              [accept]="'image/jpeg, image/png, image/bmp, image/avif'"
+              (change)="onSelect($event)"
+            >
+              <ngx-dropzone-label>
+                <h5 translate>UPLOAD_PROFILE_IMAGE_TEXT</h5>
+              </ngx-dropzone-label>
+              <ngx-dropzone-image-preview
+                ngProjectAs="ngx-dropzone-preview"
+                *ngFor="let f of files"
+                [file]="f"
+                [removable]="true"
+                (removed)="onRemove(f)"
+              >
+              </ngx-dropzone-image-preview>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-9 col-md-9 col-lg-9">
+            <div class="row">
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label translate class="required"
+                    >SCHOOL_FULL_NAME <span>*</span></label
+                  >
+                  <input
+                    type="text"
+                    formControlName="schoolName"
+                    class="form-control"
+                    placeholder="{{ 'SCHOOL_FULL_NAME' | translate }}"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['schoolName'].errors
+                    }"
+                    maxlength="500"
+                  />
+                  <div
+                    *ngIf="submitted && f['schoolName'].errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f['schoolName'].errors['required']">
+                      <span translate>SCHOOL_FULL_NAME</span>
+                      <span translate> IS_REQUIRED</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label translate>SCHOOL_CODE_NO </label>
+                  <input
+                    type="text"
+                    formControlName="schoolCodeNo"
+                    class="form-control"
+                    placeholder="{{ 'SCHOOL_CODE_NO' | translate }}"
+                    maxlength="20"
+                  />
+                </div>
+              </div>
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label translate class="required"
+                    >MEDIUM <span>*</span></label
+                  >
+                  <select
+                    (change)="resetSelectList(f, 'schoolMediumId')"
+                    formControlName="schoolMediumId"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['schoolMediumId'].errors
+                    }"
+                    maxlength="15"
+                  >
+                    <option [value]="null">
+                      <span translate>SELECT_MEDIUM</span>
+                    </option>
+                    <option
+                      *ngFor="let item of mediumTypeDropdownList"
+                      [value]="item.mediumTypeId"
+                    >
+                      {{ item.mediumTypeName }}
+                    </option>
+                  </select>
+                  <div
+                    *ngIf="submitted && f['schoolMediumId'].errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f['schoolMediumId'].errors['required']">
+                      <span translate>MEDIUM</span>
+                      <span translate> IS_REQUIRED</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label class="required" translate
+                    >SCHOOL_EMAIL <span>*</span></label
+                  >
+                  <input
+                    type="email"
+                    formControlName="schoolEmail"
+                    [class.is-invalid]="
+                      f['schoolEmail'].invalid && f['schoolEmail'].touched
+                    "
+                    class="form-control"
+                    placeholder="{{ 'SCHOOL_EMAIL' | translate }}"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['schoolEmail'].errors
+                    }"
+                    maxlength="80"
+                  />
+                  <div
+                    *ngIf="submitted && f['schoolEmail'].errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f['schoolEmail'].errors['required']">
+                      <span translate>SCHOOL_EMAIL</span>
+                      <span translate> IS_REQUIRED</span>
+                    </div>
+                    <div *ngIf="f['schoolEmail'].errors['pattern']">
+                      <span translate>SCHOOL_EMAIL</span>
+                      <span translate> IS_INVALID</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label class="required" translate
+                    >SCHOOL_CONTACT <span>*</span></label
+                  >
+                  <input
+                    type="text"
+                    formControlName="schoolContactNo1"
+                    class="form-control"
+                    placeholder="{{ 'SCHOOL_CONTACT' | translate }}"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['schoolContactNo1'].errors
+                    }"
+                    maxlength="20"
+                  />
+                  <div
+                    *ngIf="submitted && f['schoolContactNo1'].errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f['schoolContactNo1'].errors['required']">
+                      <span translate>SCHOOL_CONTACT</span>
+                      <span translate> IS_REQUIRED</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label translate>SCHOOL_ALTERNATE_CONTACT </label>
+                  <input
+                    type="text"
+                    formControlName="schoolContactNo2"
+                    class="form-control"
+                    placeholder="{{ 'SCHOOL_ALTERNATE_CONTACT' | translate }}"
+                    maxlength="20"
+                  />
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label translate>SCHOOL_WEBSITE</label>
+                  <input
+                    type="text"
+                    formControlName="schoolWebsiteUrl"
+                    class="form-control"
+                    placeholder="{{ 'SCHOOL_WEBSITE' | translate }}"
+                    maxlength="250"
+                  />
+                </div>
+              </div>
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label translate>SCHOOL_DESCRIPTION</label>
+                  <textarea
+                    type="text"
+                    formControlName="schoolDescription"
+                    class="form-control"
+                    placeholder="{{ 'SCHOOL_DESCRIPTION' | translate }}"
+                    maxlength="500"
+                  ></textarea>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label class="required" translate
+                    >SCHOOL_ADDRESS_LINE_1 <span>*</span></label
+                  >
+                  <input
+                    type="text"
+                    formControlName="schoolAddressLine1"
+                    class="form-control"
+                    placeholder="{{ 'SCHOOL_ADDRESS_LINE_1' | translate }}"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['schoolAddressLine1'].errors
+                    }"
+                    maxlength="250"
+                  />
+                  <div
+                    *ngIf="submitted && f['schoolAddressLine1'].errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f['schoolAddressLine1'].errors['required']">
+                      <span translate>SCHOOL_ADDRESS</span>
+                      <span translate> IS_REQUIRED</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label translate>SCHOOL_ADDRESS_LINE_2 </label>
+                  <input
+                    type="text"
+                    formControlName="schoolAddressLine2"
+                    class="form-control"
+                    placeholder="{{ 'SCHOOL_ADDRESS_LINE_2' | translate }}"
+                    maxlength="250"
+                  />
+                </div>
+              </div>
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label class="required" translate
+                    >PIN_CODE <span>*</span></label
+                  >
+                  <input
+                    type="text"
+                    formControlName="pincode"
+                    class="form-control"
+                    placeholder="{{ 'PIN_CODE' | translate }}"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['pincode'].errors
+                    }"
+                    maxlength="10"
+                  />
+
+                  <div
+                    *ngIf="submitted && f['pincode'].errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f['pincode'].errors['required']">
+                      <span translate>PIN_CODE</span>
+                      <span translate> IS_REQUIRED</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label translate class="required"
+                    >REGISTER_COUNTRY <span>*</span></label
+                  >
+                  <select
+                    (change)="resetSelectList(f, 'countryId')"
+                    formControlName="countryId"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['countryId'].errors
+                    }"
+                  >
+                    <option [value]="null">
+                      <span translate>SELECT_COUNTRY</span>
+                    </option>
+                    <option
+                      *ngFor="let item of countryDropdownList"
+                      [value]="item.countryId"
+                      translate
+                    >
+                      {{ item.countryName }}
+                    </option>
+                  </select>
+                  <div
+                    *ngIf="submitted && f['countryId'].errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f['countryId'].errors['required']">
+                      <span translate>REGISTER_COUNTRY</span>
+                      <span translate> IS_REQUIRED</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label translate class="required"
+                    >REGISTER_STATE <span>*</span></label
+                  >
+                  <select
+                    (change)="resetSelectList(f, 'stateId')"
+                    formControlName="stateId"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['stateId'].errors
+                    }"
+                    translate
+                  >
+                    <option [value]="null">
+                      <span translate>SELECT_STATE</span>
+                    </option>
+                    <option
+                      *ngFor="let item of stateFilteredDropdownList"
+                      [value]="item.stateId"
+                      translate
+                    >
+                      {{ item.stateName }}
+                    </option>
+                  </select>
+                  <div
+                    *ngIf="submitted && f['stateId'].errors"
+                    class="invalid-feedback"
+                    translate
+                  >
+                    <div *ngIf="f['stateId'].errors['required']">
+                      <span translate>REGISTER_STATE</span>
+                      <span translate> IS_REQUIRED</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label translate class="required"
+                    >REGISTER_DISTRICT <span>*</span></label
+                  >
+                  <select
+                    (change)="resetSelectList(f, 'districtId')"
+                    formControlName="districtId"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['districtId'].errors
+                    }"
+                  >
+                    <option [value]="null">
+                      <span translate>SELECT_DISTRICT</span>
+                    </option>
+                    <option
+                      *ngFor="let item of districtFilteredDropdownList"
+                      [value]="item.districtId"
+                      translate
+                    >
+                      {{ item.districtName }}
+                    </option>
+                  </select>
+                  <div
+                    *ngIf="submitted && f['districtId'].errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f['districtId'].errors['required']">
+                      <span translate>REGISTER_DISTRICT</span>
+                      <span translate> IS_REQUIRED</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label translate class="required"
+                    >REGISTER_TALUKA <span>*</span></label
+                  >
+                  <select
+                    (change)="resetSelectList(f, 'talukaId')"
+                    formControlName="talukaId"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['talukaId'].errors
+                    }"
+                  >
+                    <option [value]="null">
+                      <span translate>SELECT_TALUKA</span>
+                    </option>
+                    <option
+                      *ngFor="let item of talukaFilteredDropdownList"
+                      [value]="item.talukaId"
+                      translate
+                    >
+                      {{ item.talukaName }}
+                    </option>
+                  </select>
+                  <div
+                    *ngIf="submitted && f['talukaId'].errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f['talukaId'].errors['required']">
+                      <span translate>REGISTER_TALUKA</span>
+                      <span translate> IS_REQUIRED</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title" translate>REGISTRATION_DETAILS</h4>
+      </div>
+      <div class="card-body card-body-form">
+        <div class="row">
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate>AUTHORISED_BY </label>
+              <input
+                type="text"
+                formControlName="authorisedBy"
+                class="form-control"
+                placeholder="{{ 'AUTHORISED_BY' | translate }}"
+                maxlength="500"
+              />
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate>SECTION </label>
+              <input
+                type="text"
+                formControlName="section"
+                class="form-control"
+                placeholder="{{ 'SECTION' | translate }}"
+                maxlength="500"
+              />
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label class="required" translate>SCHOOL_PERMISSION </label>
+              <input
+                type="text"
+                formControlName="schoolPermission"
+                class="form-control"
+                placeholder="{{ 'SCHOOL_PERMISSION' | translate }}"
+                maxlength="500"
+              />
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label class="required" translate
+                >REGISTER_NUMBER <span>*</span></label
+              >
+              <input
+                type="text"
+                formControlName="registrationNumber"
+                class="form-control"
+                placeholder="{{ 'REGISTER_NUMBER' | translate }}"
+                [ngClass]="{
+                  'is-invalid': submitted && f['registrationNumber'].errors
+                }"
+                maxlength="500"
+              />
+              <div
+                *ngIf="submitted && f['registrationNumber'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['registrationNumber'].errors['required']">
+                  <span translate>REGISTER_NUMBER</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate>SCHOOL_TYPE</label>
+              <input
+                type="text"
+                formControlName="schoolType"
+                class="form-control"
+                placeholder="{{ 'SCHOOL_TYPE' | translate }}"
+                maxlength="200"
+              />
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate>UDISE_NO</label>
+              <input
+                type="text"
+                formControlName="udiseNumber"
+                class="form-control"
+                placeholder="{{ 'UDISE_NO' | translate }}"
+                maxlength="500"
+              />
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label class="required" translate>BOARD<span>*</span></label>
+              <input
+                type="text"
+                formControlName="board"
+                class="form-control"
+                placeholder="{{ 'BOARD' | translate }}"
+                [ngClass]="{ 'is-invalid': submitted && f['board'].errors }"
+                maxlength="500"
+              />
+              <div
+                *ngIf="submitted && f['board'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['board'].errors['required']">
+                  <span translate>BOARD</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate>AFFILIATION_NO</label>
+              <input
+                type="text"
+                formControlName="affiliationNumber"
+                class="form-control"
+                placeholder="{{ 'AFFILIATION_NO' | translate }}"
+                maxlength="500"
+              />
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate>HSC_SSC_INDEX_NO</label>
+              <input
+                type="text"
+                formControlName="hscOrSscIndexNo"
+                class="form-control"
+                placeholder="{{ 'HSC_SSC_INDEX_NO' | translate }}"
+                maxlength="200"
+              />
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group datepicker">
+              <label class="required" translate>ESTABLISHMENT_DATE</label>
+
+              <input
+                type="text"
+                formControlName="ngbEstablishmentDate"
+                class="form-control"
+                placeholder="{{ 'ESTABLISHMENT_DATE' | translate }}"
+                ngbDatepicker
+                [minDate]="{ year: 1901, month: 1, day: 1 }"
+                [maxDate]="{ year: 2100, month: 1, day: 1 }"
+                [readonly]="true"
+                #establishmentDatepicker="ngbDatepicker"
+                (click)="establishmentDatepicker.toggle()"
+              />
+              <div class="calendar" (click)="establishmentDatepicker.toggle()">
+                <i class="bi bi-calendar3"></i>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="userRoleName !='Super Admin'" class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group datepicker">
+              <label class="required" translate>ACADEMIC_YEAR<span>*</span></label>
+
+              <select
+                style="
+                  cursor: not-allowed;
+                  pointer-events: none;
+                  background-color: lightgrey;
+                  
+                "
+                formControlName="academicYearId"
+                class="form-control"
+                [ngClass]="{
+                  'is-invalid': submitted && f['academicYearId'].errors
+                }"
+              >
+                <option
+                  *ngFor="let item of academicYearDropdownList"
+                  [value]="item.academicYearId"
+                >
+                  {{ item.academicYearName }}
+                </option>
+              </select>
+
+              <div
+                *ngIf="submitted && f['academicYearId'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['academicYearId'].errors['required']">
+                  <span translate>ACADEMIC_YEAR</span>
+                  <span translate>IS_REQUIRED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="userRoleName=='Super Admin'" class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group datepicker">
+
+              <label class="required" translate>ACADEMIC_YEAR<span>*</span></label>
+
+              <select
+              (change)="resetSelectList(f, 'academicYearId')"
+                formControlName="academicYearId"
+                class="form-control"
+                [ngClass]="{
+                  'is-invalid': submitted && f['academicYearId'].errors
+                }"
+              >
+                <option [value]="null">
+                  <span translate>SELECT_ACADEMIC_YEAR</span>
+                </option>
+                <option
+                  *ngFor="let item of academicYearDropdownList"
+                  [value]="item.academicYearId"
+                >
+                  {{ item.academicYearName }}
+                </option>
+              </select>
+
+              <div
+                *ngIf="submitted && f['academicYearId'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['academicYearId'].errors['required']">
+                  <span translate>ACADEMIC_YEAR</span>
+                  <span translate>IS_REQUIRED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title" translate>CONTACT_PERSON_DETAILS</h4>
+      </div>
+      <div class="card-body card-body-form">
+        <div class="row">
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate>CONTACT_PERSON_NAME </label>
+              <input
+                type="text"
+                formControlName="contactPersonName"
+                class="form-control"
+                placeholder="{{ 'CONTACT_PERSON_NAME' | translate }}"
+                maxlength="50"
+              />
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate>CONTACT_PERSON_ROLE </label>
+              <input
+                type="text"
+                formControlName="contactPersonRole"
+                class="form-control"
+                placeholder="{{ 'CONTACT_PERSON_ROLE' | translate }}"
+                maxlength="50"
+              />
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate>CONTACT_PERSON_EMAIL </label>
+              <input
+                type="email"
+                formControlName="contactPersonEmail"
+                [class.is-invalid]="
+                  f['contactPersonEmail'].invalid &&
+                  f['contactPersonEmail'].touched
+                "
+                class="form-control"
+                placeholder="{{ 'CONTACT_PERSON_EMAIL' | translate }}"
+                [ngClass]="{
+                  'is-invalid': submitted && f['contactPersonEmail'].errors
+                }"
+                maxlength="80"
+              />
+              <div
+                *ngIf="submitted && f['contactPersonEmail'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['contactPersonEmail'].errors['pattern']">
+                  <span translate>EMAIL</span>
+                  <span translate> IS_INVALID</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label translate>CONTACT_PERSON_MOBILE_NO </label>
+              <input
+                type="text"
+                formControlName="contactPersonMobileNo"
+                class="form-control"
+                placeholder="{{ 'CONTACT_PERSON_MOBILE_NO' | translate }}"
+                maxlength="20"
+              />
+            </div>
+          </div>
+
+          <div class="form-group text-end form-footer-buttons">
+            <button
+              type="button"
+              (click)="onReset()"
+              class="btn btn-secondary float-right"
+              translate
+            >
+              RESET
+            </button>
+
+            <button
+              type="submit"
+              *ngIf="
+                this.sharedPermissionServiceService.havePermission(
+                  'School Profile',
+                  'Create'
+                ) ||
+                this.sharedPermissionServiceService.havePermission(
+                  'School Profile',
+                  'Update'
+                )
+              "
+              class="btn btn-primary"
+              translate
+            >
+              UPDATE
+            </button>
+            <button
+              type="button"
+              ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+              *ngIf="
+                !this.sharedPermissionServiceService.havePermission(
+                  'School Profile',
+                  'Create'
+                ) &&
+                !this.sharedPermissionServiceService.havePermission(
+                  'School Profile',
+                  'Update'
+                )
+              "
+              class="btn btn-primary btn-disabled"
+              translate
+            >
+              UPDATE
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,339 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title" 
+    *ngIf="f['stoppageId']?.value==0"
+    ngbAutofocus translate> ADD_STOPPAGE</h4>
+    <h4 class="modal-title" id="modal-basic-title"
+    *ngIf="f['stoppageId']?.value>0"
+     ngbAutofocus translate> UPDATE_STOPPAGE</h4>
+
+</div>
+<div class="modal-body">
+    <form [formGroup]="stoppageForm" novalidate>
+      <div class="row">
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label class="required" translate
+                >STOPPAGE_NAME <span>*</span></label
+              >
+              <input
+                type="text"
+                formControlName="stoppageName"
+                class="form-control"
+                placeholder="{{ 'STOPPAGE_NAME' | translate }}"
+                maxlength="50"
+                [ngClass]="{
+                  'is-invalid': submitted && f['stoppageName'].errors
+                }"
+              /> 
+              <div
+              *ngIf="submitted && f['stoppageName'].errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f['stoppageName'].errors['required']">
+                <span translate>STOPPAGE_NAME</span>
+                <span translate> IS_REQUIRED</span>
+              </div>
+            </div>
+              </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label class="required" translate
+                >ORDER_NO <span>*</span> </label
+              >
+              <input
+                type="text"
+                formControlName="orderNo"
+                class="form-control"
+                placeholder="{{ 'ORDER_NO' | translate }}"
+                maxlength="3"
+                pattern="[0-9]*"
+                [ngClass]="{
+                  'is-invalid': submitted && f['orderNo'].errors
+                }"
+                (input)="clearErrorMessage()"
+                 />
+                 <div *ngIf="errorMessage" class="text-danger" translate>
+                  {{ errorMessage }}
+                </div>
+              <div
+              *ngIf="submitted && f['orderNo'].errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f['orderNo'].errors['required']">
+                <span translate>ORDER_NO</span>
+                <span translate> IS_REQUIRED</span>
+              </div>
+              <div *ngIf="f['orderNo'].errors['pattern']">
+                <span translate>ORDER_NO</span>
+                <span translate> MUST_BE_DIGITS</span>
+              </div>
+            </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label class="required" translate 
+                >SELECT_AREA <span>*</span></label
+              >
+              <select
+                formControlName="areaId"
+                class="form-control"
+                (change)="getPriceAreaChange()"
+                [ngClass]="{
+                  'is-invalid': submitted && f['areaId'].errors
+                }"
+              >
+              <option [value]="null">
+                <span translate>SELECT_AREA</span>
+              </option>
+              <option *ngFor="let item of areaList" [value]="item.areaId" >
+                <span translate>{{item.areaName}}</span>
+              </option>
+              </select>
+              <div
+              *ngIf="submitted && f['areaId'].errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f['areaId'].errors['required']">
+                <span translate>AREA</span>
+                <span translate> IS_REQUIRED</span>
+              </div>
+            </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label class="required"
+                ><span class="span-label" translate>PICK_PRICE</span> (per month)<span>*</span> </label
+              >
+              <input
+                type="text"
+                formControlName="pickPrice"
+                class="form-control"
+                placeholder="{{ 'PICK_PRICE' | translate }}"
+                [ngClass]="{
+                  'is-invalid': submitted && f['pickPrice'].errors
+                }"
+                step="0.01"
+                pattern="^\d+(\.\d{1,2})?$"
+                maxlength="7"
+              /> 
+              <div
+              *ngIf="submitted && f['pickPrice'].errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f['pickPrice'].errors['required']">
+                <span translate>PICK_PRICE</span>
+                <span translate> IS_REQUIRED</span>
+              </div>
+              <div *ngIf="f['pickPrice'].errors['pattern']">
+                <span translate>PICK_PRICE</span>
+                <span translate> IS_INVALID</span>
+            </div>
+            </div>         
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+              <label class="required" translate
+                ><span class="span-label" translate>DROP_PRICE</span> (per month)<span>*</span> </label
+              >
+              <input
+                type="text"
+                formControlName="dropPrice"
+                class="form-control"
+                placeholder="{{ 'DROP_PRICE' | translate }}"
+                [ngClass]="{
+                  'is-invalid': submitted && f['dropPrice'].errors
+                }"
+                step="0.01"
+                pattern="^\d+(\.\d{1,2})?$"
+                maxlength="7"
+              />
+              <div
+              *ngIf="submitted && f['dropPrice'].errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f['dropPrice'].errors['required']">
+                <span translate>DROP_PRICE</span>
+                <span translate> IS_REQUIRED</span>
+              </div>
+              <div *ngIf="f['dropPrice'].errors['pattern']">
+                <span translate>DROP_PRICE</span>
+                <span translate> IS_INVALID</span>
+            </div>
+            </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label class="required" translate
+                    ><span class="span-label" translate>PICK_DROP_PRICE</span> (per month)<span>*</span> </label
+                  >
+                  <input
+                    type="text"
+                    formControlName="pickAndDropPrice"
+                    class="form-control"
+                    placeholder="{{ 'PICK_DROP_PRICE' | translate }}"   
+                    [ngClass]="{
+                      'is-invalid': submitted && f['pickAndDropPrice'].errors
+                    }"   
+                    step="0.01"
+                    pattern="^\d+(\.\d{1,2})?$"   
+                    maxlength="7"           
+                  />
+                  <div
+                  *ngIf="submitted && f['pickAndDropPrice'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['pickAndDropPrice'].errors['required']">
+                    <span translate>PICK_DROP_PRICE</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                  <div *ngIf="f['pickAndDropPrice'].errors['pattern']">
+                    <span translate>PICK_DROP_PRICE</span>
+                    <span translate> IS_INVALID</span>
+                </div>
+                </div>
+              </div>
+          </div>
+          <div class="col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+                <label class="required" translate>PICKUP_TIME <span>*</span> </label>
+                <ngb-timepicker
+                  [meridian]="true"
+                  formControlName="ngbPickUpTime"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['ngbPickUpTime'].errors
+                  }"
+                ></ngb-timepicker>  
+                <div
+                *ngIf="submitted && f['ngbPickUpTime'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['ngbPickUpTime'].errors['required']">
+                  <span translate>PICKUP_TIME</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>          
+            </div>
+          </div>
+          <div class="col-sm-4 col-md-4 col-lg-4">
+            <div class="form-group">
+                <label class="required" translate>DROP_PICKUP_TIME <span>*</span></label>
+                <ngb-timepicker
+                  [meridian]="true"
+                  formControlName="ngbDropPickUpTime"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['ngbDropPickUpTime'].errors
+                  }"
+                ></ngb-timepicker>   
+                <div
+                *ngIf="submitted && f['ngbDropPickUpTime'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['ngbDropPickUpTime'].errors['required']">
+                  <span translate>DROP_PICKUP_TIME</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>         
+            </div>
+            </div>
+      
+            <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label class="required" translate
+                    >KILOMETER <span>*</span></label
+                  >
+                  <input
+                    type="text"
+                    formControlName="kiloMeter"
+                    class="form-control"
+                    placeholder="{{ 'KILOMETER' | translate }}"
+                    maxlength="6"
+                    (keypress)="preventSpaceAndDot($event)"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['kiloMeter'].errors
+                    }"
+                  />
+                  <div
+              *ngIf="submitted && f['kiloMeter'].errors"
+              class="invalid-feedback"
+            >
+              <div *ngIf="f['kiloMeter'].errors['required']">
+                <span translate>KILOMETER</span>
+                <span translate> IS_REQUIRED</span>
+              </div>
+            </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label class="required" translate
+                    >STOP_LAT  </label
+                  >
+                  <input
+                    type="text"
+                    formControlName="stopLat"
+                    class="form-control"
+                    placeholder="{{ 'STOP_LAT' | translate }}"
+                    maxlength="200"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['stopLat'].errors
+                    }"
+                     />
+                  <div
+                  *ngIf="submitted && f['stopLat'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['stopLat'].errors['required']">
+                    <span translate>STOP_LAT</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label class="required" translate
+                    >STOP_LNG </label
+                  >
+                  <input
+                    type="text"
+                    formControlName="stopLng"
+                    class="form-control"
+                    placeholder="{{ 'STOP_LNG' | translate }}"
+                    maxlength="200"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['stopLng'].errors
+                    }"
+                     />
+                  <div
+                  *ngIf="submitted && f['stopLng'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['stopLng'].errors['required']">
+                    <span translate>STOP_LNG</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+                </div>
+              </div>
+      
+   </div>
+    </form>
+</div>
+<div class="modal-footer">
+  <div class="form-group mb-0">
+  
+    <button type="button" class="btn btn-primary" (click)="saveStoppageData()"
+    translate
+    >SAVE</button>
+    <button class="btn btn-light" (click)="close()" translate
+    >CANCEL</button>
+
+  </div>
+  
+</div>

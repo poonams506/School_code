@@ -1,0 +1,145 @@
+<div class="container-fluid">
+  <div class="d-flex align-items-center page-heading-wrapper">
+    <h3 class="page-heading" translate>SCHOOL_EVENT</h3>
+    <button *ngIf="this.sharedPermissionServiceService.havePermission('Events','Create')"
+      class="btn btn-with-icon with-text btn-primary ms-auto" (click)="addSchoolEvent()" translate>
+      ADD_SCHOOL_EVENT
+    </button>
+    <button container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+      *ngIf="!this.sharedPermissionServiceService.havePermission('Events','Create')"
+      class="btn btn-with-icon with-text btn-primary ms-auto btn-disabled" translate>
+      ADD_SCHOOL_EVENT
+    </button>
+  </div>
+
+
+
+  <div class="card mb-4">
+    <div class="card-body table-body">
+      <div id="no-more-tables">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="display table row-border hover">
+          <thead>
+            <tr>
+              <th translate>EVENT_TITLE</th>
+              <th translate>EVENT_FEES</th>
+              <th translate>EVENT_VENUE</th>
+              <th translate>EVENT_COORDINATOR</th>
+              <th translate>START_DATE</th>
+              <th translate>END_DATE</th>
+              <th translate>STATUS</th>
+              <th style="width: 12%" class="text-center" translate>ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="schoolEvents?.length != 0">
+            <tr *ngFor="let item of schoolEvents">
+
+              <td [attr.data-title]="'EVENT_TITLE' | translate">
+                {{ item.eventTitle }}
+              </td>
+              <td [attr.data-title]="'EVENT_FEES' | translate">
+                ₹ {{ item.eventFess | number : "1.1-2" }}
+              </td>
+              <td [attr.data-title]="'EVENT_VENUE' | translate">
+                {{ item.eventVenue }}
+              </td>
+              <td [attr.data-title]="'EVENT_COORDINATOR' | translate">
+                {{ item.eventCoordinator }}
+              </td>
+
+              <td [attr.data-title]="'START_DATE' | translate">
+                {{ item.startDate | date : "dd/MM/yyyy" }}
+              </td>
+              <td [attr.data-title]="'END_DATE' | translate">
+                {{ item.endDate | date : "dd/MM/yyyy" }}
+              </td>
+              <td [attr.data-title]="'STATUS' | translate">
+                {{ item.status }}
+              </td>
+
+              <td [attr.data-title]="'ACTIONS' | translate" class="action text-center actions-td">
+                <div class="d-flex flex-wrap justify-content-end">
+                  <button type="button" *ngIf="this.sharedPermissionServiceService.havePermission('Events','Read')"
+                    class="btn btn-secondary action-btn" (click)="viewSchoolEventDescription(item.schoolEventId)"
+                    translate>
+                    <span placement="top" ngbTooltip="{{ 'VIEW' | translate }}">
+                      <i class="bi bi-eye"></i>
+                    </span>
+                  </button>
+                  <button type="button" class="btn btn-secondary action-btn btn-disabled"
+                    *ngIf="!this.sharedPermissionServiceService.havePermission('Events','Read')" translate>
+                    <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                      <i class="bi bi-eye"></i>
+                    </span>
+                  </button>
+
+                  <button type="button" class="btn btn-secondary action-btn" translate
+                    (click)="publishSchoolEvent(item.schoolEventId)"
+                    *ngIf="this.sharedPermissionServiceService.havePermission('Events','Create')&& item.status === 'Unpublished'">
+                    <span placement="top" ngbTooltip="{{ 'PUBLISH' | translate }}">
+                      <i class="bi bi-box-arrow-up"></i>
+                    </span>
+                  </button>
+                  <button type="button" class="btn btn-secondary action-btn btn-disabled" translate
+                    *ngIf="!this.sharedPermissionServiceService.havePermission('Events','Create')&&item.status === 'Unpublished'">
+
+                    <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                      <i class="bi bi-box-arrow-up"></i>
+                    </span>
+                  </button>
+
+
+                  <button type="button" class="btn btn-secondary action-btn" translate
+                    (click)="unPublishSchoolEvent(item.schoolEventId)"
+                    *ngIf="this.sharedPermissionServiceService.havePermission('Events','Create')&& item.status === 'Published'">
+                    <span placement="top" ngbTooltip="{{ 'UNPUBLISH' | translate }}">
+                      <i class="bi bi-x-circle"></i>
+                    </span>
+                  </button>
+                  <button type="button" class="btn btn-secondary action-btn btn-disabled " translate
+                    *ngIf="!this.sharedPermissionServiceService.havePermission('Events','Create')&&item.status === 'Published'">
+
+                    <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                      <i class="bi bi-x-circle"></i>
+                    </span>
+                  </button>
+
+
+                  <button type="button" *ngIf="this.sharedPermissionServiceService.havePermission('Events','Update')"
+                    class="btn btn-secondary action-btn" (click)="editSchoolEvent(item.schoolEventId)">
+                    <span placement="top" ngbTooltip="{{ 'EDIT' | translate }}">
+                      <i class="bi bi-pencil"></i>
+                    </span>
+                  </button>
+                  <button type="button" *ngIf="!this.sharedPermissionServiceService.havePermission('Events','Update')"
+                    class="btn btn-secondary action-btn btn-disabled">
+                    <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                      <i class="bi bi-pencil"></i>
+                    </span>
+                  </button>
+
+                  <button type="button" *ngIf="this.sharedPermissionServiceService.havePermission('Events','Delete')"
+                    class="btn btn-danger action-btn" (click)="confirmSchoolEventDelete(item.schoolEventId)">
+                    <span placement="top" ngbTooltip="{{ 'DELETE' | translate }}">
+                      <i class="bi bi-trash"></i>
+                    </span>
+                  </button>
+                  <button *ngIf="!this.sharedPermissionServiceService.havePermission('Events','Delete')" type="button"
+                    class="btn btn-secondary action-btn btn-disabled">
+                    <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                      <i class="bi bi-trash"></i>
+                    </span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="schoolEvents?.length == 0">
+              <td colspan="12" class="no-data-available" translate>
+                NO_RECORDS_FOUND
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

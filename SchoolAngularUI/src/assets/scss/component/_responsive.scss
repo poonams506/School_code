@@ -1,0 +1,93 @@
+@media (max-width: 992px) {
+    .layout .page-container {
+        padding: 75px 15px;
+        .main-content {
+            padding: 0;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .layout .page-container {
+        padding: 75px 0px;
+    }
+    .card {
+        .card-body {
+            &.table-body {
+                padding: 0;
+            }
+        }
+    }
+}
+
+@media (max-width: 441px) {
+    .page-heading {
+        font-size: 15px;
+    }
+    .search-btns-mobile-margin {
+        margin-bottom: 0;
+    }
+    .form-signin {
+        padding: 15px;
+        .login-text {
+            margin-bottom: 25px !important;
+        }
+        &.login-with-width {
+            width: 95%;
+        }
+    }
+
+    .card {
+        .card-header {
+            padding-top: 12px;
+            h4 {
+                font-size: 13px !important;
+                margin-bottom: 0;
+            }
+            .card-title::before {
+                top: 12px;
+            }
+        }
+        .card-body.search-body {
+            padding-bottom: 10px;
+        }
+    }
+
+    .search-in-table {
+        flex-wrap: wrap;
+        .show-entries {
+            order: 2;
+            margin: 10px auto !important;
+        }
+        .table-search-field {
+            margin-left: 0 !important;
+            width: 100%;
+        }
+    }
+
+    .profile-dropzone {
+        width: 100% !important;
+        margin-bottom: 20px;
+    }
+
+    .dataTables_wrapper {
+        .dataTables_filter {
+            label {
+                display: flex;
+                position: relative;
+                width: 50%;
+                margin: 0 auto;
+                overflow: hidden;
+                border-radius: 4px;
+            }
+        }
+    }
+    .fees-plan-cards {
+        padding: 0;
+        margin-top: 0;
+        margin-bottom: 0;
+        .whole {
+            flex: 0 0 48%;
+        }
+    }
+}

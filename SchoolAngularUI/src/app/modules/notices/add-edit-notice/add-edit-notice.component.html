@@ -1,0 +1,485 @@
+<div class="modal-header">
+  <h4
+    class="modal-title"
+    id="modal-basic-title"
+    *ngIf="f['noticeId']?.value == 0 && !isViewMode"
+    ngbAutofocus
+    translate
+  >
+    ADD_NOTICE
+  </h4>
+  <h4
+    class="modal-title"
+    id="modal-basic-title"
+    *ngIf="f['noticeId']?.value > 0 && !isViewMode"
+    ngbAutofocus
+    translate
+  >
+    UPDATE_NOTICE
+  </h4>
+  <h4
+  class="modal-title"
+  id="modal-basic-title"
+  *ngIf="isViewMode"
+  ngbAutofocus
+  translate
+>
+VIEW_NOTICE
+</h4>
+</div>
+<div class="modal-body">
+  <form class="search-filter" [formGroup]="noticeForm">
+    <div class="row">
+      <div class="col-12 col-sm-2 col-md-2 col-lg-2">
+        <div class="form-group">
+          <label translate class="required">NOTICE_TO <span>*</span></label>
+          <select
+          (change)="resetSelectList(f,'noticeToType')"
+            formControlName="noticeToType"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid': submitted && f['noticeToType'].errors
+            }"
+          >
+            <option [value]="null">
+              <span translate>SELECT_NOTICE_TO</span>
+            </option>
+            <option
+              *ngFor="let item of noticeToDropdownList"
+              [value]="item.id"
+              translate            >
+              {{ item.value }}
+            </option>
+          </select>
+          <div
+            *ngIf="submitted && f['noticeToType'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['noticeToType'].errors['required']">
+              <span translate>NOTICE_TO</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-10 col-md-10 col-lg-10" *ngIf="f['noticeToType']?.value==2">
+        <div class="form-group">
+          <label translate class="required">CLASS <span>*</span></label>
+        
+          <ng-select 
+          [ngClass]="{
+            'is-invalid': submitted && f['classId'].errors
+          }"
+[items]="divisionGradeMapping"
+[multiple]="true"
+bindLabel='className'
+[selectableGroup]="false"
+[closeOnSelect]="false"
+bindValue="schoolGradeDivisionMatrixId"
+placeholder="{{ 'SELECT_CLASS' | translate }}"
+formControlName="classId"
+(clear) = "checkSelectAllClass()"
+(remove) = "checkSelectAllClass()"
+>
+
+<ng-template ng-option-tmp  let-item="item" let-item$="item$" let-index="index">
+  <input id="item-{{index}}"  type="checkbox" [ngModelOptions]="{standalone: true}" [ngModel]="item$.selected"
+  (change)="checkSelectAllClass()"/> 
+  {{item.className}}
+</ng-template>
+<ng-template ng-header-tmp>
+  <input type="checkbox"  [id]="'select-all'" [ngModelOptions]="{standalone: true}" (change)="selectAllOptionClass()" [(ngModel)]="selectAllClass"/> 
+  <label [for]="'select-all'" translate>SELECT_ALL</label>
+</ng-template>
+</ng-select>
+          <div
+            *ngIf="submitted && f['classId'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['classId'].errors['required']">
+              <span translate>CLASS</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-10 col-md-10 col-lg-10" *ngIf="f['noticeToType']?.value==1">
+        <div class="form-group">
+          <label translate class="required">STUDENT <span>*</span></label>
+        
+          <ng-select
+          [ngClass]="{
+            'is-invalid': submitted && f['studentId'].errors
+          }"
+[items]="studentDropdownList"
+[multiple]="true"
+bindLabel='value'
+[selectableGroup]="false"
+[closeOnSelect]="false"
+bindValue="id"
+placeholder="{{ 'SELECT_STUDENT' | translate }}"
+formControlName="studentId"
+(clear) = "checkSelectAllStudent()"
+(remove) = "checkSelectAllStudent()">
+
+<ng-template ng-option-tmp  let-item="item" let-item$="item$" let-index="index">
+  <input id="item-{{index}}"  type="checkbox" [ngModelOptions]="{standalone: true}" [ngModel]="item$.selected"
+  (change)="checkSelectAllStudent()"/> {{item.value}} 
+</ng-template>
+<ng-template ng-header-tmp>
+  <input type="checkbox" [id]="'select-all'" [ngModelOptions]="{standalone: true}" (change)="selectAllOptionStudent()" [(ngModel)]="selectAllStudent"/> 
+  <label [for]="'select-all'" translate>SELECT_ALL</label>
+</ng-template>
+</ng-select>
+          <div
+            *ngIf="submitted && f['studentId'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['studentId'].errors['required']">
+              <span translate>STUDENT</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+     
+      <div class="col-12 col-sm-10 col-md-10 col-lg-10" *ngIf="f['noticeToType']?.value==3">
+        <div class="form-group">
+          <label translate class="required">TEACHER <span>*</span></label>
+        
+          <ng-select 
+          [ngClass]="{
+            'is-invalid': submitted && f['teacherId'].errors
+          }"
+[items]="teacherDropdownList"
+[multiple]="true"
+bindLabel='teacherName'
+[selectableGroup]="false"
+[closeOnSelect]="false"
+bindValue="teacherId"
+placeholder="{{ 'SELECT_TEACHER' | translate }}"
+formControlName="teacherId"
+(clear) = "checkSelectAllTeacher()"
+(remove) = "checkSelectAllTeacher()">
+
+<ng-template ng-option-tmp  let-item="item" let-item$="item$" let-index="index">
+  <input id="item-{{index}}"  type="checkbox" [ngModelOptions]="{standalone: true}" [ngModel]="item$.selected"
+  (change)="checkSelectAllTeacher()"/> {{item.teacherName}}
+</ng-template>
+<ng-template ng-header-tmp>
+  <input type="checkbox"  [id]="'select-all'" [ngModelOptions]="{standalone: true}" (change)="selectAllOptionTeacher()" [(ngModel)]="selectAllTeacher"/> 
+  <label [for]="'select-all'" translate>SELECT_ALL</label>
+</ng-template>
+</ng-select>
+          <div
+            *ngIf="submitted && f['teacherId'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['teacherId'].errors['required']">
+              <span translate>TEACHER</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-10 col-md-10 col-lg-10" *ngIf="f['noticeToType']?.value==4">
+        <div class="form-group">
+          <label translate class="required">CLERK <span>*</span></label>
+        
+          <ng-select
+          [ngClass]="{
+            'is-invalid': submitted && f['clerkId'].errors
+          }"
+[items]="clerkDropdownList"
+[multiple]="true"
+bindLabel='value'
+[selectableGroup]="false"
+[closeOnSelect]="false"
+bindValue="id"
+placeholder="{{ 'SELECT_CLERK' | translate }}"
+formControlName="clerkId"
+(clear) = "checkSelectAllClerk()"
+(remove) = "checkSelectAllClerk()"
+>
+
+<ng-template ng-option-tmp  let-item="item" let-item$="item$" let-index="index">
+  <input id="item-{{index}}"  type="checkbox" [ngModelOptions]="{standalone: true}" [ngModel]="item$.selected"
+  (change)="checkSelectAllClerk()"/> {{item.value}}
+</ng-template>
+<ng-template ng-header-tmp>
+  <input type="checkbox" [id]="'select-all'" [ngModelOptions]="{standalone: true}" (change)="selectAllOptionClerk()" [(ngModel)]="selectAllClerk"/> 
+  <label [for]="'select-all'" translate>SELECT_ALL</label>
+</ng-template>
+</ng-select>
+          <div
+            *ngIf="submitted && f['clerkId'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['clerkId'].errors['required']">
+              <span translate>CLERK</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-10 col-md-10 col-lg-10" *ngIf="f['noticeToType']?.value==5">
+        <div class="form-group">
+          <label translate class="required">CAB_DRIVER <span>*</span></label>
+        
+          <ng-select
+          [ngClass]="{
+            'is-invalid': submitted && f['cabDriverId'].errors
+          }"
+[items]="cabDriverDropdownList"
+[multiple]="true"
+bindLabel='value'
+[selectableGroup]="false"
+[closeOnSelect]="false"
+bindValue="id"
+placeholder="{{ 'SELECT_CAB_DRIVER' | translate }}"
+formControlName="cabDriverId"
+(clear) = "checkSelectAllCabDriver()"
+(remove) = "checkSelectAllCabDriver()"
+>
+
+<ng-template ng-option-tmp  let-item="item" let-item$="item$" let-index="index">
+  <input id="item-{{index}}"  type="checkbox" [ngModelOptions]="{standalone: true}" [ngModel]="item$.selected"
+  (change)="checkSelectAllCabDriver()"/> {{item.value}}
+</ng-template>
+<ng-template ng-header-tmp>
+  <input type="checkbox" [id]="'select-all'" [ngModelOptions]="{standalone: true}" (change)="selectAllOptionCabDriver()" [(ngModel)]="selectAllCabDriver"/> 
+  <label [for]="'select-all'" translate>SELECT_ALL</label>
+</ng-template>
+</ng-select>
+          <div
+            *ngIf="submitted && f['cabDriverId'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['cabDriverId'].errors['required']">
+              <span translate>CAB_DRIVER</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+        <div class="form-group">
+          <label for="noticeTitle" class="required" translate
+            >NOTICE_TITLE <span>*</span></label
+          >
+          <input
+            id="noticeTitle"
+            type="text"
+            formControlName="noticeTitle"
+            class="form-control"
+            placeholder="{{ 'NOTICE_TITLE' | translate }}"
+            [ngClass]="{
+              'is-invalid': submitted && f['noticeTitle'].errors
+            }"
+            maxlength="1000"
+          />
+          <div
+            *ngIf="submitted && f['noticeTitle'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['noticeTitle'].errors['required']">
+              <span translate>NOTICE_TITLE</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+        <div class="form-group datepicker">
+          <label class="required" translate>START_DATE<span>*</span></label>
+      
+          <input type="text" formControlName="ngbStartDate" class="form-control"
+            placeholder="{{ 'START_DATE' | translate }}"
+            [ngClass]="{ 'is-invalid': submitted && f['ngbStartDate'].errors }" ngbDatepicker [maxDate]="maxDate"   [readonly]="true" 
+            #startDateDatepicker="ngbDatepicker" (click)="startDateDatepicker.toggle()" />
+          <div class="calendar" (click)="startDateDatepicker.toggle()">
+            <i class="bi bi-calendar3"></i>
+          </div>
+      
+          <div *ngIf="submitted && f['ngbStartDate'].errors" class="invalid-feedback">
+            <div *ngIf="f['ngbStartDate'].errors['required']">
+              <span translate>START_DATE</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+        <div class="form-group datepicker">
+          <label class="required" translate>END_DATE<span>*</span></label>
+      
+          <input type="text" formControlName="ngbEndDate" class="form-control"
+            placeholder="{{ 'END_DATE' | translate }}" [ngClass]="{ 'is-invalid': submitted && f['ngbEndDate'].errors }"
+            ngbDatepicker [minDate]="minEndDate" [maxDate]="maxDate"   [readonly]="true"  #endDateDatepicker="ngbDatepicker"
+            (click)="endDateDatepicker.toggle()" />
+          <div class="calendar" (click)="endDateDatepicker.toggle()">
+            <i class="bi bi-calendar3"></i>
+          </div>
+      
+          <div *ngIf="submitted && f['ngbEndDate'].errors" class="invalid-feedback">
+            <div *ngIf="f['ngbEndDate'].errors['required']">
+              <span translate>END_DATE</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+    <div class="col-12 col-sm-8 col-md-8 col-lg-8">
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group">
+            <label for="isImportant" translate>IS_IMPORTANT</label>
+            <div class="custom-control custom-checkbox d-flex align-items-center">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="isImportant"
+                formControlName="isImportant"
+              />
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-6">
+          <div class="form-group">
+            <label for="isPublished" translate>IS_PUBLISHED</label>
+            <div class="custom-control custom-checkbox d-flex align-items-center">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="isPublished"
+                formControlName="isPublished"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+<div class="col-12">
+  <div class="form-group">
+    <label class="required" translate>NOTICE_DESCRIPTION <span>*</span></label>
+    <ckeditor [editor]="Editor" formControlName="noticeDescription"
+      [ngClass]="{'is-invalid': submitted && f['noticeDescription'].errors}"></ckeditor>
+
+    <div *ngIf="submitted && f['noticeDescription'].errors" class="invalid-feedback">
+      <div *ngIf="f['noticeDescription'].errors['required']">
+        <span translate>NOTICE_DESCRIPTION</span>
+        <span translate> IS_REQUIRED</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+        <div class="form-group">
+          <label for="homeworkTextFileArray" translate>
+            NOTICE_FILE
+          </label>
+          <span
+          placement="top"
+          ngbTooltip="{{ 'USE_THIS_FILE_FORMATE_ONLY'| translate }}" 
+          style="margin-left: 5px;"
+        >
+        <i class="bi bi-info-circle"></i>
+        </span>
+          <div
+            class="profile-dropzone profile-dropzone-btn"
+            ngx-dropzone
+            [accept]="allowedFileFormats.join('')"
+            [multiple]="true"
+            (change)="onTextFileSelect($event)"
+            [compress]="true"
+            [disabled]="isViewMode"
+          >
+            <ngx-dropzone-label>
+              <h5><span translate>UPLOAD_NOTICE_FILE</span></h5>
+            </ngx-dropzone-label>
+          </div>
+
+          <div *ngIf="invalidFileFormatError" class="text-danger">{{ invalidFileFormatError }}</div>
+          <div class="form-control uploaded-file-text">
+            <span class="file-thumb" *ngFor="let f of textfiles; let i = index">
+              <img *ngIf="getFileExtension(f.name) === 'png'" src="../../../../assets/img/img.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'jpeg'" src="../../../../assets/img/img.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'jpg'" src="../../../../assets/img/img.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'pdf'" src="../../../../assets/img/pdf.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'docx'" src="../../../../assets/img/docx-file.png"
+                (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'xls'" src="../../../../assets/img/xlsx.png.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'pptx'" src="../../../../assets/img/ppt.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'txt'" src="../../../../assets/img/txt.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'svg'" src="../../../../assets/img/img.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'csv'" src="../../../../assets/img/csv.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'bmp'" src="../../../../assets/img/bmp.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'xlsx'" src="../../../../assets/img/xlsx.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'doc'" src="../../../../assets/img/doc.png"
+                (click)="showFile(f)" />
+              <!-- Add similar conditions for other file types -->
+              <span class="delete-file" *ngIf="!isViewMode" (click)="onTextFileRemove(i)" ngbTooltip="{{ 'DELETE' | translate }}">
+                <i class="bi bi-trash"></i>
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+   
+      <div class="row" formArrayName="videoText">
+        <div class="form-group"></div>
+        <div class="col-12">
+          <h5 class="font-weight-bold mb-2">Video Text</h5>
+        </div>
+        <div class="col-12 col-md-12" *ngFor="let item of videoText; let i = index; let last = last;let first=first">
+          <div [formGroupName]="i" class="row d-flex align-items-center mb-2">
+            <div class="col-12 col-md-9">
+              <input type="text" formControlName="contentUrl" id="contentUrl_{{i}}" class="form-control" placeholder="Add Video Url" maxlength="1000" />
+
+            </div>
+           <div class="d-flex align-items-center col-12 col-md-3">
+            <button type="button" (click)="openVideoLink(i)" class="btn btn-primary action-btn">Open Link</button>
+            <button type="button" *ngIf="last" (click)="addVideoText()" class="btn btn-secondary action-btn">
+              <i class="bi bi-plus-lg" placement="top" ngbTooltip="Add"></i>
+            </button>
+            <button type="button" *ngIf="videoText.length > 1" (click)="removeVideotext(i)" class="btn btn-danger action-btn">
+              <i class="bi bi-dash-lg" placement="top" ngbTooltip="Actions"></i>
+            </button>
+          </div>
+          </div>
+        </div>
+      </div>
+      
+      
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <div class="form-group mb-0 pb-0">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="saveNoticeData()"
+      translate
+    >
+      SAVE
+    </button>
+    <button class="btn btn-light" (click)="close()" translate>
+      CANCEL
+    </button>
+  </div>
+</div>
+
+

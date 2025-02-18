@@ -1,0 +1,122 @@
+<!-- <p>student-attendance-report works!</p> -->
+<div class="container-fluid">
+  <div class="d-flex align-items-center page-heading-wrapper">
+    <h3 class="page-heading" translate>CLASS_ATTENDANCE_REPORT</h3>
+  </div>
+ 
+  <div class="card mb-4">
+    <div class="card-body search-body table-body position-relative">
+      <div class="search-body-table report-search">
+        <!--table search filter start-->
+        <form [formGroup]="classAttendanceReportForm" class="search-filter">
+          <div class="row mb-2">
+            <div class="col-12 col-md-4">
+              <div class="form-group datepicker mb-0">
+                <!-- <label translate>ATTENDANCE_DATE</label> -->
+                <input
+  type="text"
+  formControlName="ngbtakenOn"
+  class="form-control"
+  placeholder="{{ 'ATTENDANCE_DATE' | translate }}"
+  ngbDatepicker
+  [minDate]="{year: 1901, month: 1, day: 1}" 
+  [maxDate]="{year: 2100, month: 1, day: 1}"
+  [readonly]="true"
+  #fromDateDatepicker="ngbDatepicker"
+  (click)="fromDateDatepicker.toggle()"
+  (onChange)="clearErrorMessage()"
+/>
+<div class="calendar" (click)="fromDateDatepicker.toggle()">
+  <i class="bi bi-calendar3"></i>
+</div>
+
+    
+                <!-- <span style="position: relative; top:-5px" *ngIf="errorMessage" class="text-danger font12" translate>{{errorMessage}}</span> -->
+
+              </div>
+            </div>
+    
+            <div class="col-sm text-right">
+              <div class="form-group search-btns-mobile-margin mb-0">
+                <label for="city" class="d-none">&nbsp;</label>
+                <button
+                  type="button"
+                  (click)="onReset()"
+                  class="btn btn-light"
+                  translate
+                >
+                  RESET
+                </button>
+                <button *ngIf="this.sharedPermissionServiceService.havePermission('Class-wise Attendance Report','Read')"
+                  type="button"
+                  (click)="search()"
+                  class="btn btn-secondary"
+                  translate
+                >
+                  SEARCH
+                </button>
+                <button *ngIf="!this.sharedPermissionServiceService.havePermission('Class-wise Attendance Report','Read')"
+                type="button"
+                ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}" 
+                class="btn btn-secondary btn-disabled "
+                translate
+              >
+                SEARCH
+              </button>
+              </div>
+             
+            </div>
+            
+          </div>
+        </form>
+        
+      </div>
+     
+      <!-- <div>
+      <div *ngIf="errorMessage" class="alert alert-secondary" role="alert">
+        <p class="text-danger"><b translate>{{errorMessage}}</b> </p>
+      </div>
+      </div> -->
+      <!--table listing statrt-->
+      <div id="no-more-tables">
+          <div *ngIf="errorMessage" class="alert alert-danger p-0 px-2 py-1 font12 selected-day" role="alert">
+            <p class="text-danger m-0"><b translate>{{errorMessage}}</b> </p>
+          </div>
+        <table
+          datatable
+          [dtOptions]="dtOptions"
+          [dtTrigger]="dtTrigger"
+          class="display table row-border hover"
+        >
+          <thead>
+            <tr>
+              <th style="width: 2%;" translate>CLASS</th>
+              <th style="width: 2%" translate>ATTENDANCE_STATUS</th>
+              <th style="width: 2%" translate>TAKEN_BY</th>
+              <th style="width: 2%" translate>TAKEN_ON</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="classAttendanceReport?.length != 0">
+            <tr *ngFor="let attendanceReport of classAttendanceReport; index as i">
+              <td [attr.data-title]=" 'CLASS' | translate">{{ attendanceReport.gradeName }} - {{attendanceReport.divisionName}}</td>
+              <td [attr.data-title]="'ATTENDANCE_STATUS' | translate">
+                {{ attendanceReport.status }}
+              </td>
+              <td [attr.data-title]="'TAKEN_BY' | translate">
+                {{ attendanceReport.takenBy }}
+              </td>
+              <td [attr.data-title]="'TAKEN_ON' | translate">
+                {{ attendanceReport.takenOn | date : 'dd-MM-yyyy  HH:mm a'}}
+              </td>
+            </tr>
+            <tr *ngIf="classAttendanceReport?.length == 0">
+              <td colspan="7" class="no-data-available" translate>
+                NO_RECORDS_FOUND
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

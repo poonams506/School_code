@@ -1,0 +1,100 @@
+<div class="container-fluid">
+  <div class="d-flex align-items-center page-heading-wrapper">
+    <h3 class="page-heading" translate>FEE_WAIVER_MASTER</h3>
+    <button class="btn btn-with-icon with-text btn-primary ms-auto" (click)="addFeeWavier()" *ngIf="this.sharedPermissionServiceService.havePermission('Fee Waiver Master','Create')" translate>ADD</button>
+    <button class="btn btn-with-icon with-text btn-primary ms-auto btn-disabled" container="body"  ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"  *ngIf="!this.sharedPermissionServiceService.havePermission('Fee Waiver Master','Create')" translate>ADD</button>
+  </div>
+
+  
+
+  <div class="card mb-4">
+    <div class="card-body table-body">
+      <!--table listing statrt-->
+      <div id="no-more-tables">
+      
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="display table row-border">
+          <thead>
+            <tr>
+              <th translate>WAVIER_NAME</th>
+              <th translate>FEE_WAVIER_DISPLAY_NAME</th>
+              <th translate>DESCRIPTION</th>
+              <th><span translate>DISCOUNT_IN_PERCENT</span> (%)</th>
+              <th translate>NUMBER_OF_INSTALLMENT</th>
+              <th style="width: 6%;" translate>IS_ACTIVE</th>
+              <th style="width: 8%" class="text-end" translate>ACTIONS</th>
+            </tr>
+            
+          </thead>
+          <tbody *ngIf="feeWaiverTypes?.length != 0">
+            <tr *ngFor="let feeWaiver of feeWaiverTypes index as i">
+              <td [attr.data-title]="'WAVIER_NAME' | translate">{{feeWaiver.feeWavierTypeName}}</td>
+              <td [attr.data-title]="'FEE_WAVIER_DISPLAY_NAME' | translate">{{feeWaiver.feeWavierDisplayName}}</td>
+              <td [attr.data-title]="'DESCRIPTION' | translate">{{feeWaiver.description}}</td>
+              <td [attr.data-title]="'DISCOUNT_IN_PERCENT' | translate">{{feeWaiver.discountInPercent}}</td>
+              <td [attr.data-title]="'NUMBER_OF_INSTALLMENT' | translate">{{feeWaiver.numberOfInstallments}}</td>
+              <td [attr.data-title]="'IS_ACTIVE' | translate">{{feeWaiver.isActive}}</td>
+              <td [attr.data-title]=" 'ACTIONS' | translate" class="action text-center actions-td">
+                <div class="d-flex flex-wrap justify-content-end">
+                  <button *ngIf="this.sharedPermissionServiceService.havePermission('Fee Waiver Master','Update')"
+                    type="button"
+                    class="btn btn-secondary action-btn"
+                    (click)="editFeeWavier(feeWaiver)"
+                  >
+                    <span
+                      placement="top"
+                      ngbTooltip="{{ 'VIEW_EDIT' | translate }}"
+                    >
+                      <i class="bi bi-pencil"></i>
+                    </span>
+                  </button>
+                  <button *ngIf="!this.sharedPermissionServiceService.havePermission('Fee Waiver Master','Update')"
+                  type="button"
+                  class="btn btn-secondary action-btn btn-disabled"
+                >
+                  <span
+                    placement="top"
+                    ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                  >
+                    <i class="bi bi-pencil"></i>
+                  </span>
+                </button>
+
+                  <button *ngIf="this.sharedPermissionServiceService.havePermission('Fee Waiver Master','Delete')"
+                    type="button"
+                    class="btn btn-danger action-btn"
+                    (click)="confirmWavierDelete(feeWaiver)"
+                  >
+                    <span
+                      placement="top"
+                      ngbTooltip="{{ 'DELETE' | translate }}"
+                    >
+                      <i class="bi bi-trash"></i>
+                    </span>
+                  </button>
+                  <button *ngIf="!this.sharedPermissionServiceService.havePermission('Fee Waiver Master','Delete')"
+                    type="button"
+                    class="btn btn-secondary action-btn btn-disabled"
+                  >
+                    <span
+                      placement="top"
+                      ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+
+                    >
+                      <i class="bi bi-trash"></i>
+                    </span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+         
+            
+          </tbody>
+        </table>
+      </div>
+
+    
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,31 @@
+
+.no-data-available {
+    text-align: center;
+  }
+
+  .classes {
+    .m-span {
+      overflow: hidden;
+      display: inline-block;
+      background: #fff;
+      border: 1px solid #9e9c9c;
+      border-radius: 4px;
+      margin-left: 5px;
+      margin-bottom: 5px;
+      font-size: 11px;
+      
+    }
+    .action-btn {
+      border: 0;
+      background-color: #eb5252;
+      color: #fff;
+      padding: 2px 4px;
+      margin-left: 5px;
+    }
+  }
+  
+  
+  ::ng-deep table.dataTable td.dataTables_empty {
+    display: none;
+  }
+  

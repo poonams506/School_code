@@ -1,0 +1,52 @@
+<div class="login-page-bg-cover">
+   
+    <div class="login-page-bg-overlay"></div>
+    <div class="arc-bottom">
+      <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 120">
+        <path d="M 0,36 C 144,53.6 432,123.2 720,124 C 1008,124.8 1296,56.8 1440,40L1440 140L0 140z"></path>
+    </svg>
+    </div>
+    </div>
+    
+    <div class="d-flex align-items-center justify-content-center hv-100">
+  <div>
+      <div class="text-center logo mt-2 mb-5 position-relative" style="z-index:2">
+          <img src="./assets/img/logo-full.png" alt="Logo">
+          <!-- <p class="mb-3 mt-3 text-white" translate>OTP_MESSAGE</p> -->
+        </div>
+  
+        <form class="form-signin login-with-width" novalidate>
+          <div class="text-center">
+              <!-- <img src="./assets/img/logo-full.png" alt="Logo"> -->
+              <!-- <p class="mb-0">Welcome Back !</p> -->
+              <h4 class="mb-0 login-text" translate>CONFIRM_WITH_OTP</h4>
+              <p class="mb-3 mt-3"><span translate>OTP_MESSAGE</span> +91 9876543270</p>
+          </div>
+          <div class="row">
+            <div class="col-12"> 
+                <button class="btn btn-lg btn-outline-secondary w-100 mt-2 mb-3" type="button" (click)="toggleDiv()">{{ buttonText }}</button>
+            </div>
+          </div>
+         
+          <div class="row" *ngIf="showDiv">
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1" translate>ENTER_OTP</label>
+                    <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="{{ 'ENTER_OTP' | translate }}">
+                    <div class="invalid-feedback">
+                        <span translate>PLEASE_ENTER</span>
+                  <span translate>OTP</span>
+                      </div>
+                  </div>
+            </div>
+            
+              <div class="col-12"> <button class="btn btn-lg btn-primary w-100 mt-4" type="button"  routerLink="/sign-up">Submit</button></div>
+  
+              <!-- <div class="col-12 d-flex justify-content-center">
+              <a href="javascript:void(0)" class="forgot-password-link link-bold mt-3" routerLink="/login" title="Forgot Password">Login</a>
+                </div> -->
+          </div>
+        </form>
+      </div>
+      </div>
+   

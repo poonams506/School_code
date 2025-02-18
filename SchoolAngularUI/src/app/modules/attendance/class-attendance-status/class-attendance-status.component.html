@@ -1,0 +1,150 @@
+ 
+<div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>CLASS_ATTENDANCE_STATUS</h3>
+
+     
+    </div>
+  
+    <div class="card mb-4">
+      <div class="card-body table-body"> 
+        <div class="card-body search-body table-body position-relative">
+          <!-- <div class=" search-body-table report-search"> -->
+            <!--table search filter start-->
+            <form [formGroup]="classAttendanceForm" class="search-filter">
+              <div class="row mb-2">
+                <div class="col-12 col-md-8" >
+                  <div class="form-group mb-0">
+                    <!-- <label translate>CLASS </label> -->
+                    <ng-select 
+                    [ngClass]="{
+                      'is-invalid': submitted && f['classId'].errors
+                       }"
+                       [items]="divisionGradeMapping"
+                       [multiple]="true"
+                       bindLabel='className'
+                       [selectableGroup]="false"
+                       [closeOnSelect]="false"
+                       bindValue="schoolGradeDivisionMatrixId"
+                       placeholder="{{ 'SELECT_CLASS' | translate }}"
+                       formControlName="classId"
+                       (clear) = "checkSelectAllClass()"
+                       (remove) = "checkSelectAllClass()"
+                       >
+          
+                   <ng-template ng-option-tmp  let-item="item" let-item$="item$" let-index="index">
+                   <input id="item-{{index}}"  type="checkbox" [ngModelOptions]="{standalone: true}" [ngModel]="item$.selected"
+                   (change)="checkSelectAllClass()"/> {{item.className}}
+                 </ng-template>
+                 <ng-template ng-header-tmp>
+                  <input type="checkbox" [id]="'select-all'" [ngModelOptions]="{standalone: true}" (change)="selectAllOptionClass()" [(ngModel)]="selectAllClass"/> 
+                  <label [for]="'select-all'" translate>SELECT_ALL</label>
+                </ng-template>
+                 </ng-select>
+                </div>
+              </div>
+                <div class="col-12 col-md-3 text-right">
+                  <div class="form-group search-btns-mobile-margin mb-0">
+                    <label for="city" class="d-none">&nbsp;</label>
+                    <button type="button" (click)="onReset()" class="btn btn-light" translate>
+                      RESET
+                    </button>
+                    <button type="button" (click)="search()" class="btn btn-secondary" 
+                    *ngIf="this.sharedPermissionServiceService.havePermission('Student Attendance Report','Read')" translate>
+                      SEARCH
+                    </button>
+                    <button type="button" container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"  class="btn btn-secondary btn-disabled"
+                    *ngIf="!this.sharedPermissionServiceService.havePermission('Student Attendance Report','Read')" translate>
+                      SEARCH
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!--table listing statrt-->
+        <div id="no-more-tables">
+           
+          <table  datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="display table row-border hover">
+            <thead>
+              <tr> 
+                
+                <th translate>CLASS_NAME</th>
+                <th translate>MONTH</th>
+                <th translate>STATUS</th>
+                <th style="width: 7%" class="text-end" translate>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="classAttendanceList?.length != 0">
+              <tr *ngFor="let bulkAttendance of classAttendanceList index as i">
+                   
+                  <td [attr.data-title]=" 'CLASS_NAME' | translate">{{ bulkAttendance.className }}</td>
+                  <td [attr.data-title]=" 'MONTH' | translate">{{ bulkAttendance.month }}</td>
+                  <td [attr.data-title]="'STATUS' | translate">{{ bulkAttendance.status }}</td>
+                  <td [attr.data-title]=" 'ACTIONS' | translate" class="action text-center actions-td">
+                    <div class="d-flex flex-wrap justify-content-end">
+                      <button *ngIf="this.sharedPermissionServiceService.havePermission('Grade','Update')" 
+                        type="button"
+                        class="btn btn-secondary action-btn"
+                        (click)="editBulkAttendance(bulkAttendance)"
+                      >
+                        <span
+                          placement="top"
+                          ngbTooltip="{{ 'VIEW_EDIT' | translate }}"
+                        >
+                          <i class="bi bi-pencil"></i>
+                        </span>
+                      </button>
+                      <button *ngIf="!this.sharedPermissionServiceService.havePermission('Grade','Update')" 
+                      type="button"
+                      class="btn btn-secondary action-btn btn-disabled"
+                    >
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                      >
+                        <i class="bi bi-pencil"></i>
+                      </span>
+                    </button>
+    
+                      <!-- <button *ngIf="this.sharedPermissionServiceService.havePermission('Grade','Delete')" 
+                        type="button"
+                        class="btn btn-danger action-btn"
+                        (click)="confirmAttendanceDelete(classAttendance)" 
+                      >
+                        <span
+                          placement="top"
+                          ngbTooltip="{{ 'DELETE' | translate }}"
+                        >
+                          <i class="bi bi-trash"></i>
+                        </span>
+                      </button>
+                      <button *ngIf="!this.sharedPermissionServiceService.havePermission('Grade','Delete')" 
+                      type="button"
+                      class="btn btn-secondary action-btn btn-disabled"
+                    >
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                      >
+                        <i class="bi bi-trash"></i>
+                      </span>
+                    </button> -->
+                    </div>
+                  </td>
+  
+              </tr>
+              <tr *ngIf="classAttendanceList?.length == 0">
+                <td colspan="7" class="no-data-available" translate>NO_RECORDS_FOUND</td>
+              
+              </tr>
+            </tbody>
+  
+          </table>
+        </div>
+      
+      </div>
+    </div>
+  </div>
+  
+  

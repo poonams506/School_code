@@ -1,0 +1,52 @@
+/* Component CSS or global stylesheet */
+.report-heading {
+  font-weight: bold;
+  font-size: 1.5rem; /* Adjust font size as needed */
+  margin-bottom: 10px; /* Add margin below the header */
+}
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px; /* Add margin above the table */
+  }
+  
+  .table th, .table td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ddd; /* Add borders to cells */
+  }
+  
+  .table th {
+    background-color: #f2f2f2; /* Light gray background for header */
+    font-weight: bold;
+  }
+  
+  .table tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* Alternate row background color */
+  }
+
+  
+.no-data-available {
+    text-align: center;
+  }
+  
+  
+  ::ng-deep table.dataTable td.dataTables_empty {
+    display: none;
+  }
+  
+/* Apply red border to ng-select when it's invalid */
+.ng-select.is-invalid .ng-select-container {
+  border-color: red; /* Adjust styles as needed */
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.export-button {
+  margin-left: auto;
+}

@@ -1,0 +1,68 @@
+<ion-header collapse="fade" [translucent]="true" class="modal-header">
+  <ion-toolbar>
+    <ion-title style="font-weight: bold; color: black;">Event Details</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" fill="solid" (click)="close()">
+        Close
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-card-subtitle class="message-from">
+    <span class="bold-black-text">Event Title: &nbsp;</span>
+    <ion-text>{{ selectedEvent.eventTitle }}</ion-text>
+  </ion-card-subtitle>
+  <br>
+  <ion-card-subtitle class="message-from" *ngFor="let date of selectedEvent.lstEventDate">
+    <span class="bold-black-text">Event Date : &nbsp; </span>
+    <ion-text>{{date.eventStartDate | date: 'dd-MMM-yyyy' }} <span>To</span>  {{ date.eventEndDate | date: 'dd-MMM-yyyy' }}</ion-text>
+  </ion-card-subtitle>
+  <br>
+  <ng-container *ngIf="selectedEvent && selectedEvent.startTime && selectedEvent.endTime">
+    <ion-card-subtitle class="message-from">
+      <span class="bold-black-text">Event Time: &nbsp; </span>
+      <ion-text>
+        {{ selectedEvent.startTime | date: 'hh:mm a' }}
+        <span>To</span> {{ selectedEvent.endTime | date: 'hh:mm a' }}
+      </ion-text>
+    </ion-card-subtitle>
+  </ng-container>
+  <br>
+  <ion-card-subtitle class="message-from inline">
+    <span class="bold-black-text">Event Description:&nbsp;</span>
+    <ion-text [innerHTML]="selectedEvent.eventDescription"></ion-text>
+  </ion-card-subtitle>
+  <ion-card-subtitle class="message-from">
+    <span class="bold-black-text">Event Coordinator: &nbsp;</span>
+    <ion-text>{{ selectedEvent.eventCoordinator }}</ion-text>
+  </ion-card-subtitle>
+  <br>
+  <ion-card-subtitle class="message-from"
+    *ngIf="selectedEvent.eventFess && selectedEvent.eventFess.length > 0 && selectedEvent.eventFess !== '0.0000'">
+    <span class="bold-black-text">Event Fees: &nbsp;</span>
+    <ion-text> <b> ₹ </b> {{ selectedEvent.eventFess | number:'1.2-2' }}</ion-text>
+  </ion-card-subtitle>
+  <div class="download">
+    <ion-card-subtitle class="message-from" *ngIf="selectedEvent.lstEventDetail && selectedEvent.lstEventDetail.length > 0">
+      <span class="bold-black-text">Event Files Download : &nbsp; </span>
+    </ion-card-subtitle>
+    <div class="uploaded-file-text">
+      <span class="file-thumb" *ngFor="let f of selectedEvent.lstEventDetail; let i = index">
+        <img *ngIf="getFileExtension(f.fileName) === 'png'" src="../../../../assets/img/img.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'jpeg'" src="../../../../assets/img/img.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'jpg'" src="../../../../assets/img/img.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'pdf'" src="../../../../assets/img/pdf.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'doc'" src="../../../../assets/img/doc.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'xls'" src="../../../../assets/img/xlsx.png.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'pptx'" src="../../../../assets/img/ppt.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'txt'" src="../../../../assets/img/txt.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'svg'" src="../../../../assets/img/img.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'csv'" src="../../../../assets/img/csv.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'bmp'" src="../../../../assets/img/bmp.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'xlsx'" src="../../../../assets/img/xlsx.png" class="thumbnail-icon" (click)="showFile(f)" />
+      </span>
+    </div>
+  </div>
+
+</ion-content>

@@ -1,0 +1,146 @@
+<div class="container-fluid">
+  <div class="d-flex align-items-center page-heading-wrapper">
+    <h3 class="page-heading" translate>ID_CARD</h3>
+    <!-- <button class="btn btn-with-icon with-text btn-primary ms-auto" (click)="openLg(contentLg)" translate>ADD</button> -->
+  </div>
+
+  <div class="card mb-4 d-md-block">
+    <div class="card-body search-body">
+      <!--table search filter start-->
+      <form  [formGroup]="certificateForm" (ngSubmit)="onGenerateCertificate()" class="search-filter">
+        <div class="row mb-2">
+          <div class="col-sm">
+            <div class="form-group">
+              <label translate class="required"
+                >CLASS <span>*</span></label
+              >
+              <select (change)="resetSelectList(f,'classId')"
+                formControlName="classId"
+                class="form-control"
+                [ngClass]="{
+                  'is-invalid': certificateSubmitted && f['classId'].errors
+                }"
+              >
+              <option [value]="null">
+                <span translate>SELECT_CLASS</span>
+                </option>
+              <option *ngFor="let item of divisionGradeMapping" [value]="item.schoolGradeDivisionMatrixId" >
+                {{item.className}}
+              </option>
+              </select>
+              <div
+                *ngIf="certificateSubmitted && f['classId'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['classId'].errors['required']">
+                  <span translate>CLASS</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm">
+            <div class="form-group">
+              <label translate class="required"
+                >STUDENT_NAME <span>*</span></label
+              ><select (change)="resetSelectList(f,'fullName')"
+                formControlName="fullName"
+                class="form-control"
+                [ngClass]="{
+                  'is-invalid': certificateSubmitted && f['fullName'].errors
+                }"
+              >
+              <option [value]="null">
+                <span translate> SELECT_STUDENT_NAME</span>
+                </option>
+              <option *ngFor="let item of studentDropdownList" [value]="item.studentId">
+                {{item.fullName}}
+              </option>
+              </select>
+              <div
+                *ngIf="certificateSubmitted && f['fullName'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['fullName'].errors['required']">
+                  <span translate>STUDENT_NAME</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+         
+          <div class="col-md-3 text-right">
+            <div class="form-group search-btns-mobile-margin">
+              <label for="city" class="d-none d-md-block">&nbsp;</label>
+              <button type="button" class="btn btn-light" translate (click)="onCertificateReset()">
+                RESET
+              </button>
+              <button type="submit" class="btn btn-primary" *ngIf="this.sharedPermissionServiceService.havePermission('ID Card','Create')" translate>
+                GENERATE
+              </button>
+              <button type="button" container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}" class="btn btn-primary btn-disabled" *ngIf="!this.sharedPermissionServiceService.havePermission('ID Card','Create')" translate>
+                GENERATE
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <div *ngIf="certificateDto && certificateDto.idCardDetails">
+    <div class="id-card">
+      <div class="card">
+        <div class="card-header">
+            <div class="school-details">
+          <div class="school-logo">
+           <!-- <img src="../../../../assets/img/sm-logo.png" />-->
+           <img src="{{ schoolLogoUrl }}"  style="width:100%; height: 100%;">
+          </div>
+          <div class="school-name">{{certificateDto.idCardDetails.schoolName}}</div>
+        </div>
+       <div class="identity"> {{certificateDto.idCardDetails.academicYearName}}</div>
+        </div>
+        <div class="card-body">
+          <div class="card-left">
+            <div class="profile-photo">
+              <!--  <img src="../../../../assets/img/px.jpg" />-->
+                <img src="{{ studentLogoUrl }}"  style="width:100%; height: 100%;">
+            </div>
+            <div class="grade">
+                <span translate>Grade</span> {{certificateDto.idCardDetails.gradeName}}
+            </div>
+          </div>
+          <div class="card-right">
+            <div class="details-wrap">
+                <div class="title"><span translate>NAME</span>:</div>
+                <div class="details"><span>{{certificateDto.idCardDetails.name}}</span></div>
+            </div>
+            <div class="details-wrap">
+                <div class="title"><span translate>DATE_OF_BIRTH</span>:</div>
+                <div class="details"><span>{{certificateDto.idCardDetails.birthDate.toDate()  | date : 'dd/MM/yyyy'}}</span></div>
+            </div>
+            <div class="details-wrap">
+                <div class="title"><span translate>BLOOD_GROUP</span>:</div>
+                <div class="details"><span>{{certificateDto.idCardDetails.bloodGroup}}</span></div>
+            </div>
+            <div class="details-wrap">
+                <div class="title"><span translate>ADDRESS</span>:</div>
+                <div class="details"><span>{{certificateDto.idCardDetails.address}}</span></div>
+            </div>
+            <div class="details-wrap">
+                <div class="title"><span translate>CONTACT_NO </span>:</div>
+                <div class="details"><span>{{certificateDto.idCardDetails.emergencyContactNumber}}</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
+</div>
+
+
+

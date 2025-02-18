@@ -1,0 +1,281 @@
+
+<div class="container-fluid position-relative">
+  <div class="d-flex align-items-center page-heading-wrapper">
+    <h3 class="page-heading" translate>STUDENTS</h3>
+  
+    <a (click)="addStudent()" *ngIf="this.sharedPermissionServiceService.havePermission('Students','Create')"  class="btn btn-with-icon with-text btn-primary ms-auto" translate>ADD_STUDENT</a>
+    <a	container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"  *ngIf="!this.sharedPermissionServiceService.havePermission('Students','Create')"  class="btn btn-with-icon with-text btn-primary ms-auto btn-disabled" translate>ADD_STUDENT</a>
+    <button container="body"
+    *ngIf="this.sharedPermissionServiceService.havePermission('Students','Create')" [disabled]="isImportDisabled" class="btn btn-with-icon  btn-primary" (click)="importData()">
+      <span
+    placement="top"
+    ngbTooltip="{{ 'IMPORT' | translate }}"
+  >
+  <i class="bi bi-box-arrow-in-down"></i>
+  </span>
+    </button>
+    <button container="body"
+    *ngIf="this.sharedPermissionServiceService.havePermission('Students','Create')" [disabled]="isExportDisabled" class="btn btn-with-icon  btn-primary" (click)="ExportData()">
+    <span
+    placement="top"
+    ngbTooltip="{{ 'EXPORT' | translate }}"
+  >
+  <i class="bi bi-box-arrow-up"></i>
+  </span>
+  </button>
+    <button container="body"
+    ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"  *ngIf="!this.sharedPermissionServiceService.havePermission('Students','Create')" class="btn btn-with-icon  btn-primary btn-disabled">
+      <i class="bi bi-box-arrow-in-down"></i>
+    </button>
+  
+<!-- 
+    <button container="body"
+    *ngIf="this.sharedPermissionServiceService.havePermission('Students','Read')" [disabled]="isExportDisabled" class="btn btn-with-icon  btn-primary" (click)="DownloadQRCodeSheet()">
+    <span
+    placement="top"
+    ngbTooltip="{{ 'DOWNLOAD_QR_SHEET' | translate }}"
+  >
+  <i class="bi bi-qr-code"></i>
+  </span>
+  </button>
+    <button container="body"
+    ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"  *ngIf="!this.sharedPermissionServiceService.havePermission('Students','Read')" class="btn btn-with-icon  btn-primary btn-disabled">
+      <i class="bi bi-qr-code"></i>
+    </button> -->
+    <!-- <button container="body"
+    *ngIf="this.sharedPermissionServiceService.havePermission('Students','Read')" [disabled]="isExportDisabled" class="btn btn-with-icon  btn-primary">
+    <span
+    placement="top"
+    ngbTooltip="{{ 'Send Notification' | translate }}"
+  >
+  <i class="bi bi-send"></i>
+  </span>
+  </button> -->
+  <!-- <button container="body"
+  *ngIf="this.sharedPermissionServiceService.havePermission('Students','Read')" [disabled]="isExportDisabled" class="btn btn-with-icon  btn-primary" (click)="SendNotification()">
+  <span
+  placement="top"
+  ngbTooltip="{{ 'Send Notification' | translate }}"
+>
+<i class="bi bi-send"></i>
+</span>
+</button> -->
+  </div>
+  
+    <div class="card mb-6">
+     
+      <div class="card-body table-body position-relative">
+        <div class="search-body search-body-table">
+          <!--table search filter start-->
+          <form [formGroup]="studentForm" class="search-filter">
+            <div class="row mb-2">
+              <div class="col-12 col-md-4" >
+                <div class="form-group mb-0">
+                    <!-- <label for="classId" translate>CLASS</label> -->
+                    <select
+                    formControlName="classId"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['classId'].errors
+                    }"
+                    
+                  >
+                  <option [value]="null">
+                    <span translate>SELECT_CLASS</span>
+                    </option>
+                  <option *ngFor="let item of divisionGradeMapping" [value]="item.schoolGradeDivisionMatrixId" >
+                    {{item.className}}
+                  </option>
+                  </select>
+                  
+                  </div>
+              </div>
+              <div class="col-sm text-right">
+                <div class="form-group mb-0 search-btns-mobile-margin">
+                  <label for="city" class="d-none">&nbsp;</label>
+                  <button type="button" (click)="onReset()" class="btn btn-light" translate>
+                    RESET
+                  </button>
+                  <button type="button" (click)="searchStudent()" *ngIf="this.sharedPermissionServiceService.havePermission('Students','Read')"
+                   class="btn btn-secondary" translate>
+                    SEARCH
+                  </button>
+                  <button type="button" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"  *ngIf="!this.sharedPermissionServiceService.havePermission('Students','Read')"
+                  class="btn btn-secondary btn-disabled " translate>
+                    SEARCH
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+          <!--table listing statrt-->
+          <div id="no-more-tables">
+         
+            <table  datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="display table row-border hover">
+              <thead>
+                <tr>
+                  <th style="width: 5%;" translate>ROLL_NO</th>
+                  <th style="width: 10%;" translate>STUDENT</th>
+                  <th style="width: 10%;" translate>GEN_REG_NO</th>
+                  <th style="width: 10%;" translate>ADHAAR_NO</th>
+                  <th style="width: 5%;" translate>CLASS</th>
+                  <th style="width: 10%;" translate>APP_ACCESS_USER_ID</th>
+                  <th style="width: 10%;" translate>EMERG_CONTACT_NO</th>
+                  <th style="width: 15%;" class="text-end" translate>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="students?.length != 0">
+                <tr *ngFor="let student of students index as i">
+                    <td [attr.data-title]=" 'ROLL_NO' | translate" [ngClass]="{
+                      'is-highlighted-student': hlighlightedStudentId == student.studentId}">{{ student.rollNumber }}</td>
+                    <td [attr.data-title]=" 'STUDENT' | translate" [ngClass]="{
+                      'is-highlighted-student': hlighlightedStudentId == student.studentId}">{{ student.fullName }}</td>
+                    <td [attr.data-title]=" 'GEN_REG_NO' | translate" [ngClass]="{
+                      'is-highlighted-student': hlighlightedStudentId == student.studentId}">{{ student.generalRegistrationNo }}</td>
+                    <td [attr.data-title]=" 'ADHAAR_NO' | translate" [ngClass]="{
+                      'is-highlighted-student': hlighlightedStudentId == student.studentId}">{{ student.adharNo }}</td>
+                    <td [attr.data-title]=" 'Class' | translate" [ngClass]="{
+                      'is-highlighted-student': hlighlightedStudentId == student.studentId}">{{ student.gradeName }}</td>
+                    <td [attr.data-title]=" 'AppAccessUserId' | translate" [ngClass]="{
+                      'is-highlighted-student': hlighlightedStudentId == student.studentId}">{{ student.appAccessMobileNo }}</td>
+                    <td [attr.data-title]=" 'EmergContactNo' | translate" [ngClass]="{
+                      'is-highlighted-student': hlighlightedStudentId == student.studentId}">{{ student.emergencyContactNumber}}</td>
+                    <td [attr.data-title]=" 'ACTIONS' | translate" [ngClass]="{
+                      'is-highlighted-student': hlighlightedStudentId == student.studentId}" class="action text-center actions-td">
+                      <div class="d-flex flex-wrap justify-content-end">
+                        <button *ngIf="this.sharedPermissionServiceService.havePermission('Students','Read') "
+                      type="button"
+                      class="btn btn-secondary action-btn"
+                      (click)="viewStudent(student)"
+                      translate
+                    >
+                    <span placement="top" ngbTooltip="{{'VIEW' | translate}}">
+                      <i class="bi bi-eye"></i>
+                    </span>                    
+                  </button>
+                  <button *ngIf="!this.sharedPermissionServiceService.havePermission('Students','Read') "
+                  type="button"
+                  class="btn btn-secondary action-btn btn-disabled"
+                  translate
+                >
+                <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}" >
+                  <i class="bi bi-eye"></i>
+                </span>            
+              </button>
+
+
+
+                        <button *ngIf="this.sharedPermissionServiceService.havePermission('Students','Update')" 
+                          type="button"
+                          class="btn btn-secondary action-btn"
+                          (click)="editStudent(student)"
+                        >
+                          <span
+                            placement="top"
+                            ngbTooltip="{{ 'VIEW_EDIT' | translate }}"
+                          >
+                            <i class="bi bi-pencil"></i>
+                          </span>
+                        </button>
+                        <button *ngIf="!this.sharedPermissionServiceService.havePermission('Students','Update')" 
+                          type="button"
+                          class="btn btn-secondary action-btn btn-disabled"
+                        >
+                          <span
+                            placement="top"
+                            ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                          >
+                            <i class="bi bi-pencil"></i>
+                          </span>
+                        </button>
+                        <button *ngIf="this.sharedPermissionServiceService.havePermission('Students','Update') && student.appAccessMobileNo" 
+                        type="button"
+                        class="btn btn-secondary action-btn"
+                        (click)="resetPassword(student)"
+                      >
+                        <span
+                          placement="top"
+                          ngbTooltip="{{ 'Reset Password' | translate }}"
+                        >
+                          <i class="bi bi-bootstrap-reboot"></i>
+                        </span>
+                      </button>
+                      <button *ngIf="!this.sharedPermissionServiceService.havePermission('Students','Update') && student.appAccessMobileNo" 
+                        type="button"
+                        class="btn btn-secondary action-btn btn-disabled"
+                      >
+                        <span
+                          placement="top"
+                          ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                        >
+                          <i class="bi bi-bootstrap-reboot"></i>
+                        </span>
+                      </button>
+
+
+                      <!-- <button *ngIf="this.sharedPermissionServiceService.havePermission('Students','Read')" 
+                      type="button"
+                      class="btn btn-secondary action-btn"
+                      (click)="DownloadQRCode(student)"
+                    >
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'Download QR Code' | translate }}"
+                      >
+                        <i class="bi bi-qr-code"></i>
+                      </span>
+                    </button>
+                    <button *ngIf="!this.sharedPermissionServiceService.havePermission('Students','Read')" 
+                      type="button"
+                      class="btn btn-secondary action-btn btn-disabled"
+                    >
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                      >
+                        <i class="bi bi-qr-code"></i>
+                      </span>
+                    </button> -->
+
+
+                        <button *ngIf="this.sharedPermissionServiceService.havePermission('Students','Delete')" 
+                          type="button"
+                          class="btn btn-danger action-btn"
+                          (click)="deleteStudentConfirmBox(student)"
+                        >
+                          <span
+                            placement="top"
+                            ngbTooltip="{{ 'DELETE' | translate }}"
+                          >
+                            <i class="bi bi-trash"></i>
+                          </span>
+                        </button>
+                        <button *ngIf="!this.sharedPermissionServiceService.havePermission('Students','Delete')" 
+                          type="button"
+                          class="btn btn-secondary action-btn btn-disabled"
+                        >
+                          <span
+                            placement="top"
+                            ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                          >
+                            <i class="bi bi-trash"></i>
+                          </span>
+                        </button>
+                       
+                      </div>
+                    </td>
+    
+                </tr>
+                <tr *ngIf="students?.length == 0">
+                  <td colspan="9" class="no-data-available">No Records Found!</td>
+                </tr>
+              </tbody>
+    
+            </table>
+          </div>
+      </div>
+  </div>
+
+</div>
+

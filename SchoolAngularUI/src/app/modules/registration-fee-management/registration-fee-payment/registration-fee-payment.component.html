@@ -1,0 +1,560 @@
+<div
+  class="container-fluid"
+
+>
+  <div class="d-flex align-items-center page-heading-wrapper">
+    <h3 class="page-heading" translate>Registration Payment</h3>
+    <a routerLink="/students/student-enquiry" class="back-arrow"
+      ><i class="bi bi-arrow-left-circle"></i
+    ></a>
+  </div>
+
+  <div class="card mb-4 d-md-block">
+    <div class="card-header">
+      <h4 class="card-title" translate>STUDENT_INFORMATION</h4>
+    </div>
+    <div class="card-body">
+      <div class="row mb-2">
+        <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+          <div class="form-group">
+            <label  translate>STUDENT_NAME</label>:
+            <label class="read-only-lable">{{fetchedInfo.studentFirstName}} {{fetchedInfo.studentMiddleName}} {{fetchedInfo.studentLastName}}</label>
+          </div>
+        </div>
+        <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+          <div class="form-group"><label for="gradeAndDivision" translate>INTERESTED_CLASS</label>: <label class="read-only-lable">
+            {{ fetchedInfo.gradeName }} - {{fetchedInfo.divisionName}}</label></div>
+       </div>
+        <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+          <div class="form-group"><label for="mobileNo" translate>MOBILE_NO</label>: <label class="read-only-lable">{{
+           fetchedInfo.mobileNumber
+         }}</label></div>
+       </div>
+       <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+          <div class="form-group"><label for="academicYear" translate>ACADEMIC_YEAR</label>: <label translate class="read-only-lable">{{
+           getAcademicYearValue()
+         }}</label></div>
+       </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ <!-- <app-fee-pending-due-by-ac [currentAcademicYearInclude]="false" [studentEnquiryId]="studentEnquiryId"></app-fee-pending-due-by-ac> -->
+<div
+  class="container-fluid"
+  
+>
+<div class="card mb-4 d-md-block">
+    <div class="card-header">
+      <h4 class="card-title" translate>Payment Details</h4>
+    </div>
+    <div class="card-body payment-summary-cards">
+      <form [formGroup]="paymentSummaryForm">
+        <div formArrayName="registrationFeeDetailsParticularList">
+          <div *ngFor="let particular of registrationFeeDetailsParticularList.controls; let i = index" [formGroupName]="i">
+           <div class="row">
+            <div class="col-12 col-sm-6 col-md-4">
+              <div class="form-group">
+                <label class="required" translate>Particular <span>*</span></label>
+                <div class="d-flex">
+                <select
+                  formControlName="feeParticularId"
+                  class="form-control"
+                  [ngClass]="{ 'is-invalid': paySubmitted && particular.get('feeParticularId')?.errors?.['required'] }"
+                >
+                  <option [value]="null">
+                    <span translate>SELECT_PARTICULAR</span>
+                  </option>
+                  <option
+                    *ngFor="let item of particularList"
+                    [value]="item.adhocParticularMasterId"
+                  >
+                    <span translate>{{ item.particular }}</span>
+                  </option>
+                </select>
+                <div class=" d-flex ms-3 align-items-center">
+                  <button type="button" (click)="addParticular()" class="btn btn-secondary action-btn">
+                    <span translate>ADD
+                    </span>
+                  </button>
+              </div>
+              </div>
+                <div *ngIf="paySubmitted && particular.get('feeParticularId')?.errors?.['required']" class="invalid-feedback">
+                  <div>
+                    <span translate>Particular</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="row">
+              <div class="col-12 col-sm-6 col-md-6">
+                <div class="form-group">
+                  <label class="required" translate>Total Amount <span>*</span></label>
+                  <input
+                    type="text"
+                    formControlName="paidAmount"
+                    class="form-control"
+                    [ngClass]="{ 'is-invalid': paySubmitted && particular.get('paidAmount')?.errors?.['required'] }"
+                    appTwoDigitDecimalPositiveNumber
+                  />
+                  <div *ngIf="paySubmitted && particular.get('paidAmount')?.errors?.['required']" class="invalid-feedback">
+                    <div>
+                      <span translate>Total Amount</span>
+                      <span translate> IS_REQUIRED</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+    
+              <div class="col-12 col-sm-12 col-md-4 d-flex align-items-center">
+                <button type="button" *ngIf="i === registrationFeeDetailsParticularList.length - 1" (click)="addParticularDetails()" class="btn btn-secondary action-btn me-2">
+                  <i class="bi bi-plus-lg" placement="top" ngbTooltip="Add"></i>
+                </button>
+                <button type="button" *ngIf="registrationFeeDetailsParticularList.length > 1" (click)="removeParticularDetails(i)" class="btn btn-danger action-btn">
+                  <i class="bi bi-dash-lg" placement="top" ngbTooltip="Remove"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+         
+          </div>
+        </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+
+  <div class="card mb-4 d-md-block">
+    <div class="card-header">
+      <h4 class="card-title" translate>PAYMENT_SUMMARY</h4>
+    </div>
+    <div class="card-body payment-summary-cards">
+      <ul
+        ngbNav
+        #nav="ngbNav"
+        [(activeId)]="active"
+        class="nav-tabs nav-tabs-buttons-card"
+      >
+        <li [ngbNavItem]="1">
+          <a ngbNavLink
+            ><i class="bi bi-cash"></i> <span translate>CASH</span></a
+          >
+          <ng-template ngbNavContent>
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title" translate>CASH</h4>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group datepicker">
+                    <label class="required" translate
+                      >PAYMENT_DATE<span>*</span></label
+                    >
+
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="{{ 'PAYMENT_DATE' | translate }}"
+                      [ngClass]="{
+                        'is-invalid':
+                          paySubmitted &&
+                          !registrationFeePaymentDto.ngbOnlineTransactionDateTime
+                      }"
+                      [(ngModel)]="
+                        registrationFeePaymentDto.ngbOnlineTransactionDateTime
+                      "
+                      ngbDatepicker
+                      [minDate]="{ year: 1901, month: 1, day: 1 }"
+                      [maxDate]="{ year: 2100, month: 1, day: 1 }"
+                      [readonly]="true"
+                      #birthDateDatepicker="ngbDatepicker"
+                      (click)="birthDateDatepicker.toggle()"
+                    />
+                    <div
+                      class="calendar"
+                      (click)="birthDateDatepicker.toggle()"
+                    >
+                      <i class="bi bi-calendar3"></i>
+                    </div>
+
+                    <div
+                      *ngIf="
+                        paySubmitted &&
+                        !registrationFeePaymentDto.ngbOnlineTransactionDateTime
+                      "
+                      class="invalid-feedback"
+                    >
+                      <div>
+                        <span translate>PAYMENT_DATE</span>
+                        <span translate> IS_REQUIRED</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label translate
+                      >REMARK </label
+                    >
+                    <input
+                      type="text"
+                      [(ngModel)]="registrationFeePaymentDto.remark"
+                      class="form-control"
+                      placeholder="{{ 'REMARK' | translate }}"
+                      maxlength="200"
+                    />
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="4">
+          <a ngbNavLink>
+            <i class="bi bi-credit-card-2-back"></i>
+            <span translate>CREDIT_DEBIT_CARD</span></a
+          >
+          <ng-template ngbNavContent>
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title" translate>CREDIT_DEBIT_CARD</h4>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label class="required" translate
+                      >TRANSACTION_ID <span>*</span></label
+                    >
+                    <input
+                      type="text"
+                      [(ngModel)]="registrationFeePaymentDto.onlineTransactionId"
+                      class="form-control"
+                      placeholder="{{ 'TRANSACTION_ID' | translate }}"
+                      [ngClass]="{
+                        'is-invalid':
+                          paySubmitted &&
+                          !registrationFeePaymentDto.onlineTransactionId
+                      }"
+                    />
+                    <div
+                      *ngIf="
+                        paySubmitted &&
+                        !registrationFeePaymentDto.onlineTransactionId
+                      "
+                      class="invalid-feedback"
+                    >
+                      <div>
+                        <span translate>TRANSACTION_ID</span>
+                        <span translate> IS_REQUIRED</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group datepicker">
+                    <label class="required" translate
+                      >PAYMENT_DATE<span>*</span></label
+                    >
+
+                    <input
+                      type="text"
+                      [(ngModel)]="
+                        registrationFeePaymentDto.ngbOnlineTransactionDateTime
+                      "
+                      class="form-control"
+                      placeholder="{{ 'PAYMENT_DATE' | translate }}"
+                      [ngClass]="{
+                        'is-invalid':
+                          paySubmitted &&
+                          !registrationFeePaymentDto.ngbOnlineTransactionDateTime
+                      }"
+                      ngbDatepicker
+                      [minDate]="{ year: 1901, month: 1, day: 1 }"
+                      [maxDate]="{ year: 2100, month: 1, day: 1 }"
+                      [readonly]="true"
+                      #birthDateDatepicker="ngbDatepicker"
+                      (click)="birthDateDatepicker.toggle()"
+                    />
+                    <div
+                      class="calendar"
+                      (click)="birthDateDatepicker.toggle()"
+                    >
+                      <i class="bi bi-calendar3"></i>
+                    </div>
+
+                    <div
+                      *ngIf="
+                        paySubmitted &&
+                        !registrationFeePaymentDto.ngbOnlineTransactionDateTime
+                      "
+                      class="invalid-feedback"
+                    >
+                      <div>
+                        <span translate>PAYMENT_DATE</span>
+                        <span translate> IS_REQUIRED</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label translate
+                      >REMARK </label
+                    >
+                    <input
+                      type="text"
+                      [(ngModel)]="registrationFeePaymentDto.remark"
+                      class="form-control"
+                      placeholder="{{ 'REMARK' | translate }}"
+                      maxlength="200"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </li>
+
+        <li [ngbNavItem]="5">
+          <a ngbNavLink>
+            <i class="bi bi-bank"></i> <span translate>NETBANKING</span></a
+          >
+          <ng-template ngbNavContent>
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title" translate>NETBANKING</h4>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label class="required" translate
+                      >TRANSACTION_ID <span>*</span></label
+                    >
+                    <input
+                      type="text"
+                      [(ngModel)]="registrationFeePaymentDto.onlineTransactionId"
+                      class="form-control"
+                      placeholder="{{ 'TRANSACTION_ID' | translate }}"
+                      [ngClass]="{
+                        'is-invalid':
+                          paySubmitted &&
+                          !registrationFeePaymentDto.onlineTransactionId
+                      }"
+                    />
+                    <div
+                      *ngIf="
+                        paySubmitted &&
+                        !registrationFeePaymentDto.onlineTransactionId
+                      "
+                      class="invalid-feedback"
+                    >
+                      <div>
+                        <span translate>TRANSACTION_ID</span>
+                        <span translate> IS_REQUIRED</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group datepicker">
+                    <label class="required" translate
+                      >PAYMENT_DATE<span>*</span></label
+                    >
+
+                    <input
+                      type="text"
+                      [(ngModel)]="
+                        registrationFeePaymentDto.ngbOnlineTransactionDateTime
+                      "
+                      class="form-control"
+                      placeholder="{{ 'PAYMENT_DATE' | translate }}"
+                      [ngClass]="{
+                        'is-invalid':
+                          paySubmitted &&
+                          !registrationFeePaymentDto.ngbOnlineTransactionDateTime
+                      }"
+                      ngbDatepicker
+                      [minDate]="{ year: 1901, month: 1, day: 1 }"
+                      [maxDate]="{ year: 2100, month: 1, day: 1 }"
+                      [readonly]="true"
+                      #birthDateDatepicker="ngbDatepicker"
+                      (click)="birthDateDatepicker.toggle()"
+                    />
+                    <div
+                      class="calendar"
+                      (click)="birthDateDatepicker.toggle()"
+                    >
+                      <i class="bi bi-calendar3"></i>
+                    </div>
+
+                    <div
+                      *ngIf="
+                        paySubmitted &&
+                        !registrationFeePaymentDto.ngbOnlineTransactionDateTime
+                      "
+                      class="invalid-feedback"
+                    >
+                      <div>
+                        <span translate>PAYMENT_DATE</span>
+                        <span translate> IS_REQUIRED</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label translate
+                      >REMARK </label
+                    >
+                    <input
+                      type="text"
+                      [(ngModel)]="registrationFeePaymentDto.remark"
+                      class="form-control"
+                      placeholder="{{ 'REMARK' | translate }}"
+                      maxlength="200"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </li>
+
+        <li [ngbNavItem]="6">
+          <a ngbNavLink class="upi">
+            <img src="../../../../assets/img/upi-icon.svg" />
+            <span translate>UPI_PAYMENT</span></a
+          >
+          <ng-template ngbNavContent>
+            <div class="card">
+              <div class="card-header">
+                <h4 class="card-title" translate>UPI_PAYMENT</h4>
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label class="required" translate
+                      >TRANSACTION_ID <span>*</span></label
+                    >
+                    <input
+                      type="text"
+                      [(ngModel)]="registrationFeePaymentDto.onlineTransactionId"
+                      class="form-control"
+                      placeholder="{{ 'TRANSACTION_ID' | translate }}"
+                      [ngClass]="{
+                        'is-invalid':
+                          paySubmitted &&
+                          !registrationFeePaymentDto.onlineTransactionId
+                      }"
+                    />
+                    <div
+                      *ngIf="
+                        paySubmitted &&
+                        !registrationFeePaymentDto.onlineTransactionId
+                      "
+                      class="invalid-feedback"
+                    >
+                      <div>
+                        <span translate>TRANSACTION_ID</span>
+                        <span translate> IS_REQUIRED</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group datepicker">
+                    <label class="required" translate
+                      >PAYMENT_DATE<span>*</span></label
+                    >
+
+                    <input
+                      type="text"
+                      [(ngModel)]="
+                        registrationFeePaymentDto.ngbOnlineTransactionDateTime
+                      "
+                      class="form-control"
+                      placeholder="{{ 'PAYMENT_DATE' | translate }}"
+                      [ngClass]="{
+                        'is-invalid':
+                          paySubmitted &&
+                          !registrationFeePaymentDto.ngbOnlineTransactionDateTime
+                      }"
+                      ngbDatepicker
+                      [minDate]="{ year: 1901, month: 1, day: 1 }"
+                      [maxDate]="{ year: 2100, month: 1, day: 1 }"
+                      [readonly]="true"
+                      #birthDateDatepicker="ngbDatepicker"
+                      (click)="birthDateDatepicker.toggle()"
+                    />
+                    <div
+                      class="calendar"
+                      (click)="birthDateDatepicker.toggle()"
+                    >
+                      <i class="bi bi-calendar3"></i>
+                    </div>
+
+                    <div
+                      *ngIf="
+                        paySubmitted &&
+                        !registrationFeePaymentDto.ngbOnlineTransactionDateTime
+                      "
+                      class="invalid-feedback"
+                    >
+                      <div>
+                        <span translate>PAYMENT_DATE</span>
+                        <span translate> IS_REQUIRED</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-sm-3 col-md-3 col-lg-3">
+                  <div class="form-group">
+                    <label translate
+                      >REMARK </label
+                    >
+                    <input
+                      type="text"
+                      [(ngModel)]="registrationFeePaymentDto.remark"
+                      class="form-control"
+                      placeholder="{{ 'REMARK' | translate }}"
+                      maxlength="200"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </li>
+      </ul>
+      <div [ngbNavOutlet]="nav" class="mt-0"></div>
+      <div class="row mt-4">
+        <div class="text-center">
+          <button
+            class="btn btn-with-icon with-text ms-auto btn-light"
+            routerLink="/students/student-enquiry"
+            translate
+          >
+            CANCEL</button
+          >&nbsp;&nbsp;
+          <button
+            (click)="pay()"
+            class="btn btn-with-icon with-text btn-primary ms-auto miin-w"
+            translate
+          >
+            SAVE
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

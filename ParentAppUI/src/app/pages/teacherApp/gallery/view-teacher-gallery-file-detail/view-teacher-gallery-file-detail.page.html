@@ -1,0 +1,84 @@
+<ion-header collapse="fade" [translucent]="true" class="modal-header">
+  <ion-toolbar>
+   
+
+    <ion-title color="dark-color" style="font-weight: bold;">Gallery Details</ion-title>
+      
+  
+    <ion-buttons slot="end">
+      <ion-button color="primary" fill="solid" (click)="close()">
+        Close
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <!-- <ion-card-subtitle class="message-from">
+    <span class="bold-black-text">Gallery To : &nbsp;</span>
+    <ion-text>{{galleryDetails.galleryTo}}</ion-text>
+  </ion-card-subtitle>
+  <br> -->
+  <ion-card-subtitle class="message-from">
+    <span class="bold-black-text">Gallery Title : &nbsp;</span>
+    <ion-text>{{galleryDetails.galleryTitle}}</ion-text>
+  </ion-card-subtitle>
+  <br>
+  <ion-card-subtitle class="message-from">
+    <span class="bold-black-text">Date : &nbsp;</span>
+    <ion-text>{{ galleryDetails.startDate.format('DD-MMM-YYYY') }}</ion-text>
+  </ion-card-subtitle>
+  <br>
+  <!-- <ion-card-subtitle class="message-from">
+    <span class="bold-black-text">End Date : &nbsp;</span>
+    <ion-text>{{ noticeDetails.endDate.format('DD-MMM-YYYY') }}</ion-text>
+  </ion-card-subtitle>
+  <br> -->
+  <!-- <ion-card-subtitle class="message-from">
+    <span class="bold-black-text">Important Notice: &nbsp;</span>
+    <ion-text>{{ noticeDetails.isImportant ? 'Yes' : 'No' }}</ion-text>
+    <ion-icon *ngIf="noticeDetails.isImportant"></ion-icon>
+  </ion-card-subtitle>
+  <br> -->
+  <ion-card-subtitle class="message-from inline"  >
+    <span class="bold-black-text">Gallery Description:&nbsp;</span>
+    <ion-text  [innerHTML]="galleryDetails.description"></ion-text>
+  </ion-card-subtitle>
+   <div class="download">
+    <ion-card-subtitle class="message-from" *ngIf="galleryDetails.galleryTextFileArray && galleryDetails.galleryTextFileArray.length > 0">
+      <span class="bold-black-text">Upload Files : &nbsp; </span>
+    </ion-card-subtitle>
+    <div class="uploaded-file-text">
+      <span class="file-thumb" *ngFor="let f of galleryDetails.galleryTextFileArray; let i = index">
+        <img *ngIf="getFileExtension(f.fileName) === 'png'" src="../../../../assets/img/img.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'jpeg'" src="../../../../assets/img/img.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'jpg'" src="../../../../assets/img/img.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <img *ngIf="getFileExtension(f.fileName) === 'gif'" src="../../../../assets/img/gif-file.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <!-- <img *ngIf="getFileExtension(f.fileName) === 'pdf'" src="../../../../assets/img/pdf.png" class="thumbnail-icon" (click)="showFile(f)" /> -->
+        <!-- <img *ngIf="getFileExtension(f.fileName) === 'doc'" src="../../../../assets/img/doc.png" class="thumbnail-icon" (click)="showFile(f)" /> -->
+        <!-- <img *ngIf="getFileExtension(f.fileName) === 'xls'" src="../../../../assets/img/xlsx.png.png" class="thumbnail-icon" (click)="showFile(f)" /> -->
+        <!-- <img *ngIf="getFileExtension(f.fileName) === 'pptx'" src="../../../../assets/img/ppt.png" class="thumbnail-icon" (click)="showFile(f)" /> -->
+        <!-- <img *ngIf="getFileExtension(f.fileName) === 'txt'" src="../../../../assets/img/txt.png" class="thumbnail-icon" (click)="showFile(f)" /> -->
+        <img *ngIf="getFileExtension(f.fileName) === 'svg'" src="../../../../assets/img/svg.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <!-- <img *ngIf="getFileExtension(f.fileName) === 'csv'" src="../../../../assets/img/csv.png" class="thumbnail-icon" (click)="showFile(f)" /> -->
+        <img *ngIf="getFileExtension(f.fileName) === 'bmp'" src="../../../../assets/img/bmp.png" class="thumbnail-icon" (click)="showFile(f)" />
+        <!-- <img *ngIf="getFileExtension(f.fileName) === 'xlsx'" src="../../../../assets/img/xlsx.png" class="thumbnail-icon" (click)="showFile(f)" /> -->
+      </span>
+    </div>
+  </div>
+  <br>
+
+  <div class="download" *ngIf="galleryDetails.galleryVideoText && hasNonEmptyVideoLinks()">
+    <ion-card-subtitle class="message-from">
+      <span class="bold-black-text" >Video URL: </span>
+    </ion-card-subtitle>
+    <div class="videoText video-link-wrap">
+      <ul class="black-bullet">
+        <li *ngFor="let f of galleryDetails.galleryVideoText; let i = index">
+          <a [href]="f.contentUrl" target="_blank" id="contentUrl_{{i}}">
+            {{ f.contentUrl }}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</ion-content>

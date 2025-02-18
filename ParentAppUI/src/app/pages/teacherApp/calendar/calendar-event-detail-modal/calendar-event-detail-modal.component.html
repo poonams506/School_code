@@ -1,0 +1,129 @@
+
+      <ion-header>
+        <ion-toolbar>
+          <ion-title color="light" *ngIf="currentEventOnPopup.eventType=='Event'">Event Detail</ion-title>
+          <ion-title color="light" *ngIf="currentEventOnPopup.eventType=='Holiday'">Holiday Detail</ion-title>
+          <ion-title color="light" *ngIf="currentEventOnPopup.eventType=='Vacation'">Vacation Detail</ion-title>
+          <ion-title color="light" *ngIf="currentEventOnPopup.eventType=='WeeklyOff'">Weekly Off Detail</ion-title>
+
+
+         
+          <ion-buttons slot="end">
+            <ion-button  (click)="cancel()">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding" *ngIf="currentEventOnPopup.eventType=='Event'" >
+       
+        <ion-grid  class="p-0 my-2 mb-4 modal-text-header">
+          <ion-row>
+            <ion-col  class="p-0">
+              <ion-card-subtitle class="message-from"
+                ><span class="bold-black-text">Event Title : &nbsp; </span> <ion-text>{{currentEventOnPopup.eventTitle}}</ion-text>
+              </ion-card-subtitle>
+              <br>
+              <ion-card-subtitle class="message-from"><span class="bold-black-text">Event Date : &nbsp; </span> {{currentEventOnPopup.startDate .format('DD-MMM-YYYY')}} To {{currentEventOnPopup.endDate .format('DD-MMM-YYYY')}}
+              </ion-card-subtitle>
+              <br>
+              <ng-container *ngIf="currentEventOnPopup && currentEventOnPopup.startTime && currentEventOnPopup.endTime">
+                <ion-card-subtitle class="message-from">
+                  <span class="bold-black-text">Event Time: &nbsp; </span>
+                  <ion-text>
+                    {{ currentEventOnPopup.startTime .format('hh:mm a')  }}
+                    <b>To</b> {{ currentEventOnPopup.endTime .format('hh:mm a') }}
+                  </ion-text>
+                </ion-card-subtitle>
+              </ng-container>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <ion-card-subtitle class="message-from"
+                ><span class="bold-black-text">Event Description:  &nbsp; </span><ion-text [innerHTML]="currentEventOnPopup.eventDescription"></ion-text>
+        </ion-card-subtitle>
+        <br>
+        <ion-card-subtitle class="message-from">
+          <span class="bold-black-text">Event Coordinator: &nbsp;</span>
+          <ion-text>{{ currentEventOnPopup.eventCoordinator }}</ion-text>
+        </ion-card-subtitle>
+        <br>
+        <ion-card-subtitle class="message-from" *ngIf="currentEventOnPopup.eventFess && currentEventOnPopup.eventFess > 0">
+          <span class="bold-black-text">Event Fees: &nbsp;</span>
+          <ion-text>{{ currentEventOnPopup.eventFess | number:'1.0-4' }}</ion-text>
+        </ion-card-subtitle>
+        <br>
+        <div class="download">
+          <ion-card-subtitle class="message-from" *ngIf="currentEventOnPopup.lstEventDetail && currentEventOnPopup.lstEventDetail.length > 0">
+            <span class="bold-black-text">Event Files Download : &nbsp; </span>
+          </ion-card-subtitle>
+          <div class="uploaded-file-text">
+            <span class="file-thumb" *ngFor="let f of currentEventOnPopup.lstEventDetail; let i = index">
+              <img *ngIf="getFileExtension(f.fileName) === 'png'" src="../../../../assets/img/img.png" class="thumbnail-icon" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.fileName) === 'jpeg'" src="../../../../assets/img/jpeg.png" class="thumbnail-icon" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.fileName) === 'jpg'" src="../../../../assets/img/jpg-image.png" class="thumbnail-icon" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.fileName) === 'pdf'" src="../../../../assets/img/pdf.png" class="thumbnail-icon" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.fileName) === 'doc'" src="../../../../assets/img/doc.png" class="thumbnail-icon" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.fileName) === 'xls'" src="../../../../assets/img/xlsx.png.png" class="thumbnail-icon" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.fileName) === 'pptx'" src="../../../../assets/img/ppt.png" class="thumbnail-icon" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.fileName) === 'txt'" src="../../../../assets/img/txt.png" class="thumbnail-icon" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.fileName) === 'svg'" src="../../../../assets/img/svg.png" class="thumbnail-icon" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.fileName) === 'csv'" src="../../../../assets/img/csv.png" class="thumbnail-icon" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.fileName) === 'bmp'" src="../../../../assets/img/bmp.png" class="thumbnail-icon" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.fileName) === 'xlsx'" src="../../../../assets/img/xlsx.png" class="thumbnail-icon" (click)="showFile(f)" />
+            </span>
+          </div>
+        </div>
+        
+      </ion-content>
+      <ion-content class="ion-padding" *ngIf="currentEventOnPopup.eventType=='Holiday'" >
+        <ion-card-subtitle class="message-from">
+          <span class="bold-black-text">Holiday Date: &nbsp;</span>
+          <ion-text>
+            {{ currentEventOnPopup.calendarDate .format('DD-MMM-YYYY') }}
+          </ion-text>
+        </ion-card-subtitle>
+        <br>
+        <ion-card-subtitle class="message-from"
+                > <span class="bold-black-text">Holiday Description:  &nbsp; </span>  <ion-text [innerHTML]="currentEventOnPopup.holidayReason"></ion-text>
+        </ion-card-subtitle>
+       
+       
+
+       
+      </ion-content>
+      <ion-content class="ion-padding" *ngIf="currentEventOnPopup.eventType=='WeeklyOff'" >
+        <ion-card-subtitle class="message-from">
+          <span class="bold-black-text">WeeklyOff Date: &nbsp;</span>
+          <ion-text>
+            {{ currentEventOnPopup.weeklyOffDate .format('DD-MMM-YYYY') }}
+          </ion-text>
+        </ion-card-subtitle>
+        <br>
+        <ion-card-subtitle class="message-from"
+                > <span class="bold-black-text">WeeklyOff Description:  &nbsp; </span>  <ion-text [innerHTML]="currentEventOnPopup.weeklyOffName"></ion-text>
+        </ion-card-subtitle>
+       
+       
+
+       
+      </ion-content>
+
+      <ion-content class="ion-padding" *ngIf="currentEventOnPopup.eventType=='Vacation'" >
+        <ion-card-subtitle class="message-from">
+          <span class="bold-black-text">Start Date: &nbsp;</span>
+          <ion-text>
+            {{ currentEventOnPopup.vacationStartDate .format('DD-MMM-YYYY') }}
+          </ion-text>
+        </ion-card-subtitle>
+        <br>
+        <ion-card-subtitle class="message-from">
+          <span class="bold-black-text">End Date: &nbsp;</span>
+          <ion-text>
+            {{ currentEventOnPopup.vacationEndDate .format('DD-MMM-YYYY') }}
+          </ion-text>
+        </ion-card-subtitle>
+        <br>
+        <ion-card-subtitle class="message-from"> 
+          <span class="bold-black-text">Vacation Description:  &nbsp; </span> 
+           <ion-text [innerHTML]="currentEventOnPopup.vacationName"></ion-text>
+        </ion-card-subtitle>
+      </ion-content>

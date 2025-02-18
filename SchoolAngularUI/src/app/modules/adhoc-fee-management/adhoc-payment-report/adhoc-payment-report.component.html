@@ -1,0 +1,650 @@
+<div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>ADDITIONAL_FEE_PAYMENT_COLLECTION_REPORT</h3>
+    </div>
+    <div class="card mb-4">
+      <div class="card-body table-body">
+        <form [formGroup]="adhocPaymentCollectionReportForm" class="search-filter">
+          <div class="row mb-2">
+            <div class="col-12 col-md-3">
+              <div class="form-group datepicker mb-0">
+                <label translate> START_DATE</label>
+                <input type="text" formControlName="ngbStartDate" class="form-control"
+                  placeholder="{{ 'START_DATE' | translate }}" ngbDatepicker [minDate]="{year: 1901, month: 1, day: 1}" 
+                  [maxDate]="{year: 2100, month: 1, day: 1}" #startDateDatepicker="ngbDatepicker"
+                  (click)="startDateDatepicker.toggle()" />
+                <div class="calendar" (click)="startDateDatepicker.toggle()">
+                  <i class="bi bi-calendar3"></i>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-3">
+              <div class="form-group datepicker mb-0">
+                <label translate> END_DATE</label>
+                <input type="text" formControlName="ngbEndDate" class="form-control"
+                  placeholder="{{ 'END_DATE' | translate }}" ngbDatepicker [minDate]="{year: 1901, month: 1, day: 1}"
+                  [maxDate]="{year: 2100, month: 1, day: 1}" #endDateDatepicker="ngbDatepicker"
+                  (click)="endDateDatepicker.toggle()" />
+                <div class="calendar" (click)="endDateDatepicker.toggle()">
+                  <i class="bi bi-calendar3"></i>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-3 text-right">
+              <div class="form-group search-btns-mobile-margin mb-0">
+                <label class="d-none d-md-block">&nbsp;</label>
+                <button type="button" (click)="search()" class="btn btn-secondary" translate>
+                  SEARCH
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="payment-collection-accordion" id="no-more-tables" *ngIf="daywiseAdhocPaymentReportDto != null">
+          <div ngbAccordion #accordion="ngbAccordion" [closeOthers]="true">
+            <div ngbAccordionItem="first" #first="ngbAccordionItem" [collapsed]="false">
+             <div class="payment-collection-accordion-header">
+              <h6 class="w-16" ngbAccordionHeader>
+                <b> CASH </b>
+              </h6>
+              <table class="collection-tables">
+              <tr *ngIf="daywiseAdhocPaymentReportDto.cashDaywiseAdhocPaymentReport.cashAdhocDaywisePaymentReportTotal">
+                <td>
+                  <b translate>TOTAL_COLLECTION</b>:
+                  <b>{{daywiseAdhocPaymentReportDto.cashDaywiseAdhocPaymentReport.cashAdhocDaywisePaymentReportTotal.totalPaymentAmount | currency : "INR" }}</b>
+
+                </td>
+                <td>
+                </td>
+              </tr>
+              </table>
+              <div class="right">
+                <i (click)="accordion.toggle('first')" class="bi" [ngClass]="
+                                  first.collapsed
+                                    ? 'bi-plus-circle-fill'
+                                    : 'bi-dash-circle-fill'
+                                "></i>
+              </div>
+            </div>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <ng-template>
+                    <div id="no-more-tables">
+                      <table class="display table row-border hover">
+                        <thead>
+                          <tr>
+                            <th style="width: 2%" translate>INVOICE_NUMBER</th>
+                            <th style="width: 2%;" translate>STUDENT_NAME</th>
+                            <th style="width: 2%;" translate>GEN_REG_NO</th>
+                            <th style="width: 2%" translate>ACADEMIC_YEAR</th>
+                            <th style="width: 2%" translate>CLASS</th>
+                            <th style="width: 2%" translate>PAYMENT_AMOUNT</th>
+                            <th style="width: 2%" translate>TRANSACTION_DATE</th>
+                            <th style="width: 2%" translate>PAYMENT_MODE</th>                                                
+                            <th style="width: 2%" translate>TRANSACTION_BY</th>
+                          </tr>
+                        </thead>
+                        <tbody
+                          *ngIf="daywiseAdhocPaymentReportDto.cashDaywiseAdhocPaymentReport && daywiseAdhocPaymentReportDto.cashDaywiseAdhocPaymentReport.cashDaywiseAdhocPaymentReportList.length > 0">
+                          <tr
+                            *ngFor="let cashDaywiseAdhocPaymentReport of daywiseAdhocPaymentReportDto.cashDaywiseAdhocPaymentReport.cashDaywiseAdhocPaymentReportList; index as i">
+                            <td>
+                              {{ cashDaywiseAdhocPaymentReport.invoiceNumber }}
+                            </td>
+                            <td>
+                              {{ cashDaywiseAdhocPaymentReport.studentName }}
+                            </td>
+                            <td>
+                              {{ cashDaywiseAdhocPaymentReport.generalRegistrationNo }}
+                            </td>
+                            <td>
+                              {{ cashDaywiseAdhocPaymentReport.academicYearName }}
+                            </td>
+                            <td>
+                              {{ cashDaywiseAdhocPaymentReport.class }}
+                            </td>
+                            <td>
+                              {{ cashDaywiseAdhocPaymentReport.paymentAmount | currency : "INR"}}
+                            </td>
+                            <td>
+                              {{ cashDaywiseAdhocPaymentReport.transactionDate.toDate() | date : 'dd-MM-yyyy'}}
+                            </td>
+                            <td>
+                              {{ cashDaywiseAdhocPaymentReport.paymentMode }}
+                            </td>                       
+                            <td>
+                              {{ cashDaywiseAdhocPaymentReport.transactionBy }}
+                            </td>
+                          </tr>
+                          <tr *ngIf="daywiseAdhocPaymentReportDto.cashDaywiseAdhocPaymentReport.cashAdhocDaywisePaymentReportTotal">
+                            <td colspan="4" translate>
+                              <b translate>TOTAL_COLLECTION</b>
+                            </td>
+                            <td>
+                              <b>{{daywiseAdhocPaymentReportDto.cashDaywiseAdhocPaymentReport.cashAdhocDaywisePaymentReportTotal.totalPaymentAmount | currency : "INR"}}</b>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+            <div ngbAccordionItem="second" #second="ngbAccordionItem" [collapsed]="false">
+              <div class="payment-collection-accordion-header">
+              <h6 class="w-16" ngbAccordionHeader>
+                <b>CHEQUE</b>
+              </h6>
+              <table class="collection-tables">
+
+              <tr *ngIf="daywiseAdhocPaymentReportDto.chequeDaywiseAdhocPaymentReport.chequeDaywiseAdhocPaymentReportTotal">
+                <td>
+                  <b translate>TOTAL_COLLECTION</b>:
+                  <b>{{daywiseAdhocPaymentReportDto.chequeDaywiseAdhocPaymentReport.chequeDaywiseAdhocPaymentReportTotal.totalPaymentAmount | currency : "INR"}}</b>
+                </td>
+                
+                <td>
+                  <b translate>CHEQUE_UNCLEARED_AMOUNT</b>:
+                  <b>{{daywiseAdhocPaymentReportDto.chequeDaywiseAdhocPaymentReport.chequeDaywiseAdhocPaymentReportTotal.totalChequeUnclearedAmount | currency : "INR"}}</b>
+                </td>
+              </tr>
+              </table>
+              <div class="right">
+                <i (click)="accordion.toggle('second')" class="bi" [ngClass]="
+                                second.collapsed
+                                  ? 'bi-plus-circle-fill'
+                                  : 'bi-dash-circle-fill'
+                              "></i>
+              </div>
+            </div>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <ng-template>
+                    <div id="no-more-tables">
+                      <table class="display table row-border hover">
+                        <thead>
+                          <tr>
+                            <th style="width: 2%" translate>INVOICE_NUMBER</th>
+                            <th style="width: 2%;" translate>STUDENT_NAME</th>
+                            <th style="width: 2%;" translate>GEN_REG_NO</th>
+                            <th style="width: 2%" translate>ACADEMIC_YEAR</th>
+                            <th style="width: 2%" translate>CLASS</th>
+                            <th style="width: 2%" translate>PAYMENT_AMOUNT</th>
+                            <th style="width: 2%" translate>TRANSACTION_DATE</th>
+                            <th style="width: 2%" translate>PAYMENT_MODE</th>
+                            <th style="width: 2%" translate>CHEQUE_NO</th>
+                            <th style="width: 2%" translate>CHEQUE_DATE</th>
+                            <th style="width: 2%" translate>CHEQUE_BANK</th>
+                            <th style="width: 2%" translate>CHEQUE_UNCLEARED_AMOUNT</th>
+                            <th style="width: 2%" translate>TRANSACTION_BY</th>
+                          </tr>
+                        </thead>
+                        <tbody
+                          *ngIf="daywiseAdhocPaymentReportDto.chequeDaywiseAdhocPaymentReport && daywiseAdhocPaymentReportDto.chequeDaywiseAdhocPaymentReport.chequeDaywiseAdhocPaymentReportList.length > 0">
+                          <tr
+                            *ngFor="let chequeDaywiseAdhocPaymentReport of daywiseAdhocPaymentReportDto.chequeDaywiseAdhocPaymentReport.chequeDaywiseAdhocPaymentReportList; index as i">
+                            <td>
+                              {{ chequeDaywiseAdhocPaymentReport.invoiceNumber }}
+                            </td>
+                            <td>
+                              {{ chequeDaywiseAdhocPaymentReport.studentName }}
+                            </td>
+                            <td>
+                              {{ chequeDaywiseAdhocPaymentReport.generalRegistrationNo }}
+                            </td>
+                            <td>
+                              {{ chequeDaywiseAdhocPaymentReport.academicYearName }}
+                            </td>
+                            <td>
+                              {{ chequeDaywiseAdhocPaymentReport.class }}
+                            </td>
+                            <td>
+                              {{ chequeDaywiseAdhocPaymentReport.paymentAmount | currency : "INR"}}
+                            </td>
+                            <td>
+                              {{ chequeDaywiseAdhocPaymentReport.transactionDate.toDate() | date : 'dd-MM-yyyy'}}
+                            </td>
+                            <td>
+                              {{ chequeDaywiseAdhocPaymentReport.paymentMode }}
+                            </td>
+                            <td>
+                              {{ chequeDaywiseAdhocPaymentReport.chequeNumber }}
+                            </td>
+                            <td>
+                              {{ chequeDaywiseAdhocPaymentReport.chequeDate.toDate() | date : 'dd-MM-yyyy' }}
+                            </td>
+                            <td>
+                              {{ chequeDaywiseAdhocPaymentReport.chequeBank }}
+                            </td>
+                            <td>
+                              {{ chequeDaywiseAdhocPaymentReport.chequeUnclearedAmount | currency : "INR" }}
+                            </td>                 
+                            <td>
+                              {{ chequeDaywiseAdhocPaymentReport.transactionBy }}
+                            </td>
+                          </tr>
+                          <tr *ngIf="daywiseAdhocPaymentReportDto.chequeDaywiseAdhocPaymentReport.chequeDaywiseAdhocPaymentReportTotal">
+                            <td colspan="4" translate>
+                              <b translate>TOTAL_COLLECTION</b>
+                            </td>
+                            <td>
+                              <b>{{daywiseAdhocPaymentReportDto.chequeDaywiseAdhocPaymentReport.chequeDaywiseAdhocPaymentReportTotal.totalPaymentAmount | currency : "INR"}}</b>
+                            </td>
+                            <td colspan="6" translate>
+                              <b translate>CHEQUE_UNCLEARED_AMOUNT</b>
+                            </td>
+                            <td>
+                              <b>{{daywiseAdhocPaymentReportDto.chequeDaywiseAdhocPaymentReport.chequeDaywiseAdhocPaymentReportTotal.totalChequeUnclearedAmount | currency : "INR"}}</b>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+            <div ngbAccordionItem="third" #third="ngbAccordionItem" [collapsed]="false">
+              <div class="payment-collection-accordion-header">
+                <h6 class="w-16" ngbAccordionHeader>
+                  <b>DD</b>
+                </h6>
+                <table class="collection-tables">
+
+                <tr *ngIf="daywiseAdhocPaymentReportDto.ddDaywiseAdhocPaymentReport.ddDaywiseAdhocPaymentReportTotal">
+                  <td>
+                    <b translate>TOTAL_COLLECTION</b>:
+                    <b>{{daywiseAdhocPaymentReportDto.ddDaywiseAdhocPaymentReport.ddDaywiseAdhocPaymentReportTotal.totalPaymentAmount | currency : "INR"}}</b>
+                  </td>
+                  
+                  <td>
+                    <b translate>DD_UNCLEARED_AMOUNT</b>:
+                    <b>{{daywiseAdhocPaymentReportDto.ddDaywiseAdhocPaymentReport.ddDaywiseAdhocPaymentReportTotal.totalChequeUnclearedAmount | currency : "INR"}}</b>
+                  </td>
+               
+                </tr>
+                </table>
+                <div class="right">
+                  <i (click)="accordion.toggle('third')" class="bi" [ngClass]="
+                                  third.collapsed
+                                    ? 'bi-plus-circle-fill'
+                                    : 'bi-dash-circle-fill'
+                                "></i>
+                </div>
+              </div>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <ng-template>
+                    <div id="no-more-tables">
+                      <table class="display table row-border hover">
+                        <thead>
+                          <tr>
+                            <th style="width: 2%" translate>INVOICE_NUMBER</th>
+                            <th style="width: 2%;" translate>STUDENT_NAME</th>
+                            <th style="width: 2%;" translate>GEN_REG_NO</th>
+                            <th style="width: 2%" translate>ACADEMIC_YEAR</th>
+                            <th style="width: 2%" translate>CLASS</th>
+                            <th style="width: 2%" translate>PAYMENT_AMOUNT</th>
+                            <th style="width: 2%" translate>TRANSACTION_DATE</th>
+                            <th style="width: 2%" translate>PAYMENT_MODE</th>
+                            <th style="width: 2%" translate>DD_NO</th>
+                            <th style="width: 2%" translate>DD_DATE</th>
+                            <th style="width: 2%" translate>DD_BANK</th>
+                            <th style="width: 2%" translate>DD_UNCLEARED_AMOUNT</th>
+                            <th style="width: 2%" translate>TRANSACTION_BY</th>
+                          </tr>
+                        </thead>
+                        <tbody
+                          *ngIf="daywiseAdhocPaymentReportDto.ddDaywiseAdhocPaymentReport && daywiseAdhocPaymentReportDto.ddDaywiseAdhocPaymentReport.ddDaywiseAdhocPaymentReportList.length > 0">
+                          <tr
+                            *ngFor="let ddDaywiseAdhocPaymentReport of daywiseAdhocPaymentReportDto.ddDaywiseAdhocPaymentReport.ddDaywiseAdhocPaymentReportList; index as i">
+                            <td>
+                              {{ ddDaywiseAdhocPaymentReport.invoiceNumber }}
+                            </td>
+                            <td>
+                              {{ ddDaywiseAdhocPaymentReport.studentName }}
+                            </td>
+                            <td>
+                              {{ ddDaywiseAdhocPaymentReport.generalRegistrationNo }}
+                            </td>
+                            <td>
+                              {{ ddDaywiseAdhocPaymentReport.academicYearName }}
+                            </td>
+                            <td>
+                              {{ ddDaywiseAdhocPaymentReport.class }}
+                            </td>
+                            <td>
+                              {{ ddDaywiseAdhocPaymentReport.paymentAmount | currency : "INR"}}
+                            </td>
+                            <td>
+                              {{ ddDaywiseAdhocPaymentReport.transactionDate.toDate() | date : 'dd-MM-yyyy'}}
+                            </td>
+                            <td>
+                              {{ ddDaywiseAdhocPaymentReport.paymentMode }}
+                            </td>
+                            <td>
+                              {{ ddDaywiseAdhocPaymentReport.chequeNumber }}
+                            </td>
+                            <td>
+                              {{ ddDaywiseAdhocPaymentReport.chequeDate.toDate() | date : 'dd-MM-yyyy'}}
+                            </td>
+                            <td>
+                              {{ ddDaywiseAdhocPaymentReport.chequeBank }}
+                            </td>
+                            <td>
+                              {{ ddDaywiseAdhocPaymentReport.chequeUnclearedAmount | currency : "INR" }}
+                            </td>                   
+                            <td>
+                              {{ ddDaywiseAdhocPaymentReport.transactionBy }}
+                            </td>
+                          </tr>
+                          <tr *ngIf="daywiseAdhocPaymentReportDto.ddDaywiseAdhocPaymentReport.ddDaywiseAdhocPaymentReportTotal">
+                            <td colspan="4" translate>
+                              <b translate>TOTAL_COLLECTION</b>
+                            </td>
+                            <td>
+                              <b>{{daywiseAdhocPaymentReportDto.ddDaywiseAdhocPaymentReport.ddDaywiseAdhocPaymentReportTotal.totalPaymentAmount | currency : "INR"}}</b>
+                            </td>
+                            <td colspan="6" translate>
+                              <b translate>DD_UNCLEARED_AMOUNT</b>
+                            </td>
+                            <td>
+                              <b>{{daywiseAdhocPaymentReportDto.ddDaywiseAdhocPaymentReport.ddDaywiseAdhocPaymentReportTotal.totalChequeUnclearedAmount | currency : "INR"}}</b>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+            <div ngbAccordionItem="four" #four="ngbAccordionItem" [collapsed]="false">
+              <div class="payment-collection-accordion-header">
+                <h6 class="w-16" ngbAccordionHeader>
+                 <b> UPI Payment </b>
+                </h6>
+                <table class="collection-tables">
+
+                <tr *ngIf="daywiseAdhocPaymentReportDto.upiAdhocPaymentDaywiseReport.upiAdhocPaymentDaywisePaymentReportTotal">
+                  <td>
+                    <b translate>TOTAL_COLLECTION</b>:
+                    <b>{{daywiseAdhocPaymentReportDto.upiAdhocPaymentDaywiseReport.upiAdhocPaymentDaywisePaymentReportTotal.totalPaymentAmount | currency : "INR"}}</b>
+
+                  </td>
+                  <td>
+                  </td>
+                </tr>
+                </table>
+                <div class="right">
+                  <i (click)="accordion.toggle('four')" class="bi" [ngClass]="
+                                  four.collapsed
+                                    ? 'bi-plus-circle-fill'
+                                    : 'bi-dash-circle-fill'
+                                "></i>
+                </div>
+              </div>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <ng-template>
+                    <div id="no-more-tables">
+                      <table class="display table row-border hover">
+                        <thead>
+                          <tr>
+                            <th style="width: 2%" translate>INVOICE_NUMBER</th>
+                            <th style="width: 2%;" translate>STUDENT_NAME</th>
+                            <th style="width: 2%;" translate>GEN_REG_NO</th>
+                            <th style="width: 2%" translate>ACADEMIC_YEAR</th>
+                            <th style="width: 2%" translate>CLASS</th>
+                            <th style="width: 2%" translate>PAYMENT_AMOUNT</th>
+                            <th style="width: 2%" translate>TRANSACTION_DATE</th>
+                            <th style="width: 2%" translate>PAYMENT_MODE</th>                     
+                            <th style="width: 2%" translate>TRANSACTION_ID</th>
+                            <th style="width: 2%" translate>TRANSACTION_BY</th>
+                          </tr>
+                        </thead>
+                        <tbody
+                          *ngIf="daywiseAdhocPaymentReportDto.upiAdhocPaymentDaywiseReport && daywiseAdhocPaymentReportDto.upiAdhocPaymentDaywiseReport.upiAdhocPaymentDaywisePaymentReportList.length > 0">
+                          <tr
+                            *ngFor="let upiAdhocPaymentDaywiseReport of daywiseAdhocPaymentReportDto.upiAdhocPaymentDaywiseReport.upiAdhocPaymentDaywisePaymentReportList; index as i">
+                            <td>
+                              {{ upiAdhocPaymentDaywiseReport.invoiceNumber }}
+                            </td>
+                            <td>
+                              {{ upiAdhocPaymentDaywiseReport.studentName }}
+                            </td>
+                            <td>
+                              {{ upiAdhocPaymentDaywiseReport.generalRegistrationNo }}
+                            </td>
+                            <td>
+                              {{ upiAdhocPaymentDaywiseReport.academicYearName }}
+                            </td>
+                            <td>
+                              {{ upiAdhocPaymentDaywiseReport.class }}
+                            </td>
+                            <td>
+                              {{ upiAdhocPaymentDaywiseReport.paymentAmount | currency : "INR"}}
+                            </td>
+                            <td>
+                              {{ upiAdhocPaymentDaywiseReport.transactionDate.toDate() | date : 'dd-MM-yyyy'}}
+                            </td>
+                            <td>
+                              {{ upiAdhocPaymentDaywiseReport.paymentMode }}
+                            </td>
+                            <td>
+                              {{ upiAdhocPaymentDaywiseReport.transactionId }}
+                            </td>
+                            <td>
+                              {{ upiAdhocPaymentDaywiseReport.transactionBy }}
+                            </td>
+                          </tr>
+                          <tr *ngIf="daywiseAdhocPaymentReportDto.upiAdhocPaymentDaywiseReport.upiAdhocPaymentDaywisePaymentReportTotal">
+                            <td colspan="4" translate>
+                              <b translate>TOTAL_COLLECTION</b>
+                            </td>
+                            <td>
+                              <b>{{daywiseAdhocPaymentReportDto.upiAdhocPaymentDaywiseReport.upiAdhocPaymentDaywisePaymentReportTotal.totalPaymentAmount | currency : "INR"}}</b>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+            <div ngbAccordionItem="five" #five="ngbAccordionItem" [collapsed]="false">
+              <div class="payment-collection-accordion-header">
+                <h6 class="w-16" ngbAccordionHeader>
+                  <B>Net Banking</B>
+                </h6>
+                <table class="collection-tables">
+
+                <tr *ngIf="daywiseAdhocPaymentReportDto.netBankingAdhocDaywisePaymentReport.netBankingDaywiseAdhocPaymentReportTotal">
+                  <td colspan="4" translate>
+                    <b translate>TOTAL_COLLECTION</b>:
+                    <b>{{daywiseAdhocPaymentReportDto.netBankingAdhocDaywisePaymentReport.netBankingDaywiseAdhocPaymentReportTotal.totalPaymentAmount | currency : "INR"}}</b>
+
+                  </td>
+                  <td>
+                  </td>
+                </tr>
+                </table>
+                <div class="right">
+                  <i (click)="accordion.toggle('five')" class="bi" [ngClass]="
+                                  five.collapsed
+                                    ? 'bi-plus-circle-fill'
+                                    : 'bi-dash-circle-fill'
+                                "></i>
+                </div>
+              </div>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <ng-template>
+                    <div id="no-more-tables">
+                      <table class="display table row-border hover">
+                        <thead>
+                          <tr>
+                            <th style="width: 2%" translate>INVOICE_NUMBER</th>
+                            <th style="width: 2%;" translate>STUDENT_NAME</th>
+                            <th style="width: 2%;" translate>GEN_REG_NO</th>
+                            <th style="width: 2%" translate>ACADEMIC_YEAR</th>
+                            <th style="width: 2%" translate>CLASS</th>
+                            <th style="width: 2%" translate>PAYMENT_AMOUNT</th>
+                            <th style="width: 2%" translate>TRANSACTION_DATE</th>
+                            <th style="width: 2%" translate>PAYMENT_MODE</th>                   
+                            <th style="width: 2%" translate>TRANSACTION_ID</th>
+                            <th style="width: 2%" translate>TRANSACTION_BY</th>
+                          </tr>
+                        </thead>
+                        <tbody
+                          *ngIf="daywiseAdhocPaymentReportDto.netBankingAdhocDaywisePaymentReport && daywiseAdhocPaymentReportDto.netBankingAdhocDaywisePaymentReport.netBankingDaywiseAdhocPaymentReportList.length > 0">
+                          <tr
+                            *ngFor="let netBankingAdhocDaywisePaymentReport of daywiseAdhocPaymentReportDto.netBankingAdhocDaywisePaymentReport.netBankingDaywiseAdhocPaymentReportList; index as i">
+                            <td>
+                              {{ netBankingAdhocDaywisePaymentReport.invoiceNumber }}
+                            </td>
+                            <td>
+                              {{ netBankingAdhocDaywisePaymentReport.studentName }}
+                            </td>
+                            <td>
+                              {{ netBankingAdhocDaywisePaymentReport.generalRegistrationNo }}
+                            </td>
+                            <td>
+                              {{ netBankingAdhocDaywisePaymentReport.academicYearName }}
+                            </td>
+                            <td>
+                              {{ netBankingAdhocDaywisePaymentReport.class }}
+                            </td>
+                            <td>
+                              {{ netBankingAdhocDaywisePaymentReport.paymentAmount | currency : "INR"}}
+                            </td>
+                            <td>
+                              {{ netBankingAdhocDaywisePaymentReport.transactionDate.toDate() | date : 'dd-MM-yyyy'}}
+                            </td>
+                            <td>
+                              {{ netBankingAdhocDaywisePaymentReport.paymentMode }}
+                            </td>                       
+                            <td>
+                              {{ netBankingAdhocDaywisePaymentReport.transactionId }}
+                            </td>
+                            <td>
+                              {{ netBankingAdhocDaywisePaymentReport.transactionBy }}
+                            </td>
+                          </tr>
+                          <tr *ngIf="daywiseAdhocPaymentReportDto.netBankingAdhocDaywisePaymentReport.netBankingDaywiseAdhocPaymentReportTotal">
+                            <td colspan="4" translate>
+                              <b translate>TOTAL_COLLECTION</b>
+                            </td>
+                            <td>
+                              <b>{{daywiseAdhocPaymentReportDto.netBankingAdhocDaywisePaymentReport.netBankingDaywiseAdhocPaymentReportTotal.totalPaymentAmount | currency : "INR"}}</b>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+            <div ngbAccordionItem="six" #six="ngbAccordionItem" [collapsed]="false">
+              <div class="payment-collection-accordion-header">
+                <h6 class="w-16" ngbAccordionHeader>
+                  <b>Credit/Debit Card</b>
+                </h6>
+                <table class="collection-tables">
+
+                <tr *ngIf="daywiseAdhocPaymentReportDto.cardDaywiseAdhocPaymentReport.cardDaywiseAdhocPaymentReportTotal">
+                  <td>
+                    <b translate>TOTAL_COLLECTION</b>:
+                    <b>{{daywiseAdhocPaymentReportDto.cardDaywiseAdhocPaymentReport.cardDaywiseAdhocPaymentReportTotal.totalPaymentAmount | currency : "INR"}}</b>
+
+                  </td>
+                  <td>
+                  </td>
+                </tr>
+                </table>
+                <div class="right">
+                  <i (click)="accordion.toggle('six')" class="bi" [ngClass]="
+                                  six.collapsed
+                                    ? 'bi-plus-circle-fill'
+                                    : 'bi-dash-circle-fill'
+                                "></i>
+                </div>
+              </div>
+              <div ngbAccordionCollapse>
+                <div ngbAccordionBody>
+                  <ng-template>
+                    <div id="no-more-tables">
+                      <table class="display table row-border hover">
+                        <thead>
+                          <tr>
+                            <th style="width: 2%" translate>INVOICE_NUMBER</th>
+                            <th style="width: 2%;" translate>STUDENT_NAME</th>
+                            <th style="width: 2%;" translate>GEN_REG_NO</th>
+                            <th style="width: 2%" translate>ACADEMIC_YEAR</th>
+                            <th style="width: 2%" translate>CLASS</th>
+                            <th style="width: 2%" translate>PAYMENT_AMOUNT</th>
+                            <th style="width: 2%" translate>TRANSACTION_DATE</th>
+                            <th style="width: 2%" translate>PAYMENT_MODE</th>                        
+                            <th style="width: 2%" translate>TRANSACTION_ID</th>
+                            <th style="width: 2%" translate>TRANSACTION_BY</th>
+                          </tr>
+                        </thead>
+                        <tbody
+                          *ngIf="daywiseAdhocPaymentReportDto.cardDaywiseAdhocPaymentReport && daywiseAdhocPaymentReportDto.cardDaywiseAdhocPaymentReport.cardDaywiseAdhocPaymentReportList.length > 0">
+                          <tr
+                            *ngFor="let cardDaywiseAdhocPaymentReport of daywiseAdhocPaymentReportDto.cardDaywiseAdhocPaymentReport.cardDaywiseAdhocPaymentReportList; index as i">
+                            <td>
+                              {{ cardDaywiseAdhocPaymentReport.invoiceNumber }}
+                            </td>
+                            <td>
+                              {{ cardDaywiseAdhocPaymentReport.studentName }}
+                            </td>
+                            <td>
+                              {{ cardDaywiseAdhocPaymentReport.generalRegistrationNo }}
+                            </td>
+                            <td>
+                              {{ cardDaywiseAdhocPaymentReport.academicYearName }}
+                            </td>
+                            <td>
+                              {{ cardDaywiseAdhocPaymentReport.class }}
+                            </td>
+                            <td>
+                              {{ cardDaywiseAdhocPaymentReport.paymentAmount | currency : "INR"}}
+                            </td>
+                            <td>
+                              {{ cardDaywiseAdhocPaymentReport.transactionDate.toDate() | date : 'dd-MM-yyyy'}}
+                            </td>
+                            <td>
+                              {{ cardDaywiseAdhocPaymentReport.paymentMode }}
+                            </td>                       
+                            <td>
+                              {{ cardDaywiseAdhocPaymentReport.transactionId }}
+                            </td>
+                            <td>
+                              {{ cardDaywiseAdhocPaymentReport.transactionBy }}
+                            </td>
+                          </tr>
+                          <tr *ngIf="daywiseAdhocPaymentReportDto.cardDaywiseAdhocPaymentReport.cardDaywiseAdhocPaymentReportTotal">
+                            <td colspan="4" translate>
+                              <b translate>TOTAL_COLLECTION</b>
+                            </td>
+                            <td>
+                              <b>{{daywiseAdhocPaymentReportDto.cardDaywiseAdhocPaymentReport.cardDaywiseAdhocPaymentReportTotal.totalPaymentAmount| currency : "INR"}}</b>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  </div>

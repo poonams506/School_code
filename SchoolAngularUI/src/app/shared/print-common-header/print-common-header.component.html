@@ -1,0 +1,136 @@
+<div style="border-bottom: 1px solid #ccc; background-color: #fff;">
+  <div style="float: left; margin-right: 0%; padding: 10px; width: 13%">
+    <div style="width: 80px; height: 80px">
+      <img src="{{ logoUrl }}" style="width: 100%; height: 100%" />
+    </div>
+  </div>
+  <div style="text-align: center; float: left; width: 70%">
+    <div style="font-weight: bold; font-size: 14px;">
+      {{ schoolDetails.authorisedBy }}
+    </div>
+
+    <div style="font-size: 18px; line-height: 1.3; font-weight: bold">
+      {{ schoolDetails.schoolName }}
+    </div>
+
+    <div
+      style="font-weight: bold; font-size: 13px;"
+    >
+      &nbsp;<span *ngIf="schoolDetails.section && schoolDetails.section != '' && schoolDetails.section != null && schoolDetails.section != undefined">({{ schoolDetails.section }})</span>
+    </div>
+    
+    <div style="font-weight: bold">
+      <span style="font-size: 11px;">
+        {{ schoolDetails.schoolAddress }}
+      </span>
+      <div style="clear: both"></div>
+    </div>
+  </div>
+
+  <div style="float: right; margin-right: 0%; padding: 10px; width: 17%">
+    <div style="width: 80px; height: 80px; float:right">
+      <!-- <img
+        src="../../../../assets/img/avatar.jpg"
+        style="width: 100%; height: 100%; float:right"
+      /> -->
+    </div>
+  </div>
+  
+    <div style="font-weight: bold">
+      <div style="float: left; padding-left: 10%; font-size: 12px;">
+        <span translate>PHONE_NO</span> :
+        {{ schoolDetails.schoolContactNo1 }}
+      </div>
+      <div style="float: right; padding-right: 10%; font-size: 12px;">
+        <span translate>EMAIL_ID</span> :
+        {{ schoolDetails.schoolEmail }}
+      </div>
+      <div style="clear: both"></div>
+    </div>
+
+
+ 
+
+  <div style="clear: both"></div>
+  <table style="width: 100%;margin-bottom: 7px;
+  margin-top: 5px;">
+    <tr>
+      <td style="width: 40%; padding: 0 5px;">
+        <span translate style="font-size: 12px; font-weight: bold;">SCHOOL_PERMISSION_NO</span> :
+    <span style="font-size: 11.5px; font-weight: bold;"
+      >{{ schoolDetails.schoolPermission }}
+    </span>
+      </td>
+      <td style="font-weight: bold; width: 20%;">
+        <span style="font-weight: bold; border: 1px solid #000; padding: 2px 5px; font-size: 13px;" 
+      ><span translate>MEDIUM</span> -
+      {{ schoolDetails.mediumTypeName }}</span
+    >
+      </td>
+      <td style="font-weight: bold; font-size: 12px; width: 40%; padding: 0 5px; text-align: right;">
+        <span translate style="font-size: 12px;">PER_REG_NO</span> :
+    <span style="font-size: 11.5px"
+      >{{ schoolDetails.registrationNumber }}
+    </span>
+      </td>
+
+    </tr>
+  </table>
+
+  <hr style="margin: 0px 0;" />
+  <div style="padding: 0px; margin: 0px">
+    <div
+      style="
+        float: left;
+        width: 33%;
+        padding-left: 5px;
+        font-weight: bold;
+        font-size: 12px;
+      "
+    >
+      <span translate>UDISE_NUMBER</span> :
+      {{ schoolDetails.udiseNumber }}
+    </div>
+    <div
+      style="
+        float: left;
+        text-align: center;
+        width: 33%;
+        font-weight: bold;
+        font-size: 12px;
+      "
+    >
+      <span translate>BOARD</span> : {{
+        schoolDetails.board
+      }}
+    </div>
+    <div style="float: right; width: 33%; text-align: right; padding-right: 5px; font-weight: bold; font-size: 12px">
+      <span
+        ><span translate>AFFILIATION_NUMBER</span> :
+        {{ schoolDetails.affiliationNumber }}</span
+      >
+    </div>
+    <br />
+    <div style="clear: both"></div>
+  </div>
+  <hr style="margin: 0px 0;"/>
+  <div style="font-weight: bold; padding: 0px; margin: 0px">
+    <div>
+      <div style="float: left; width: 33%; font-size: 12px; padding-left: 5px;">
+        <span
+        ><span translate>HSC_SSC_INDEX_NO</span> :
+          {{
+            schoolDetails.hscOrSscIndexNo
+          }}</span
+        >
+      </div>
+      <div style="float: left; text-align: center; width: 33%; font-size: 12px;">
+        {{ schoolDetails.schoolType }}
+      </div>
+      <div style="float: left; text-align: left; width: 33.5%; padding-left: 92px; font-size: 12px;">
+       <span translate>SCHOOL_CODE_NO </span> : {{ schoolDetails.schoolCodeNo }}
+      </div>
+    </div>
+    <div style="clear: both"></div>
+  </div>
+  

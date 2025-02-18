@@ -1,0 +1,584 @@
+<div class="modal-header">
+  <h4
+    class="modal-title"
+    id="modal-basic-title"
+    *ngIf="f['surveyId']?.value == 0 && !isViewMode"
+    ngbAutofocus
+    translate>
+    ADD_SURVEY
+  </h4>
+  <h4
+    class="modal-title"
+    id="modal-basic-title"
+    *ngIf="f['surveyId']?.value > 0 && !isViewMode"
+    ngbAutofocus
+    translate>
+    UPDATE_SURVEY
+  </h4>
+  <h4
+    class="modal-title"
+    id="modal-basic-title"
+    *ngIf="isViewMode"
+    ngbAutofocus
+    translate>
+    VIEW_SURVEY
+  </h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="close()"></button>
+</div>
+<div class="modal-body pb-0">
+  <form class="search-filter" [formGroup]="surveyForm">
+    <div class="row">
+      <div class="col-12 col-md-4">
+        <div class="form-group">
+          <label translate class="required">SURVEY_TO <span>*</span></label>
+          <select
+            (change)="resetSelectList(f,'surveyToType')"
+            formControlName="surveyToType"
+            class="form-control"
+            [ngClass]="{
+                'is-invalid': submitted && f['surveyToType'].errors
+              }">
+            <option [value]="null">
+              <span translate>SELECT_SURVEY_TO</span>
+            </option>
+            <option
+              *ngFor="let item of surveyToDropdownList"
+              [value]="item.id"
+              translate>
+              {{ item.value }}
+            </option>
+          </select>
+          <div
+            *ngIf="submitted && f['surveyToType'].errors"
+            class="invalid-feedback">
+            <div *ngIf="f['surveyToType'].errors['required']">
+              <span translate>SURVEY_TO</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-4"
+        *ngIf="f['surveyToType']?.value==2">
+        <div class="form-group">
+          <label translate class="required">CLASS <span>*</span></label>
+
+          <ng-select
+            [ngClass]="{
+              'is-invalid': submitted && f['classId'].errors
+            }"
+            [items]="divisionGradeMapping"
+            [multiple]="true"
+            bindLabel='className'
+            [selectableGroup]="false"
+            [closeOnSelect]="false"
+            bindValue="schoolGradeDivisionMatrixId"
+            placeholder="{{ 'SELECT_CLASS' | translate }}"
+            formControlName="classId"
+            (clear)="checkSelectAllClass()"
+            (remove)="checkSelectAllClass()">
+
+            <ng-template ng-option-tmp let-item="item" let-item$="item$"
+              let-index="index">
+              <input id="item-{{index}}" type="checkbox"
+                [ngModelOptions]="{standalone: true}" [ngModel]="item$.selected"
+                (change)="checkSelectAllClass()" />
+              {{item.className}}
+            </ng-template>
+            <ng-template ng-header-tmp>
+              <input type="checkbox" [ngModelOptions]="{standalone: true}"
+                (change)="selectAllOptionClass()"
+                [(ngModel)]="selectAllClass" />
+              <span translate>SELECT_ALL</span>
+            </ng-template>
+          </ng-select>
+          <div
+            *ngIf="submitted && f['classId'].errors"
+            class="invalid-feedback">
+            <div *ngIf="f['classId'].errors['required']">
+              <span translate>CLASS</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4"
+        *ngIf="f['surveyToType']?.value==1">
+        <div class="form-group">
+          <label translate class="required">STUDENT <span>*</span></label>
+
+          <ng-select
+            [ngClass]="{
+              'is-invalid': submitted && f['studentId'].errors
+            }"
+            [items]="studentDropdownList"
+            [multiple]="true"
+            bindLabel='value'
+            [selectableGroup]="false"
+            [closeOnSelect]="false"
+            bindValue="id"
+            placeholder="{{ 'SELECT_STUDENT' | translate }}"
+            formControlName="studentId"
+            (clear)="checkSelectAllStudent()"
+            (remove)="checkSelectAllStudent()">
+
+            <ng-template ng-option-tmp let-item="item" let-item$="item$"
+              let-index="index">
+              <input id="item-{{index}}" type="checkbox"
+                [ngModelOptions]="{standalone: true}" [ngModel]="item$.selected"
+                (change)="checkSelectAllStudent()" /> {{item.value}}
+            </ng-template>
+            <ng-template ng-header-tmp>
+              <input type="checkbox" [ngModelOptions]="{standalone: true}"
+                (change)="selectAllOptionStudent()"
+                [(ngModel)]="selectAllStudent" />
+              <span translate>SELECT_ALL</span>
+            </ng-template>
+          </ng-select>
+          <div
+            *ngIf="submitted && f['studentId'].errors"
+            class="invalid-feedback">
+            <div *ngIf="f['studentId'].errors['required']">
+              <span translate>STUDENT</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-10 col-md-10 col-lg-10"
+        *ngIf="f['surveyToType']?.value==3">
+        <div class="form-group">
+          <label translate class="required">TEACHER <span>*</span></label>
+
+          <ng-select
+            [ngClass]="{
+              'is-invalid': submitted && f['teacherId'].errors
+            }"
+            [items]="teacherDropdownList"
+            [multiple]="true"
+            bindLabel='teacherName'
+            [selectableGroup]="false"
+            [closeOnSelect]="false"
+            bindValue="teacherId"
+            placeholder="{{ 'SELECT_TEACHER' | translate }}"
+            formControlName="teacherId"
+            (clear)="checkSelectAllTeacher()"
+            (remove)="checkSelectAllTeacher()">
+
+            <ng-template ng-option-tmp let-item="item" let-item$="item$"
+              let-index="index">
+              <input id="item-{{index}}" type="checkbox"
+                [ngModelOptions]="{standalone: true}" [ngModel]="item$.selected"
+                (change)="checkSelectAllTeacher()" /> {{item.teacherName}}
+            </ng-template>
+            <ng-template ng-header-tmp>
+              <input type="checkbox" [ngModelOptions]="{standalone: true}"
+                (change)="selectAllOptionTeacher()"
+                [(ngModel)]="selectAllTeacher" />
+              <span translate>SELECT_ALL</span>
+            </ng-template>
+          </ng-select>
+          <div
+            *ngIf="submitted && f['teacherId'].errors"
+            class="invalid-feedback">
+            <div *ngIf="f['teacherId'].errors['required']">
+              <span translate>TEACHER</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-10 col-md-10 col-lg-10"
+        *ngIf="f['surveyToType']?.value==4">
+        <div class="form-group">
+          <label translate class="required">CLERK <span>*</span></label>
+
+          <ng-select
+            [ngClass]="{
+              'is-invalid': submitted && f['clerkId'].errors
+            }"
+            [items]="clerkDropdownList"
+            [multiple]="true"
+            bindLabel='value'
+            [selectableGroup]="false"
+            [closeOnSelect]="false"
+            bindValue="id"
+            placeholder="{{ 'SELECT_CLERK' | translate }}"
+            formControlName="clerkId"
+            (clear)="checkSelectAllClerk()"
+            (remove)="checkSelectAllClerk()">
+
+            <ng-template ng-option-tmp let-item="item" let-item$="item$"
+              let-index="index">
+              <input id="item-{{index}}" type="checkbox"
+                [ngModelOptions]="{standalone: true}" [ngModel]="item$.selected"
+                (change)="checkSelectAllClerk()" /> {{item.value}}
+            </ng-template>
+            <ng-template ng-header-tmp>
+              <input type="checkbox" [ngModelOptions]="{standalone: true}"
+                (change)="selectAllOptionClerk()"
+                [(ngModel)]="selectAllClerk" />
+              <span translate>SELECT_ALL</span>
+            </ng-template>
+          </ng-select>
+          <div
+            *ngIf="submitted && f['clerkId'].errors"
+            class="invalid-feedback">
+            <div *ngIf="f['clerkId'].errors['required']">
+              <span translate>CLERK</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-10 col-md-10 col-lg-10"
+        *ngIf="f['surveyToType']?.value==5">
+        <div class="form-group">
+          <label translate class="required">CAB_DRIVER <span>*</span></label>
+
+          <ng-select
+            [ngClass]="{
+              'is-invalid': submitted && f['cabDriverId'].errors
+            }"
+            [items]="cabDriverDropdownList"
+            [multiple]="true"
+            bindLabel='value'
+            [selectableGroup]="false"
+            [closeOnSelect]="false"
+            bindValue="id"
+            placeholder="{{ 'SELECT_CAB_DRIVER' | translate }}"
+            formControlName="cabDriverId"
+            (clear)="checkSelectAllCabDriver()"
+            (remove)="checkSelectAllCabDriver()">
+
+            <ng-template ng-option-tmp let-item="item" let-item$="item$"
+              let-index="index">
+              <input id="item-{{index}}" type="checkbox"
+                [ngModelOptions]="{standalone: true}" [ngModel]="item$.selected"
+                (change)="checkSelectAllCabDriver()" /> {{item.value}}
+            </ng-template>
+            <ng-template ng-header-tmp>
+              <input type="checkbox" [ngModelOptions]="{standalone: true}"
+                (change)="selectAllOptionCabDriver()"
+                [(ngModel)]="selectAllCabDriver" />
+              <span translate>SELECT_ALL</span>
+            </ng-template>
+          </ng-select>
+          <div
+            *ngIf="submitted && f['cabDriverId'].errors"
+            class="invalid-feedback">
+            <div *ngIf="f['cabDriverId'].errors['required']">
+              <span translate>CAB_DRIVER</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  
+    <div class="col-12 col-sm-10 col-md-10 col-lg-10" *ngIf="f['surveyToType'].value == 6">
+      <div class="form-group">
+        <label translate class="required">CLASS_TEACHER <span>*</span></label>
+        <select
+        (change)="resetSelectList(f,'classTeacherId')"
+        formControlName="classTeacherId"
+        class="form-control"
+        [ngClass]="{
+            'is-invalid': submitted && f['classTeacherId'].errors
+          }">
+        <option [value]="null">
+          <span translate>SELECT_CLASS_TEACHER</span>
+        </option>
+        <option
+          *ngFor="let item of classTeacherDropdownList"
+          [value]="item.id"
+          translate>
+          {{ item.classTeacherName }}
+        </option>
+      </select>
+       
+        <div *ngIf="submitted && f['classTeacherId'].errors" class="invalid-feedback">
+          <div *ngIf="f['classTeacherId'].errors['required']">
+            <span translate>CLASS_TEACHER </span>
+              <span translate>IS_REQUIRED</span>
+          </div>
+        </div>
+      </div>
+    
+      <div class="form-group">
+        <label translate class="required">CLASS_WISE_STUDENT</label>
+        <ng-select
+          [items]="teacherStudentDropdownList"
+          bindLabel="fullName"
+          bindValue="studentId"
+          placeholder="{{ 'SELECT_STUDENT' | translate }}"
+          formControlName="studentId"
+          [multiple]="true"
+          (change)="fetchFullNames()">
+
+
+          <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+            <input
+              id="studentId-item-{{index}}"
+              type="checkbox"
+              [ngModelOptions]="{ standalone: true }"
+              [(ngModel)]="item$.selected" />
+            {{ item.fullName }}
+          </ng-template>
+          <ng-template ng-header-tmp>
+            <input
+              type="checkbox"
+              [ngModelOptions]="{ standalone: true }"
+              (change)="selectAllOptionClassTeacherStudent()"
+              [(ngModel)]="selectAllClassTeacherStudent" />
+            <span translate>SELECT_ALL</span>
+          </ng-template>
+        </ng-select>
+      </div>
+    </div>
+     
+    <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+        <div class="form-group">
+          <label for="surveyTitle" class="required" translate>SURVEY_TITLE
+            <span>*</span></label>
+          <input
+            id="surveyTitle"
+            type="text"
+            formControlName="surveyTitle"
+            class="form-control"
+            placeholder="{{ 'SURVEY_TITLE' | translate }}"
+            [ngClass]="{
+                'is-invalid': submitted && f['surveyTitle'].errors
+              }"
+            maxlength="1000" />
+          <div
+            *ngIf="submitted && f['surveyTitle'].errors"
+            class="invalid-feedback">
+            <div *ngIf="f['surveyTitle'].errors['required']">
+              <span translate>SURVEY_TITLE</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+        <div class="form-group datepicker">
+          <label class="required" translate>START_DATE<span>*</span></label>
+
+          <input type="text" formControlName="ngbStartDate" class="form-control"
+            placeholder="{{ 'START_DATE' | translate }}"
+            [ngClass]="{ 'is-invalid': submitted && f['ngbStartDate'].errors }"
+            ngbDatepicker [maxDate]="maxDate" [readonly]="true"
+            #startDateDatepicker="ngbDatepicker"
+            (click)="startDateDatepicker.toggle()" />
+          <div class="calendar" (click)="startDateDatepicker.toggle()">
+            <i class="bi bi-calendar3"></i>
+          </div>
+
+          <div *ngIf="submitted && f['ngbStartDate'].errors"
+            class="invalid-feedback">
+            <div *ngIf="f['ngbStartDate'].errors['required']">
+              <span translate>START_DATE</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+        <div class="form-group datepicker">
+          <label class="required" translate>END_DATE<span>*</span></label>
+
+          <input type="text" formControlName="ngbEndDate" class="form-control"
+            placeholder="{{ 'END_DATE' | translate }}"
+            [ngClass]="{ 'is-invalid': submitted && f['ngbEndDate'].errors }"
+            ngbDatepicker [minDate]="minEndDate" [maxDate]="maxDate"
+            [readonly]="true" #endDateDatepicker="ngbDatepicker"
+            (click)="endDateDatepicker.toggle()" />
+          <div class="calendar" (click)="endDateDatepicker.toggle()">
+            <i class="bi bi-calendar3"></i>
+          </div>
+
+          <div *ngIf="submitted && f['ngbEndDate'].errors"
+            class="invalid-feedback">
+            <div *ngIf="f['ngbEndDate'].errors['required']">
+              <span translate>END_DATE</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-8 col-md-8 col-lg-8">
+      <div class="row">
+        <div class="col-6">
+          <div class="form-group">
+            <label for="isImportant" translate>IS_IMPORTANT</label>
+            <div
+              class="custom-control custom-checkbox d-flex align-items-center">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="check4"
+                formControlName="isImportant" />
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <div class="form-group">
+            <label for="isPublished" translate>IS_PUBLISHED</label>
+            <div
+              class="custom-control custom-checkbox d-flex align-items-center">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="isPublished"
+                formControlName="isPublished" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="form-group">
+        <label class="required" translate>SURVEY_DESCRIPTION
+          <span>*</span></label>
+        <ckeditor [editor]="Editor" formControlName="surveyDescription"
+          [ngClass]="{'is-invalid': submitted && f['surveyDescription'].errors}"></ckeditor>
+
+        <div *ngIf="submitted && f['surveyDescription'].errors"
+          class="invalid-feedback">
+          <div *ngIf="f['surveyDescription'].errors['required']">
+            <span translate>SURVEY_DESCRIPTION</span>
+            <span translate> IS_REQUIRED</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-6 col-lg-6">
+        <div class="form-group">
+          <label for="surveykTextFileArray" translate>
+            SURVEY_FILE
+          </label>
+          <span
+            placement="top"
+            ngbTooltip="{{ 'USE_THIS_FILE_FORMATE_ONLY'| translate }}"
+            style="margin-left: 5px;">
+            <i class="bi bi-info-circle"></i>
+          </span>
+          <div
+            class="profile-dropzone profile-dropzone-btn"
+            ngx-dropzone
+            [accept]="allowedFileFormats.join('')"
+            [multiple]="true"
+            (change)="onTextFileSelect($event)"
+            [compress]="true">
+            <ngx-dropzone-label>
+              <h5><span translate>UPLOAD_SURVEY_FILE</span></h5>
+            </ngx-dropzone-label>
+          </div>
+
+          <div *ngIf="invalidFileFormatError" class="text-danger">{{
+            invalidFileFormatError }}</div>
+          <div class="form-control uploaded-file-text" *ngIf="textfiles.length > 0">
+            <span class="file-thumb" *ngFor="let f of textfiles; let i = index">
+              <img *ngIf="getFileExtension(f.name) === 'png'"
+                src="../../../../assets/img/img.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'jpeg'"
+                src="../../../../assets/img/img.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'jpg'"
+                src="../../../../assets/img/img.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'pdf'"
+                src="../../../../assets/img/pdf.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'docx'"
+                src="../../../../assets/img/docx-file.png"
+                (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'xls'"
+                src="../../../../assets/img/xlsx.png.png"
+                (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'pptx'"
+                src="../../../../assets/img/ppt.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'txt'"
+                src="../../../../assets/img/txt.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'svg'"
+                src="../../../../assets/img/img.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'csv'"
+                src="../../../../assets/img/csv.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'bmp'"
+                src="../../../../assets/img/bmp.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'xlsx'"
+                src="../../../../assets/img/xlsx.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'doc'"
+                src="../../../../assets/img/doc.png"
+                (click)="showFile(f)" />
+              <!-- Add similar conditions for other file types -->
+              <span class="delete-file" (click)="onTextFileRemove(i)"
+                ngbTooltip="{{ 'DELETE' | translate }}">
+                <i class="bi bi-trash"></i>
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div formArrayName="surveyText">
+      <div *ngFor="let item of surveyText let i = index;let last=last;let first=first"  class="create-fee-wrapper-body align-items-center mb-2" [formGroupName]="i">
+        <div class="heading row">
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <label translate> SURVEY_QUESTION</label>
+            <input
+              type="text"
+              formControlName="surveyQuestions"
+              id="surveyQuestions_{{i}}"
+              class="form-control"
+              placeholder="{{ 'SURVEY_QUESTION' | translate }}"
+              maxlength="1000"
+            />
+          </div>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+            <div class="heading heading-btns">
+              <label class="d-none d-md-block"> &nbsp;</label>
+
+              <button type="button" *ngIf="last" (click)="addSurveyQuestion()" class="btn btn-secondary action-btn">
+                <i
+                  class="bi bi-plus-lg"
+                  placement="top"
+                  ngbTooltip="Actions"
+                ></i>
+              </button>
+              <button type="button" *ngIf=" surveyText.length>1"  (click)="removeSurvey(i)"  class="btn btn-danger action-btn">
+                <i
+                  class="bi bi-dash-lg"
+                  placement="top"
+                  ngbTooltip="Actions"
+                ></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+    <div class="modal-footer">
+      <div class="form-group mb-0 pb-0">
+        <button type="button" class="btn btn-primary" (click)="saveSurveyData()" translate>
+          SAVE
+        </button>
+        <button class="btn btn-light" (click)="close()" translate>
+          CANCEL
+        </button>
+      </div>
+    </div>
+</form>
+</div>

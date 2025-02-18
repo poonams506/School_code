@@ -1,0 +1,266 @@
+
+
+
+  <div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" *ngIf="isEditMode==false" translate>CREATE_FEE_STRUCTURE</h3>
+      <h3 class="page-heading" *ngIf="isEditMode==true && feeStructureRouteParameter.title == 'Create'" translate>CREATE_FEE_STRUCTURE</h3>
+      <h3 class="page-heading" *ngIf="isEditMode==true && feeStructureRouteParameter.title == 'Edit'" translate>EDIT_FEE_STRUCTURE</h3>
+      <h3 class="page-heading" *ngIf="isEditMode==true && feeStructureRouteParameter.title == 'View'" translate>VIEW_FEE_STRUCTURE</h3>
+     <a routerLink="/fee-management/view-fee-structure" class="back-arrow"><i class="bi bi-arrow-left-circle"></i></a>
+    </div>
+
+    <div class="card mb-4 d-md-block">
+      <div class="card-header">
+        <h4 class="card-title" translate>CREATE_FEE</h4>
+      </div>
+      <div class="card-body">
+        <!--table listing statrt-->
+        <form [formGroup]="createFeeStructureMasterForm" 
+        novalidate>
+          <div class="row mb-2">
+         
+            <div *ngIf="isEditMode==false" class="col-12 col-sm-4 col-md-4 col-lg-4">
+              <div class="form-group">
+                  <label for="divisionId" class="required" translate>CLASS <span>*</span></label>
+    
+               
+              <ng-select (change)="resetSelectList(f,'classId')"
+                  [ngClass]="{
+                    'is-invalid': submitted && f['classId'].errors
+                  }"
+      [items]="divisionGradeMapping"
+      [multiple]="true"
+      bindLabel="className"
+      [selectableGroup]="false"
+      [closeOnSelect]="false"
+      bindValue="schoolGradeDivisionMatrixId"
+      placeholder="{{ 'SELECT_CLASS' |translate}}"
+      formControlName="classId">
+    
+      <ng-template ng-option-tmp  let-item="item" let-item$="item$" let-index="index">
+          <input id="item-{{index}}" [disabled]="item.disabled" type="checkbox" [ngModelOptions]="{standalone: true}" [ngModel]="item$.selected"/> {{item.className}}
+      </ng-template>
+  </ng-select>
+  <div
+  *ngIf="submitted && f['classId'].errors"
+  class="invalid-feedback"
+  >
+  <div *ngIf="f['classId'].errors['required']">
+    <span translate>CLASS</span>
+    <span translate> IS_REQUIRED</span>
+  </div>
+  </div>
+                </div>
+            </div>
+            
+            <div *ngIf="isEditMode==true" class="col-12 col-sm-4 col-md-4 col-lg-4">
+              <div class="form-group">
+                <label translate class="required">CLASS </label>
+                <span>:</span>
+                <label>{{f['className'].value}}</label>
+                
+              </div>
+              </div>
+      
+            <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+              <div class="form-group">
+                <label for="isPublish" translate>IS_PUBLISH</label>
+                <div
+                  class="custom-control custom-checkbox d-flex align-items-center"
+                >
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="isPublish"
+                    formControlName="isPublish"
+                  />
+                 
+                </div>
+              </div>
+            </div>
+           
+          </div>
+          <div class="create-fee-wrapper">
+            <div class="create-fee-wrapper-header">
+              <div class="heading" translate>PARTICULAR <span class="text-danger">*</span></div>
+              <div class="heading" translate>AMOUNT <span class="text-danger">*</span></div>
+              <div class="heading"><span translate>IS_DISCOUNT_APPLICABLE</span> </div>
+              <div class="heading"><span translate>IS_RTE_APPLICABLE</span> </div>
+              <div class="heading" translate>
+
+              </div>
+            </div>
+            <div formArrayName="feeParticulars">
+              <div *ngFor="let particular of particulars; let i = index;let last=last;let first=first"  class="create-fee-wrapper-body align-items-center" [formGroupName]="i">
+                <div class="heading">
+                
+                  <input  (change)="resetSelectList(f,'particularName')"
+                    type="text"
+                    formControlName="particularName"
+                    id="particularName_{{i}}"
+                    class="form-control"
+                    placeholder="{{ 'PARTICULAR' | translate }}"
+                    [ngClass]="{
+                      'is-invalid': submitted && particular.get('particularName')?.errors
+                    }"
+                  />
+                  <div
+                    *ngIf="submitted && particular.get('particularName')?.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="submitted && particular.get('particularName')?.hasError('required')">
+                      <span translate>PARTICULAR</span>
+                      <span translate> IS_REQUIRED</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="heading">
+                  <div class="input-group">
+                    <span class="input-group-text">₹</span>
+                    <input 
+                    type="text"
+                    (input)="onAmountInput($event)"
+                    maxlength="7"
+                    formControlName="amount"
+                    id="particularAmount_{{i}}"
+                    class="form-control"
+                    placeholder="{{ 'AMOUNT' | translate }}"
+                    [ngClass]="{
+                      'is-invalid': submitted && particular.get('amount')?.errors
+                    }"
+                  /> 
+                  <div
+                  *ngIf="submitted && particular.get('amount')?.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="particular.get('amount')?.hasError('required')">
+                    <span translate>AMOUNT</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                  <div *ngIf="particular.get('amount')?.hasError('range')">
+                    <span translate>AMOUNT</span>
+                    <span translate> SHOULD_BETWEEN_1_100000000</span>
+                  </div>
+                </div>
+                  </div>
+                 
+               
+                 
+                </div>
+                <div class="heading">
+                  <div class="custom-control custom-checkbox d-flex align-items-center">
+                    <input
+                      type="checkbox"
+                      id="particularDiscountApplicable_{{i}}"
+                      class="custom-control-input"
+                      formControlName="isDiscountApplicable"
+                    />
+                  
+                  </div>
+                </div>
+                <div class="heading">
+                  <div class="custom-control custom-checkbox d-flex align-items-center">
+                    <input
+                      type="checkbox"
+                      id="particularDiscountApplicable_{{i}}"
+                      class="custom-control-input"
+                      formControlName="isRTEApplicable"
+                    />
+                  
+                  </div>
+                </div>
+               
+                <div class="heading heading-btns" translate>
+                  <button type="button" *ngIf="last" (click)="addFeeParticular()" class="btn btn-secondary action-btn">
+                    <i
+                      class="bi bi-plus-lg"
+                      placement="top"
+                      ngbTooltip="Actions"
+                    ></i>
+                  </button>
+                  <button type="button" *ngIf="particular.get('isFeePaymentAlreadyDone')?.value==false && particulars.length>1"  (click)="removeFeeParticular(i)"  class="btn btn-danger action-btn">
+                    <i
+                      class="bi bi-dash-lg"
+                      placement="top"
+                      ngbTooltip="Actions"
+                    ></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            
+
+            <div class="create-fee-wrapper-content flex-wrap">
+              <div class="card-header w-100">
+                <h4 class="card-title" translate>DISCOUNT_AVAILABLE</h4>
+              </div>
+              <!-- price cards start -->
+              <div class="container-fluid mt-2 fees-plan-cards" formArrayName="feeParticularWaiverMappings">
+                <div class="whole" *ngFor="let waiver of feeParticularWaiverMappings; let i = index;let last=last;let first=first" [formGroupName]="i" >
+                  <div class="type type-1">
+                      {{waiver.get('feeWavierDisplayName')?.value | translate}}
+                  </div>
+                  <div class="plan">
+                    <div class="header">
+                      {{waiver.get('feeWavierTypeName')?.value }}
+                    </div>
+                    <div class="header">
+                      {{waiver.get('discountInPercent')?.value }}%
+                      <p class="month" translate>APPLICABLE_DISCOUNT</p>
+                     
+                    </div>
+                    <div class="header">
+                      {{waiver.get('numberOfInstallments')?.value }}
+                      <p class="month" translate>No Of Installments <span (click)="getInstallmentToolTip(waiver.get('feeWavierTypeId')?.value, waiver.get('feeWavierDisplayName')?.value)" class="bi bi-info-circle cursor"></span></p>
+                    </div>
+                    <div class="btn-container">
+                      <button 
+                        type="button"
+                        *ngIf="waiver.get('isAlreadyAdded')?.value==false"
+                        (click)="waiver.get('isAlreadyAdded')?.setValue(true)"
+                        class="btn btn-with-icon with-text btn-secondary  ms-auto"
+                        translate
+                      >
+                      ADD
+                      </button>
+                      <button 
+                      type="button"
+                      *ngIf="waiver.get('isAlreadyAdded')?.value==true"
+                      (click)="waiver.get('isAlreadyAdded')?.setValue(false)"
+                      class="btn btn-with-icon with-text btn-danger ms-auto"
+                      translate
+                    >
+                    REMOVE
+                    </button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+           
+            </div>
+            <div class="row">
+              <div class="col-12 text-end">
+                <div class="form-group search-btns-mobile-margin">
+                  <label for="city" class="d-none d-md-block">&nbsp;</label>
+                  
+                  <button  type="button"  *ngIf="isEditMode==false || (isEditMode==true && feeStructureRouteParameter.isEditMode==true)" (click)="saveFeeStructure()" class="btn btn-primary" translate>
+                    SAVE
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+      
+      </div>
+    </div>
+
+  
+  </div>
+
+
+

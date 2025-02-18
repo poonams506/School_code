@@ -1,0 +1,202 @@
+
+<div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>BONAFIDE_CERTIFICATE</h3>
+      <!-- <button class="btn btn-with-icon with-text btn-primary ms-auto" (click)="openLg(contentLg)" translate>ADD</button> -->
+    </div>
+  
+    <div class="card mb-4 d-md-block">
+      <div class="card-body search-body">
+        <!--table search filter start-->
+        <form  [formGroup]="certificateForm" (ngSubmit)="onGenerateCertificate()" class="search-filter">
+          <div class="row mb-2">
+            <div class="col-sm">
+              <div class="form-group">
+                <label translate class="required"
+                  >CLASS <span>*</span></label
+                >
+                <select (change)="resetSelectList(f,'classId')"
+                  formControlName="classId"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid': certificateSubmitted && f['classId'].errors
+                  }"
+                >
+                <option [value]="null">
+                  <span translate>SELECT_CLASS</span>
+                  </option>
+                <option *ngFor="let item of divisionGradeMapping" [value]="item.schoolGradeDivisionMatrixId" >
+                  {{item.className}}
+                </option>
+                </select>
+                <div
+                  *ngIf="certificateSubmitted && f['classId'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['classId'].errors['required']">
+                    <span translate>CLASS</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm">
+              <div class="form-group">
+                <label translate class="required"
+                  >STUDENT_NAME <span>*</span></label
+                ><select (change)="resetSelectList(f,'fullName')"
+                  formControlName="fullName"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid': certificateSubmitted && f['fullName'].errors
+                  }"
+                >
+                <option [value]="null">
+                  <span translate> SELECT_STUDENT_NAME</span>
+                  </option>
+                <option *ngFor="let item of studentDropdownList" [value]="item.studentId">
+                  {{item.fullName}}
+                </option>
+                </select>
+                <div
+                  *ngIf="certificateSubmitted && f['fullName'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['fullName'].errors['required']">
+                    <span translate>STUDENT_NAME</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+           
+            <div class="col-md-3 text-right">
+              <div class="form-group search-btns-mobile-margin">
+                <label for="city" class="d-none d-md-block">&nbsp;</label>
+                <button type="button" class="btn btn-light" translate (click)="onCertificateReset()">
+                  RESET
+                </button>
+                <button type="submit" class="btn btn-primary" *ngIf="this.sharedPermissionServiceService.havePermission('Bonafied','Create')" translate>
+                  GENERATE
+                </button>
+                <button type="button" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}" class="btn btn-primary btn-disabled" *ngIf="!this.sharedPermissionServiceService.havePermission('Bonafied','Create')" translate>
+                  GENERATE
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    
+
+<!-- certificate html -->
+       <div *ngIf="certificateDto.bonafiedDetails">
+       <div id="print-section" class="wrapper-width" style="border: 2px solid gray; margin: 0 auto; background-color: #fff;">
+        <app-print-common-header></app-print-common-header>
+        
+        <table style="width: 100%;">
+          <tr>
+            <td style="width: 33%; vertical-align: top; padding-top: 40px;">
+              <div style="padding:15px 5px; font-size:13px;">
+                <div style="float:left;font-size:13px;" *ngFor="let item of items; let i=index;"><span translate> {{i+1}} </span>.  <span style="font-weight:bold;" id="srno1"><input id="txtBonNo" name="certificateNo" type="text" value="29" class="form-control"></span> </div>
+                <div style="float:left;font-size:13px;"> <span translate>DATE</span> : <span style="font-weight:bold;" id="currentdate1">{{currentDate}}</span></div>
+                <div style="clear:both;font-size:13px;"></div>
+            </div> 
+            </td>
+            <td style="width: 33%; vertical-align: top; padding-top: 20px; ">
+              <div class="text-center" style="width:100%;font-size:24px;text-decoration:underline; text-align:center; font-weight:bold;"> <span translate>BONAFIDE_CERTIFICATE </span></div>
+            </td>
+            <td style="width: 33%; vertical-align: top;">
+              <div style="float: right; margin-right: 0%; padding: 10px; width: 17%">
+                <div style="width: 100px; height: 100px; float:right; border: 1px solid #000;">
+                 &nbsp;
+                </div>
+              </div>
+            </td>
+          </tr>
+        </table>
+       
+       
+
+            <ng-container *ngIf="certificateDto.bonafiedDetails.gender === 'M'">
+                <div style="padding:5px;font-size:13px;">
+                   <span translate>B_C_D_TEXT1 </span> <b>{{certificateDto.bonafiedDetails.name}}</b> <span translate> B_C_D_TEXT2</span> <b> {{certificateDto.bonafiedDetails.gradeName}} </b><span translate> </span> - <b> {{certificateDto.bonafiedDetails.divisionName}} </b> <span translate>B_C_D_TEXT3</span> <b><span translate>{{certificateDto.bonafiedDetails.academicYearKey}}</span>.</b><br>
+
+                   <span translate>B_C_D_TEXT4</span>
+                
+                <span translate>B_C_D_TEXT5</span>
+                <span translate>CATEGORY</span> - <b>{{ certificateDto.bonafiedDetails.category }}</b>, 
+                <span translate>CAST</span> - <b>{{ certificateDto.bonafiedDetails.cast }}</b>
+                <ng-container *ngIf="certificateDto.bonafiedDetails.subCast">
+                    , <span translate>SUBCAST</span> - <b>{{ certificateDto.bonafiedDetails.subCast }}</b>
+                </ng-container>
+            
+                  <span translate>B_C_D_TEXT6</span> <b>{{certificateDto.bonafiedDetails.birthDate.toDate() | date : 'dd/MM/yyyy'}}</b>
+              
+                  <span translate>B_C_D_TEXT7</span> <b>{{certificateDto.bonafiedDetails.birthPlace}}</b>, <span translate>TALUKA</span> - <b>{{certificateDto.bonafiedDetails.birthTalukaName}}</b>, <span translate>DISTRICT</span> - <b>{{certificateDto.bonafiedDetails.birthDistrictName}}</b>, <span translate>STATE</span> - <b>{{certificateDto.bonafiedDetails.birthStateName}}</b>.
+                
+                  <span translate>B_C_D_TEXT8</span><b>{{reason}}</b> 
+                </div>
+              </ng-container>
+
+
+
+              <ng-container *ngIf="certificateDto.bonafiedDetails.gender === 'F'">
+                <div style="padding:5px;font-size:13px;">
+                  <span translate>B_C_D_TEXT9 </span> <b>{{certificateDto.bonafiedDetails.name}}</b> <span translate> B_C_D_TEXT10</span> <b> {{certificateDto.bonafiedDetails.gradeName}} </b><span translate> </span> - <b> {{certificateDto.bonafiedDetails.divisionName}} </b> <span translate>B_C_D_TEXT11</span> <b><span translate>{{certificateDto.bonafiedDetails.academicYearKey}}</span>.</b>
+              
+                  <span translate>B_C_D_TEXT12</span>
+               
+               <span translate>B_C_D_TEXT13</span>
+               <span translate>CATEGORY</span> - <b>{{ certificateDto.bonafiedDetails.category }}</b>, 
+               <span translate>CAST</span> - <b>{{ certificateDto.bonafiedDetails.cast }}</b>
+               <ng-container *ngIf="certificateDto.bonafiedDetails.subCast">
+                   , <span translate>SUBCAST</span> - <b>{{ certificateDto.bonafiedDetails.subCast }}</b>
+               </ng-container>
+           
+               <span translate>B_C_D_TEXT14</span> <b>{{certificateDto.bonafiedDetails.birthDate.toDate() | date : 'dd/MM/yyyy'}}</b>
+              
+               <span translate>B_C_D_TEXT15</span> <b>{{certificateDto.bonafiedDetails.birthPlace}}</b>, <span translate>TALUKA</span> - <b>{{certificateDto.bonafiedDetails.birthTalukaName}}</b>, <span translate>DISTRICT</span> - <b>{{certificateDto.bonafiedDetails.birthDistrictName}}</b>, <span translate>STATE</span> - <b>{{certificateDto.bonafiedDetails.birthStateName}}</b>.
+               
+               <span translate>B_C_D_TEXT16</span><b>{{reason}}</b> 
+               </div>
+              </ng-container>
+
+            <div style="padding:5px;font-size:13px;">
+            <span translate>G_R_NO</span> - <b>{{certificateDto.bonafiedDetails.generalRegistrationNo}}</b> </div>
+
+           <br>
+           <br>
+            <div style="width:100%">
+                <div class="columnsIGN" style="text-align:left;font-size:13px; padding-left: 5px;" translate> CLERK </div>
+                <div class="columnsIGN"></div>
+                <div class="columnsIGN" style="text-align:right;font-size:13px; padding-left: 5px;" translate> HEADMASTER </div>
+            </div>
+        
+
+        <div style="clear:both;"></div>
+       </div>
+    
+    <div class="text-center" style="margin-top: 10px;">
+      <button type="button" class="btn btn-primary" *ngIf="this.sharedPermissionServiceService.havePermission('Bonafied','Print')"
+      [useExistingCss]="true" ngxPrint printSectionId="print-section"
+      translate><i class="bi bi-printer"></i> PRINT</button>
+      <button type="button"  *ngIf="!this.sharedPermissionServiceService.havePermission('Bonafied','Print')"
+      container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}" class=" btn btn-primary ms-auto btn-disabled bi bi-printer"
+      translate> PRINT</button>
+    </div>
+</div>
+        <!-- certificate html end -->
+    </div>
+
+
+
+    <style>
+      @media print {
+        .card .card-header {
+          padding-left: 0 !important;
+        }
+    }
+    </style>

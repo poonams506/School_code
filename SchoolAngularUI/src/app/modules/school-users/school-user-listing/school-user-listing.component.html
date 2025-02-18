@@ -1,0 +1,318 @@
+<!--success message-->
+<ngb-alert *ngIf="successMessage" type="success" (close)="(successMessage)">{{
+    successMessage
+  }}</ngb-alert>
+  <!--success message-->
+  
+  <div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+        <h3 class="page-heading" translate>SCHOOL_USERS</h3>
+        <!-- <button class="btn btn-with-icon with-text btn-primary ms-auto">
+          Add Student
+        </button> -->
+        <a routerLink="/" class="btn btn-with-icon with-text btn-primary ms-auto" translate>ADD_USER</a>
+        <button class="btn btn-with-icon  btn-primary">
+          <i class="bi bi-box-arrow-in-down"></i>
+        </button>
+    
+       
+      </div>
+  
+    <div class="card mb-4">
+      <div class="card-body table-body">
+        <!--table listing statrt-->
+        <div id="no-more-tables">
+          <div class="search-in-table">
+            <div class="show-entries">
+              <span>Show Entries</span>
+              <select class="form-select" style="width: auto" name="pageSize">
+                <option [ngValue]="2">2</option>
+                <option [ngValue]="4">4</option>
+                <option [ngValue]="6">6</option>
+              </select>
+            </div>
+            <div class="ms-auto">
+              <div class="input-group input-group-with-btn mb-2">
+                <input type="text" class="form-control" placeholder="Search" />
+                <div class="input-group-append">
+                  <button class="btn btn-secondary" type="button">
+                    <i class="bi bi-search"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <table id="table_id" class="display table table-bordered">
+            <thead>
+              <tr>
+                <th translate>SELECT_ALL</th>
+                <th>Subject Sequence</th>
+                <th>Subject Code</th>
+                <th>Teachers</th>
+                <th style="width: 5%" class="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-title="Subject Name">Mathematics</td>
+                <td data-title="Subject Sequence">50</td>
+                <td data-title="Subject Code">Math 1</td>
+                <td data-title="Teachers">John doe</td>
+                <td data-title="Actions" class="action text-center actions-td">
+                  <div ngbDropdown class="d-inline-block">
+                    <button
+                      type="button"
+                      class="btn btn-secondary action-btn"
+                      id="dropdownBasic1"
+                      ngbDropdownToggle
+                    >
+                      <i
+                        class="bi bi-pencil"
+                        placement="top"
+                        ngbTooltip="Actions"
+                      ></i>
+                    </button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                      <button ngbDropdownItem (click)="openLg(contentLg)">
+                        View/Edit
+                      </button>
+                      <button ngbDropdownItem (click)="confirmBox()">
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                  <td data-title="Subject Name">Mathematics</td>
+                  <td data-title="Subject Sequence">50</td>
+                  <td data-title="Subject Code">Math 1</td>
+                  <td data-title="Teachers">John doe</td>
+                  <td data-title="Actions" class="action text-center actions-td">
+                    <div ngbDropdown class="d-inline-block">
+                      <button
+                        type="button"
+                        class="btn btn-secondary action-btn"
+                        id="dropdownBasic1"
+                        ngbDropdownToggle
+                      >
+                        <i
+                          class="bi bi-pencil"
+                          placement="top"
+                          ngbTooltip="Actions"
+                        ></i>
+                      </button>
+                      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <button ngbDropdownItem (click)="openLg(contentLg)">
+                          View/Edit
+                        </button>
+                        <button ngbDropdownItem (click)="confirmBox()">
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-title="Subject Name">Mathematics</td>
+                  <td data-title="Subject Sequence">50</td>
+                  <td data-title="Subject Code">Math 1</td>
+                  <td data-title="Teachers">John doe</td>
+                  <td data-title="Actions" class="action text-center actions-td">
+                    <div ngbDropdown class="d-inline-block">
+                      <button
+                        type="button"
+                        class="btn btn-secondary action-btn"
+                        id="dropdownBasic1"
+                        ngbDropdownToggle
+                      >
+                        <i
+                          class="bi bi-pencil"
+                          placement="top"
+                          ngbTooltip="Actions"
+                        ></i>
+                      </button>
+                      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <button ngbDropdownItem (click)="openLg(contentLg)">
+                          View/Edit
+                        </button>
+                        <button ngbDropdownItem (click)="confirmBox()">
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-title="Subject Name">Mathematics</td>
+                  <td data-title="Subject Sequence">50</td>
+                  <td data-title="Subject Code">Math 1</td>
+                  <td data-title="Teachers">John doe</td>
+                  <td data-title="Actions" class="action text-center actions-td">
+                    <div ngbDropdown class="d-inline-block">
+                      <button
+                        type="button"
+                        class="btn btn-secondary action-btn"
+                        id="dropdownBasic1"
+                        ngbDropdownToggle
+                      >
+                        <i
+                          class="bi bi-pencil"
+                          placement="top"
+                          ngbTooltip="Actions"
+                        ></i>
+                      </button>
+                      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <button ngbDropdownItem (click)="openLg(contentLg)">
+                          View/Edit
+                        </button>
+                        <button ngbDropdownItem (click)="confirmBox()">
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td data-title="Subject Name">Mathematics</td>
+                  <td data-title="Subject Sequence">50</td>
+                  <td data-title="Subject Code">Math 1</td>
+                  <td data-title="Teachers">John doe</td>
+                  <td data-title="Actions" class="action text-center actions-td">
+                    <div ngbDropdown class="d-inline-block">
+                      <button
+                        type="button"
+                        class="btn btn-secondary action-btn"
+                        id="dropdownBasic1"
+                        ngbDropdownToggle
+                      >
+                        <i
+                          class="bi bi-pencil"
+                          placement="top"
+                          ngbTooltip="Actions"
+                        ></i>
+                      </button>
+                      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <button ngbDropdownItem (click)="openLg(contentLg)">
+                          View/Edit
+                        </button>
+                        <button ngbDropdownItem (click)="confirmBox()">
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <ng-template #contentLg let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Add/Updated Subject</h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <form class="search-filter">
+          <div class="row mb-2">
+              <div class="col-sm">
+                  <div class="form-group">
+                      <label for="Keyword">Subject Name</label>
+                    <input
+                    id="subjectName"
+                    type="text"
+                    class="form-control"
+                    name="subjectName"
+                    placeholder="Subject Name"
+                  />
+                   
+                  </div>
+              </div>
+              <div class="col-sm">
+                  <div class="form-group">
+                      <label for="Keyword">Subject Code</label>
+                    <input
+                    id="subjectCode"
+                    type="text"
+                    class="form-control"
+                    name="subjectCode"
+                    placeholder="Subject Code"
+                  />
+                   
+                  </div>
+              </div>
+              <div class="col-sm">
+                  <div class="form-group">
+                      <label for="Keyword">Subject Title</label>
+                    <input
+                    id="subjectTitle"
+                    type="text"
+                    class="form-control"
+                    name="subjectTitle"
+                    placeholder="Subject Title"
+                  />
+                   
+                  </div>
+              </div>
+              <div class="col-sm">
+                  <div class="form-group">
+                      <label for="Keyword">Sequence For Result</label>
+                    <input
+                    id="subjectSequence"
+                    type="text"
+                    class="form-control"
+                    name="subjectSequence"
+                    placeholder="Sequence For Result"
+                  />
+                   
+                  </div>
+              </div>
+  
+             
+              
+          </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-light"
+        (click)="modal.close('Close click')"
+      >
+        Close
+      </button>
+      <button type="submit" class="btn btn-primary">Update</button>
+    </div>
+  </ng-template>
+  
+  <!-- confirm modal -->
+  <ng-template #confirm let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        <i class="icon-select"></i> Confirm
+      </h4>
+    </div>
+    <div class="modal-body">
+      <p class="text-center">Are you sure, you want to delete?</p>
+    </div>
+    <div class="modal-footer no-top-border">
+      <button
+        class="btn btn-primary"
+        (click)="changeSuccessMessage(); modal.close('Save click')"
+      >
+        OK
+      </button>
+      <button class="btn btn-secondary" (click)="modal.close('Save click')">
+        Cancel
+      </button>
+    </div>
+  </ng-template>
+  

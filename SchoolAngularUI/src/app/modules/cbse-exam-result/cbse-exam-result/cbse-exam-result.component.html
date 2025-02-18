@@ -1,0 +1,141 @@
+<div class="container-fluid">
+  <div class="d-flex align-items-center page-heading-wrapper">
+    <h3 class="page-heading" translate>EXAM_RESULT</h3>
+  
+  </div>
+ 
+  <div class="card mb-2 d-md-block">
+    <div class="card-body search-body">
+      <form [formGroup]="examResultForm" (ngSubmit)="onSearch()" novalidate class="search-filter">
+        <div class="row">
+          <div class="col-12 col-sm-4 col-md-4 col-lg-3">
+            <div class="form-group">
+              <label translate class="required">CLASS <span>*</span></label>
+              <select (change)="resetSelectList(f,'classId')"
+               class="form-control" [ngClass]="{ 'is-invalid': submitted && f['classId'].errors }" formControlName="classId">
+                <option [value]="null">
+                <span translate>SELECT_CLASS</span></option>
+                <option *ngFor="let item of divisionGradeMapping"
+                 [value]="item.schoolGradeDivisionMatrixId">
+                  {{ item.className }}
+                </option>
+              </select>
+              <div *ngIf="submitted && f['classId'].errors" class="invalid-feedback">
+                <div *ngIf="f['classId'].errors['required']">
+                  <span translate>CLASS</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-4 col-md-4 col-lg-3">
+              <div class="form-group">
+                <label translate class="required">EXAM_NAME <span>*</span></label>
+                <select (change)="resetSelectList(f,'examMasterId')"
+                 class="form-control" 
+                 [ngClass]="{ 'is-invalid': submitted && f['examMasterId'].errors }" 
+                 formControlName="examMasterId">
+                  <option [value]="null">
+                  <span translate>SELECT_EXAM_NAME</span></option>
+                  <option *ngFor="let item of examNameList"
+                   [value]="item.examMasterId">
+                    {{ item.examName }}
+                  </option>
+                </select>
+                <div *ngIf="submitted && f['examMasterId'].errors" class="invalid-feedback">
+                  <div *ngIf="f['examMasterId'].errors['required']">
+                    <span translate>EXAM_NAME</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 col-sm-4 col-md-4 col-lg-3">
+              <div class="form-group">
+                <label translate class="required">SUBJECT <span>*</span></label>
+                <select 
+                 (change)="resetSelectList(f,'subjectMasterId')"
+                 class="form-control" 
+                 [ngClass]="{ 'is-invalid': submitted && f['subjectMasterId'].errors }" 
+                 formControlName="subjectMasterId">
+                  <option [value]="null">
+                  <span translate>SELECT_SUBJECT</span></option>
+                  <option *ngFor="let item of subjectNameList"
+                   [value]="item.subjectMasterId">
+                    {{ item.subjectName }}
+                  </option>
+                </select>
+                <div *ngIf="submitted && f['subjectMasterId'].errors" class="invalid-feedback">
+                  <div *ngIf="f['subjectMasterId'].errors['required']">
+                    <span translate>SUBJECT</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+       
+
+          <div class="col-md-3 text-right">
+            <div class="form-group search-btns-mobile-margin">
+              <label class="d-none d-md-block">&nbsp;</label>
+              <button type="button" (click)="onReset()" class="btn btn-light" translate>
+                RESET
+              </button>
+              <button type="button"  (click)="onSearch()" class="btn btn-primary" translate>
+                SEARCH
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Start your coding from here -->
+  <div class="card mb-4">
+    <div class="card-body table-body">
+      <!-- The listing of the table has been started from here. -->
+      <div id="no-more-tables">
+      <table  datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="display table row-border hover">
+        <thead>
+          <tr> 
+            <th translate>CLASS_NAME</th>
+            <th translate>EXAM_NAME</th>
+            <th translate>SUBJECT_NAME</th>
+            <th translate>Percentage</th> 
+            <th style="width: 7%" class="text-end" translate>ACTION</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="examResultList?.length != 0">
+          <tr *ngFor="let examResult of examResultList index as i">
+              <td [attr.data-title]=" 'CLASS_NAME' | translate">{{ examResult.className }}</td>
+              <td [attr.data-title]=" 'EXAM_NAME' | translate">{{ examResult.examName}}</td>
+              <td [attr.data-title]=" 'SUBJECT_NAME' | translate">{{ examResult.subjectName }}</td>
+              <td [attr.data-title]=" 'PERCENTAGE' | translate">{{ examResult.percentage  }}</td>
+              <td [attr.data-title]=" 'ACTIONS' | translate" class="action text-center actions-td">
+              <div class="d-flex flex-wrap justify-content-end">
+                <button 
+                        type="button"
+                        class="btn btn-secondary action-btn"
+                        (click)="addExamResult(examResult)"
+                      >
+                        <span
+                          placement="top"
+                          ngbTooltip="{{ 'VIEW_EDIT' | translate }}"
+                        >
+                          <i class="bi bi-pencil"></i>
+                        </span>
+                      </button>
+                  </div>
+                </td> 
+              </tr>
+              <tr *ngIf="examResultList?.length == 0">
+                <td colspan="7" class="no-data-available" translate>NO_RECORDS_FOUND</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>

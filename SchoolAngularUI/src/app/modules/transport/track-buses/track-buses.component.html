@@ -1,0 +1,62 @@
+<div *ngIf="ActiveTrip.length > 0" [formGroup]="searchRouteForm" >
+    <div class="col-12 col-md-4">
+        <div class="form-group">
+            <label translate class="required">ROUTE </label>
+            <ng-select 
+            [items]="ActiveTrip" 
+            [multiple]="true" 
+            bindLabel="routeName" 
+            [selectableGroup]="false"
+            [closeOnSelect]="false" 
+            bindValue="routeId" 
+            placeholder="{{'SELECT_ROUTE'|translate}}"
+            formControlName="routeId" 
+            (clear)="checkSelectAllRoute()" 
+            (remove)="checkSelectAllRoute()"
+            >
+                <ng-template 
+                ng-option-tmp 
+                let-item="item" 
+                let-item$="item$" 
+                let-index="index"
+                >
+                    <input 
+                    id="item-{{ index }}" 
+                    type="checkbox" 
+                    [ngModelOptions]="{ standalone: true }"
+                    [ngModel]="item$.selected" 
+                    (change)="checkSelectAllRoute()" 
+                    />
+                    {{ item.routeName }}
+                </ng-template>
+                <ng-template ng-header-tmp>
+                    <input 
+                    type="checkbox" 
+                    [ngModelOptions]="{ standalone: true }" 
+                    (change)="selectAllOptionRoutes()"
+                    [(ngModel)]="checkSelectAllRoute" 
+                    />
+                    Select All
+                </ng-template>
+            </ng-select>
+        </div>
+
+    </div>
+    <div class="col-sm text-right">
+        <div class="form-group search-btns-mobile-margin mb-0">
+        
+            <button type="button" (click)="onReset()" class="btn btn-light float-right" translate>
+                RESET
+            </button>
+            <button type="submit" (click)="searchRoute()" class="btn btn-primary" translate>
+                SEARCH_ROUTE
+            </button>
+            <!-- <button type="button" container="body" class="btn btn-secondary btn-disabled" translate>
+            SEARCH
+        </button> -->
+        </div>
+    </div>
+</div>
+<div class="map-container">
+    <app-map [routeIds] = "routeIds"></app-map>
+</div>

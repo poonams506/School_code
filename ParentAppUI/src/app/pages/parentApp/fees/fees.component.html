@@ -1,0 +1,249 @@
+<ion-content [fullscreen]="true" class="light-content">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-card
+    class="ion-no-margin ion-card-chart animate__animated animate__fadeIn white-bg-color border-0 rounded-0 mb-0"
+  >
+    <!-- Skeletons -->
+    <ng-container *ngIf="!content_loaded">
+      <ion-card-header>
+        <div>
+          <ion-card-title>
+            <ion-skeleton-text animated style="width: 60px"></ion-skeleton-text>
+          </ion-card-title>
+          <ion-card-subtitle>
+            <ion-skeleton-text animated style="width: 80px"></ion-skeleton-text>
+          </ion-card-subtitle>
+        </div>
+        <ion-badge color="light" mode="ios">
+          <ion-skeleton-text animated style="width: 50px"></ion-skeleton-text>
+        </ion-badge>
+      </ion-card-header>
+
+      <ion-skeleton-text
+        animated
+        style="
+          width: calc(100% - 40px);
+          margin: 16px auto 16px auto;
+          min-height: 140px;
+        "
+      >
+      </ion-skeleton-text>
+    </ng-container>
+
+    <!-- Chart -->
+    <ng-container *ngIf="content_loaded">
+      <div class="fees-chart">
+        <div class="chart">
+          <canvas
+            baseChart
+            class="chart"
+            [data]="doughnutChartData"
+            [type]="doughnutChartType"
+            [labels]="doughnutChartLabels"
+            [options]="options"
+          >
+          </canvas>
+        </div>
+
+        <div class="chart-labels">
+          <div class="text-end total-fees">Total Fees : {{feePaymentDetails.totalFee  | currency:'INR'}}</div>
+          <ul>
+            <li>
+              <span class="color-dot green"></span>
+              <div>
+                <p>{{feePaymentDetails.totalPaid  | currency:'INR'}}</p>
+                <p class="text">Paid Amount</p>
+              </div>
+            </li>
+            <li>
+              <span class="color-dot red"></span>
+              <div>
+                <p>{{feePaymentDetails.totalDue  | currency:'INR'}}</p>
+                <p class="text">Due Amount</p>
+              </div>
+            </li>
+            <li>
+              <span class="color-dot blue"></span>
+              <div>
+                <p>{{feePaymentDetails.totalDiscount  | currency:'INR'}}</p>
+                <p class="text">Discount Amount</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </ng-container>
+  </ion-card>
+
+  <ng-container *ngIf="content_loaded">
+    <ion-segment
+      class="border-tab-btn"
+      [(ngModel)]="type"
+      (ionChange)="segmentChanged($event)"
+      scrollable
+    >
+      <ion-segment-button value="dues" checked>
+        <ion-label>Fees</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="history">
+        <ion-label>History</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <div [ngSwitch]="type">
+      <ion-list *ngSwitchCase="'dues'" class="light-blue-bg-color rounded-0">
+        <ng-container *ngIf="content_loaded">
+          <ion-title class="titles">Fee Particulars</ion-title>
+
+          <ion-card
+            *ngFor="let feeParticular of feePaymentDetails.feePaymentParticularSectionDtoList"
+            class="particular"
+          >
+            <ion-card-content>
+              <ul>
+                <li>
+                  <span class="title">{{feeParticular.particularName}}</span>
+                  <span class="amount">{{feeParticular.totalFee | currency:'INR'}}</span>
+                </li>
+              </ul>
+            </ion-card-content>
+          </ion-card>
+
+          <div class="payments-wrap" *ngIf="showFullDiscGrid()">
+            <ion-title class="titles">Fee Payment Terms & Discounts</ion-title>
+
+            <ion-card class="payments"  *ngFor="let feeParticular of feePaymentDetails.feePaymentAndDiscountSectionDtoList">
+              <ion-title *ngIf="showDisc(feeParticular)" class="header-title">{{feeParticular.feeWavierDisplayName}}</ion-title>
+              <ion-card-content *ngIf="showDisc(feeParticular)">
+                <ul>
+                  <li>
+                    <span class="title">Total Fees</span>
+                    <span class="amount">{{feeParticular.totalFee | currency:'INR'}}</span>
+                  </li>
+                  <li>
+                    <span class="title">Applicable Discount</span>
+                    <span class="amount">{{feeParticular.discountInPercent}}%</span>
+                  </li>
+                  <li>
+                    <span class="title">Applicable Fee</span>
+                    <span class="amount">{{feeParticular.applicableFee | currency:'INR'}}</span>
+                  </li>
+                  <li>
+                    <span class="title">Installments &nbsp;&nbsp;<span style="font-style: italic; text-decoration: underline;" (click)="setOpen(true,feeParticular.feeWavierDisplayName,feeParticular.feeWavierTypeId)">info</span></span>
+                    <span class="amount">{{ feeParticular.numberOfInstallments}}</span>
+                  </li>
+                </ul>
+                <div class="text-center" [hidden]="feePaymentDetails.feeWavierTypeId > 0 || feePaymentDetails.totalDue < 1" >
+                  <!-- <ion-button shape="round" class="pay-now-btn"
+                    >Apply</ion-button
+                  > -->
+                </div>
+                <div class="text-center"  *ngIf="feeParticular.feeWavierTypeId == feePaymentDetails.feeWavierTypeId">
+                  <ion-button shape="round" class="pay-now-btn"
+                    >Applied</ion-button
+                  >
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </div>
+        </ng-container>
+      </ion-list>
+
+      <ion-list *ngSwitchCase="'history'" class="light-blue-bg-color rounded-0">
+        <ng-container *ngIf="content_loaded">
+          <ion-card *ngFor="let reciept of feePaymentDetails.paymentHistoryReceiptDtoList" class="yellow-bg-color">
+            <ion-card-content>
+              <ul>
+                <li>
+                  <span class="left">Installment No</span>
+                  <span class="right">{{reciept.installmentNumber}}</span>
+                </li>
+                <li>
+                  <span class="left">Invoice No</span>
+                  <span class="right">{{reciept.invoiceNumber}}</span>
+                </li>
+                <li>
+                  <span class="left">Paid Amount</span>
+                  <span class="right">{{reciept.paidAmount | currency:'INR'}}</span>
+                </li>
+                <li>
+                  <span class="left">Payment Mode</span>
+                  <span class="right">{{reciept.paymentTypeName}}</span>
+                </li>
+                <li>
+                  <span class="left">Transaction Date</span>
+                  <span class="right">{{getFormattedDate(reciept.onlineTransactionDateTime)}}</span>
+                </li>
+                <li *ngIf="reciept.paymentTypeName == 'Cheque'">
+                  <span class="left">Cheque No</span>
+                  <span class="right">{{reciept.onlineTransactionId}}</span>
+                </li>
+                <li *ngIf="reciept.paymentTypeName == 'Cheque'">
+                  <span class="left">Cheque Date</span>
+                  <span class="right">{{getFormattedDate(reciept.chequeDate)}}</span>
+                </li>
+                <li *ngIf="reciept.paymentTypeName == 'Cheque'">
+                  <span class="left">Cheque Clear</span>
+                  <span class="right">{{reciept.isChequeOrDDClear}}</span>
+                </li>
+                <li *ngIf="reciept.paymentTypeName == 'DD'">
+                  <span class="left">DD No</span>
+                  <span class="right">{{reciept.onlineTransactionId}}</span>
+                </li>
+                <li *ngIf="reciept.paymentTypeName == 'DD'">
+                  <span class="left">DD Date</span>
+                  <span class="right">{{getFormattedDate(reciept.chequeDate)}}</span>
+                </li>
+                <li *ngIf="reciept.paymentTypeName == 'DD'">
+                  <span class="left">DD Clear</span>
+                  <span class="right">{{reciept.isChequeOrDDClear}}</span>
+                </li>
+               
+              </ul>
+
+              <!-- <div class="text-end download">
+                <a href="../../../../assets/thumbnail.pdf" download>
+                  <ion-icon name="attach-outline"></ion-icon> Reciept</a
+                >
+              </div> -->
+            </ion-card-content>
+          </ion-card>
+        </ng-container>
+      </ion-list>
+    </div>
+  </ng-container>
+
+  <ion-modal [isOpen]="isModalOpen"  backdropDismiss="false">
+    <ng-template>
+      <ion-header class="modal-header">
+        <ion-toolbar>
+          <ion-title color="dark-color">{{feeWavierDisplayName}}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button color="secondary" (click)="setOpen(false, null, null)">Close</ion-button>
+          </ion-buttons>
+         
+        </ion-toolbar>
+      </ion-header>
+      <!-- <ion-content class="ion-padding">
+        <ion-card class="payments"  *ngFor="let installment of installments">
+          <ion-title class="header-title">Installment No {{installment.installmentNumber}}</ion-title>
+          <ul>
+            <li>
+              <span class="title">Discount End Date</span>
+              <span class="amount">{{getFormattedDate(installment.discountEndDate)}}</span>
+            </li>
+            <li>
+              <span class="title">Late Fee Start Date</span>
+              <span class="amount">{{getFormattedDate(installment.lateFeeStartDate)}}</span>
+            </li>
+          </ul>
+        </ion-card>
+        
+      </ion-content> -->
+    </ng-template>
+  </ion-modal>
+</ion-content>
+
+

@@ -1,0 +1,152 @@
+.no-data-available {
+  text-align: center;
+}
+.page-heading-wrapper {
+  background-color: #fff;
+  padding: 7px;
+  border-radius: 6px;
+  .page-heading {
+    margin-top: 5px;
+  }
+  form {
+    width: 30%;
+    .form-group .form-control {
+      min-height: 24px !important;
+      padding: 4.5px !important;
+    }
+    .btn {
+      padding: 5px !important;
+      min-width: 65px;
+    }
+    .invalid-feedback {
+      margin-top: 0 !important;
+      line-height: 1.4 !important;
+    }
+  }
+}
+
+::ng-deep table.dataTable td.dataTables_empty {
+  display: none;
+}
+
+
+.promot-student-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0px;
+  .card-wrap {
+    flex: 1;
+    //background-color: #f1f1f1;
+    height: 30px;
+    font-size: 14px;
+    color: #000;
+    font-weight: bold;
+    &.p-btn {
+      flex: 0 0 100px;
+    }
+  }
+}
+
+.promot-student {
+  display: flex;
+  justify-content: space-between;
+  column-gap: 20px;
+  .card-wrap {
+    flex: 1;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    height: calc(100vh - 200px);
+    overflow: hidden;
+    overflow-y: auto;
+
+    &.p-btn {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex: 0 0 100px;
+      border: 0;
+      background: transparent;
+      .btn {
+        padding: 3px;
+        margin: 3px !important;
+      }
+    }
+    ul {
+      li {
+        background-color: #d7dbe3;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 5px;
+        margin-bottom: 7px;
+        display: flex;
+        align-items: center;
+        font-size: 12px !important;
+        span {
+          margin-left: 10px;
+          
+        }
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+    .all-pass {
+      background-color: #0ab39c;
+      padding: 5px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      ul {
+        li {
+          background-color: #d6f2ea;
+          border-color: #d6f2ea;
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+    .all-fail {
+      background-color: #de3e4d;
+      padding: 5px;
+      border-radius: 4px;
+      ul {
+        li {
+          background-color: #efb4ba;
+          border-color: #efb4ba;
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+    .pass-b {
+      background-color: #0ab39c !important;
+      color: #fff !important;
+    }
+    .fail-b {
+      background-color: #de3e4d !important;
+      color: #fff !important;
+
+    }
+    &.pass-fail {
+      padding: 2px;
+    }
+  }
+
+  .text-w {
+    color: #fff !important;
+  }
+  .bg-info {
+    background-color: #e7a44d !important;
+    color: #fff !important;
+  }
+  .pl-9 {
+    padding-left: 9px;
+  }
+
+  .pl-6 {
+    padding-left: 6px;
+  }
+}

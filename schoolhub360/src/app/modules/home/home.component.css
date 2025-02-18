@@ -1,0 +1,126 @@
+.ni {
+background-image: url('../../../assets/images/mainb.png');
+}
+
+
+.picsum-img-wrapper img {
+    height: 600px;
+    width: 100%;
+}
+
+.img-dash {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 470px;
+  }
+
+  .img-dash2 {
+    position: absolute;
+    top: -50px;
+    right: 200px;
+    height: 470px;
+  }
+
+
+  .back-slider-part {
+    position: relative;
+  }
+  .back-slider-part .slider__btm__part {
+    /* position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0; */
+    z-index: 1;
+  }
+  .back-slider-part .hero2__change-1 {
+    border-radius: 50%;
+    background-color: transparent;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    right: 13.3%;
+    top: 33%;
+    border: 2px solid rgba(255, 255, 255, 0.141);
+  }
+  .back-slider-part .hero2__change-1-item {
+    font-size: 18px;
+    font-weight: 800;
+    color: #ffffff;
+    position: absolute;
+    top: 15px;
+    left: 14px;
+  }
+  .back-slider-part .hero2__change-1:hover {
+    background-color: #ffffff;
+  }
+  .back-slider-part .hero2__change-1:hover i {
+    color: #000000;
+  }
+  .back-slider-part .hero2__change-2 {
+    border-radius: 50%;
+    background-color: transparent;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    right: 13.3%;
+    top: 40%;
+    border: 2px solid rgba(255, 255, 255, 0.141);
+  }
+  .back-slider-part .hero2__change-2-item {
+    font-size: 18px;
+    font-weight: 800;
+    color: #ffffff;
+    position: absolute;
+    top: 15px;
+    left: 14px;
+  }
+  .back-slider-part .hero2__change-2:hover {
+    background-color: #ffffff;
+  }
+  .back-slider-part .hero2__change-2:hover i {
+    color: #000000;
+  }
+  .back-slider-part .hero2__nav-content-1 {
+    background-color: rgba(228, 49, 112, 0.8);
+  }
+  .back-slider-part .hero2__nav-content-2 {
+    background-color: rgba(71, 50, 133, 0.8);
+  }
+  .back-slider-part .hero2__nav-content-3 {
+    background-color: rgba(205, 165, 97, 0.8);
+  }
+  .back-slider-part .hero2__nav-content-4 {
+    background-color: rgba(42, 109, 245, 0.8);
+  }
+  .back-slider-part .hero2__nav-content {
+    padding: 20px 0 20px 20px;
+  }
+  .back-slider-part .hero2__nav-content h4 {
+    font-size: 21px;
+    font-weight: 800;
+    margin: 0 0 15px;
+    color: #ffffff;
+  }
+  .back-slider-part .hero2__nav-content p {
+    font-size: 14px;
+    font-weight: 400;
+    color: #ffffff;
+    margin-bottom: 0;
+    line-height: 1.5;
+  }
+  .back-slider-part .hero2__nav-content i {
+    color: #ffffff;
+    font-size: 20px;
+  }
+
+  .w-99 {
+    width: 99.2%;
+  }
+
+  .btn-close {
+    position: absolute;
+    right: 0;
+    color: #000;
+    opacity: 1;
+  }

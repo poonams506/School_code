@@ -1,0 +1,66 @@
+<div class="card">
+  <!-- <div class="card-header">
+    <h4 translate>TEACHER_AVAILABILITY</h4>
+  </div> -->
+  <!-- <div class="card-body p-0">
+    <ngb-carousel *ngIf="teachersList && teachersList.length > 0" [showNavigationArrows]="showNavigationArrows" [showNavigationIndicators]="showNavigationIndicators"  [interval]="carouselInterval"(slide)="handleSlide($event)">
+      <ng-template ngbSlide *ngFor="let item of teachersList; let i = index">
+        <div class="picsum-img-wrapper color1">
+          <div class="teacher">{{ convertToAMPM(item.startingHour, item.startingMinute) }} - {{ convertToAMPM(item.endingHour, item.endingMinute) }}</div>
+          <div class="table-height">
+            <table id="table_id_{{i}}" class="display table table-bordered">
+              <thead>
+                <tr>
+                  <th translate>TEACHER_NAME</th>
+                  <th translate>MOBILE_NO</th>
+                  <th translate>SUBJECTS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let teacher of item.idealTeacherList">
+                  <td class="avatar-td" [attr.data-title]="'TEACHER_NAME' | translate">{{ teacher.teacherName }}</td>
+                  <td [attr.data-title]="'MOBILE_NO' | translate">{{ teacher.mobileNumber }}</td>
+                  <td [attr.data-title]="'SUBJECTS' | translate">{{ teacher.subjectNames }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-carousel>
+    <div *ngIf="teachersList?.length === 0" class="redbg font16 px-3"><i class="bi bi-exclamation-triangle"></i>
+       <span class="ms-2" translate>VIEW_TEACHER_AVAILABILITY</span>
+      </div>
+  </div> -->
+  <div class="card-body p-0">
+    <ngb-carousel  #carousel  (mouseenter)="carousel.pause()" (mouseleave)="carousel.cycle()"  *ngIf="teachersList && teachersList.length > 0" [showNavigationArrows]="showNavigationArrows" [showNavigationIndicators]="showNavigationIndicators" [interval]="carouselInterval" (slide)="handleSlide($event)" [wrap]="true">
+      <ng-template ngbSlide *ngFor="let item of teachersList; let i = index">
+        <div class="picsum-img-wrapper color1">
+          <div class="teacher">{{ convertToAMPM(item.startingHour, item.startingMinute) }} - {{ convertToAMPM(item.endingHour, item.endingMinute) }}</div>
+          <div class="table-height">
+            <table id="table_id_{{i}}" class="display table table-bordered">
+              <thead>
+                <tr>
+                  <th translate>TEACHER_NAME</th>
+                  <th translate>MOBILE_NO</th>
+                  <th translate>SUBJECTS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let teacher of item.idealTeacherList">
+                  <td class="avatar-td" [attr.data-title]="'TEACHER_NAME' | translate">{{ teacher.teacherName }}</td>
+                  <td [attr.data-title]="'MOBILE_NO' | translate">{{ teacher.mobileNumber }}</td>
+                  <td [attr.data-title]="'SUBJECTS' | translate">{{ teacher.subjectNames }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-carousel>
+    <div *ngIf="teachersList?.length === 0" class="redbg font16 px-3"><i class="bi bi-exclamation-triangle"></i>
+      <span class="ms-2" translate>VIEW_TEACHER_AVAILABILITY</span>
+    </div>
+  </div>
+  
+</div>

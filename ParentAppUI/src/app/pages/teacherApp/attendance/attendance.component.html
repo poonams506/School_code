@@ -1,0 +1,91 @@
+
+
+
+
+<ion-content [fullscreen]="true" class="light-content">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  
+  <ion-card-header class="date-header pb-0" *ngIf="selectAllShow">
+    <ion-card-subtitle class="d-flex justify-content-between dark-color">
+      Select All <ion-toggle aria-label="Success toggle" color="success" [checked]="selectAllChecked"
+        (ionChange)="onSelectAll($event)"></ion-toggle>
+    </ion-card-subtitle>
+    <ion-card-subtitle class="d-flex justify-content-between dark-color">
+      <span>{{currentDate | date: 'EEEE dd MMM'}} </span>
+      <span class="red-color">{{holidayError}}</span>
+      <span> <ion-select class="custom-select-css" (ionChange)="onClassChange($event)" [(ngModel)]="selectedClass">
+          <ion-select-option *ngFor="let classTeacherGradeDivision of classTeacherGradeDivisionList"
+            value="{{classTeacherGradeDivision.divisionId+':'+classTeacherGradeDivision.gradeId}}">Class -
+            {{classTeacherGradeDivision.className}}</ion-select-option>
+        </ion-select></span>
+    </ion-card-subtitle>
+    <ion-card-subtitle class="d-flex justify-content-between">
+      <span class="d-flex"> <ion-badge color="tertiary" class="mx-2">{{presentCount}}</ion-badge>
+        Present</span>
+      <span class="d-flex"> <ion-badge color="tertiary" class="mx-2">{{absentCount}}</ion-badge>
+        Absent</span>
+    </ion-card-subtitle>
+    <ion-card-subtitle class="d-flex justify-content-end">
+      <span class="red-color">{{isAttendanceAlreadyTaken?'Attendance already taken':''}}</span>
+    </ion-card-subtitle>
+
+  </ion-card-header>
+  <ng-container *ngIf="!content_loaded">
+    <ion-list class="list-custom animate__animated animate__fadeIn" lines="full">
+      <ion-item color="light" button detail="false" *ngFor="let i of [].constructor(12);">
+        <ion-label>
+          <h3><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></h3>
+          <p><ion-skeleton-text animated style="width: 75%"></ion-skeleton-text></p>
+        </ion-label>
+        <ion-skeleton-text slot="end" animated style="width: 15%"></ion-skeleton-text>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+
+  <ng-container *ngIf="content_loaded">
+
+
+
+
+    <ion-card class="box-wrapper" lines="none" *ngFor="let attendance of studentAttendanceList">
+      <div class="box left-b">
+
+        <span class="name">Roll No. {{attendance.rollNumber}}</span>
+        <span class="roll">{{attendance.fullName}}</span>
+        
+      </div>
+      <div class="box right-b text-end">
+        <ion-toggle aria-label="Success toggle" color="success" [checked]="isPresent(attendance)"
+          (ionChange)="onSelect($event,attendance)"></ion-toggle>
+
+        <!-- <ion-button size="small" shape="round" color="success">Present</ion-button>
+          <ion-button size="small" shape="round" color="danger">Absent</ion-button> -->
+      </div>
+    </ion-card>
+    <div style="height: 50px;"></div>
+  </ng-container>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button  id="open-modal2">
+      <ion-icon name="calendar-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
+
+<ion-footer class="footer-with-btn">
+  <ion-toolbar>
+    <ion-button expand="full" (click)="onSubmit()">Submit</ion-button>
+  </ion-toolbar>
+</ion-footer>
+
+
+<ion-modal trigger="open-modal2" [cssClass]="'bottom-end'" [keepContentsMounted]="true"
+[initialBreakpoint]="0.54">
+<ng-template>
+  <ion-datetime displayFormat="DD.MM.YYYY" [(ngModel)]="currentDate" size="cover"
+    (ionChange)="loadAttendenceList()" [showDefaultButtons]="true" presentation="date"></ion-datetime>
+
+</ng-template>
+</ion-modal>

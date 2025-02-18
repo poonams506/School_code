@@ -1,0 +1,72 @@
+<div>
+  
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title" translate>
+      SUBJECT_ORDER_NUMBER
+    </h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="close()"></button>
+  </div>
+
+  
+  <div class="modal-body">
+    <div class="row justify-content-center mb-3">
+      <div class="col-auto text-center">
+        <h4 class="m-0"><strong>Class:</strong> {{ className }}</h4>
+      </div>
+    </div>
+
+    <form [formGroup]="subjectMappingIndexForm" (ngSubmit)="onSubmit()">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th style="width: 50%;" translate>SUBJECT_NAME</th>
+              <th style="width: 50%;" translate>ORDER_NUMBER</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let subject of subjectMasterIndexList; let i = index">
+              <td>
+                <label>{{ subject.subjectName }}</label>
+              </td>
+              <td>
+                <div class="form-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    [formControlName]="'indexNumber_' + i"
+                    [placeholder]="'Enter Order Number for ' + subject.subjectName"
+                    [ngClass]="{
+                      'is-invalid': submitted && (subjectMappingIndexForm.get('indexNumber_' + i)?.invalid || duplicateErrors.includes(subjectMappingIndexForm.get('indexNumber_' + i)?.value))
+                    }"
+                    pattern="^[12]\d{2}$"
+                    (input)="clearErrorMessage()"
+                    maxlength="3"
+                  />
+                  <div *ngIf="submitted && (subjectMappingIndexForm.get('indexNumber_' + i)?.invalid || duplicateErrors.includes(subjectMappingIndexForm.get('indexNumber_' + i)?.value))" class="invalid-feedback">
+                    <div *ngIf="subjectMappingIndexForm.get('indexNumber_' + i)?.errors?.['required']">
+                      <span translate>INDEX_NUMBER_IS_REQUIRED</span>
+                    </div>
+                    <div *ngIf="subjectMappingIndexForm.get('indexNumber_' + i)?.errors?.['pattern']">
+                      <span translate>INDEX_NUMBER_MUST_BE_THREE_DIGIT_STARTING_1_OR_2</span>
+                    </div>
+                    <div *ngIf="duplicateErrors.includes(subjectMappingIndexForm.get('indexNumber_' + i)?.value)">
+                      <span translate>INDEX_NUMBER_ALREADY_EXISTS</span>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="modal-footer">
+        <div class="text-center mt-3">
+          <button type="submit" class="btn btn-primary mx-2" translate>SAVE</button>
+          <button type="button" class="btn btn-light mx-2" (click)="close()" translate>CANCEL</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

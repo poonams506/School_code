@@ -1,0 +1,43 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title" 
+    translate>BONAFIED_REASON</h4>
+</div>
+<div class="modal-body">
+    <form [formGroup]="bonafiedReasonForm" novalidate>
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group">
+              <label class="required" translate
+                >BONAFIED_REASON <span>*</span></label
+              >
+              <textarea
+                type="text"
+                formControlName="reason"
+                class="form-control"
+                placeholder="{{ 'BONAFIED_REASON' | translate }}"
+                [ngClass]="{
+                  'is-invalid': reasonSubmitted && f['reason'].errors
+                }"
+                maxlength="500"
+              ></textarea>
+              <div
+                *ngIf="reasonSubmitted && f['reason'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['reason'].errors['required']">
+                  <span translate>BONAFIED_REASON</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="generateBonafied()"
+    translate
+    >CONFIRM</button>
+    <button class="btn btn-light" (click)="close()" translate
+    >CANCEL</button>  
+</div>

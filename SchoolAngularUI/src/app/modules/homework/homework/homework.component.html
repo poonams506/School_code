@@ -1,0 +1,206 @@
+<div class="container-fluid">
+  <div class="d-flex align-items-center page-heading-wrapper">
+    <h3 class="page-heading" translate>HOMEWORK</h3>
+    <button class="btn btn-with-icon with-text btn-primary ms-auto" (click)="addHomework()" *ngIf="this.sharedPermissionServiceService.havePermission('Homework','Create')"  translate>
+      ADD_HOMEWORK
+    </button>
+    <button container="body"  ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}" *ngIf="!this.sharedPermissionServiceService.havePermission('Homework','Create')" class="btn btn-with-icon with-text btn-primary ms-auto btn-disabled"  translate>
+      ADD_HOMEWORK
+    </button>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body table-body position-relative">
+      <div class="search-body search-body-table">
+        <form class="search-filter" class="search-filter" [formGroup]="homeworkSearchForm" (ngSubmit)="searchHomework()">
+          <div class="row mb-2">
+            <div class="col-12 col-md-4" >
+              <div class="form-group mb-0">
+                <!-- <label translate class="required">CLASS <span>*</span></label> -->
+                <select class="form-control" [ngClass]="{
+                    'is-invalid': submitted && f['classId'].errors
+                  }" formControlName="classId">
+                  <option [value]="null"><span translate>SELECT_CLASS</span></option>
+                  <option *ngFor="let item of divisionGradeMapping" [value]="item.schoolGradeDivisionMatrixId">
+                    {{ item.className }}
+                  </option>
+                </select>
+                <div *ngIf="submitted && f['classId'].errors" class="invalid-feedback">
+                  <div *ngIf="f['classId'].errors['required']">
+                    <span translate>CLASS</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+           
+            <div class="col-sm text-right">
+              <div class="form-group search-btns-mobile-margin mb-0">
+                <label for="city" class="d-none">&nbsp;</label>
+                <button type="button" (click)="onReset()" class="btn btn-light" translate>
+                  RESET
+                </button>
+                <button type="submit" class="btn btn-secondary" *ngIf="this.sharedPermissionServiceService.havePermission('Homework','Read')" 
+                translate>
+                  SEARCH
+                </button>
+                <button type="button" container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}" class="btn btn-secondary btn-disabled" *ngIf="!this.sharedPermissionServiceService.havePermission('Homework','Read')" 
+                translate>
+                  SEARCH
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div id="no-more-tables">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="display table row-border hover">
+          <thead>
+            <tr>
+              <!-- <th translate>GRADE</th> -->
+              <!-- <th translate>DIVISION</th> -->
+              <th translate>CLASS</th>
+              <th translate>SUBJECT</th>
+              <th translate>HOMEWORK_TITLE</th>
+              <!-- <th translate>HOMEWORK_DESCRIPTION</th> -->
+              <th translate>START_DATE</th>
+              <th translate>END_DATE</th>
+              <th translate>STATUS</th>
+              <th translate>CREATED_BY</th>
+              <th translate>CREATED_DATE</th>
+              <th translate>MODIFIED_BY</th>
+              <th translate>MODIFIED_DATE</th>
+              <th style="width: 12%" class="text-center" translate>ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="homeworks?.length != 0">
+            <tr *ngFor="let homework of homeworks index as i">
+              <!-- <td [attr.data-title]="'GRADE' | translate">
+                {{ homework.gradeName }}
+              </td>
+              <td [attr.data-title]="'DIVISION' | translate">
+                {{ homework.divisionName }}
+              </td> -->
+              <td [attr.data-title]="'CLASS' | translate">{{ homework.gradeName }}-{{homework.divisionName}}</td>  
+              <td [attr.data-title]="'SUBJECT' | translate">
+                {{ homework.subjectName }}
+              </td>
+              <td [attr.data-title]="'HOMEWORK_TITLE' | translate">
+                {{ homework.homeworkTitle }}
+              </td>
+              <!-- <td [attr.data-title]="'HOMEWORK_DESCRIPTION' | translate">
+                  {{ homework.homeworkDescription }}
+                </td> -->
+              <td [attr.data-title]="'START_DATE' | translate">
+                {{ homework.startDate | date : 'dd/MM/yyyy'}}
+              </td>
+              <td [attr.data-title]="'END_DATE' | translate">
+                {{ homework.endDate | date : 'dd/MM/yyyy' }}
+              </td>
+              <td [attr.data-title]="'STATUS' | translate">
+                {{ homework.status}}
+              </td>
+              <td [attr.data-title]="'CREATED_BY' | translate">
+                {{ homework.createdBy}}
+              </td>
+              <td [attr.data-title]="'CREATED_DATE' | translate">
+                {{ homework.createdDate | date : 'dd/MM/yyyy'}}
+              </td>
+              <td [attr.data-title]="'MODIFIED_BY' | translate">
+                {{ homework.modifiedBy }}
+              </td>
+              <td [attr.data-title]="'MODIFIED_DATE' | translate">
+                {{ homework.modifiedDate | date : 'dd/MM/yyyy'}}
+              </td>
+              <td [attr.data-title]=" 'ACTIONS' | translate" class="action text-center actions-td">
+                <div class="d-flex flex-wrap justify-content-end">
+                  <button type="button" class="btn btn-secondary action-btn" *ngIf="this.sharedPermissionServiceService.havePermission('Homework','Read')&&homework.status!='UnPublished'"
+                    (click)="viewHomeworkDescription(homework.homeworkId)" translate>
+                    <span placement="top" ngbTooltip="{{'VIEW' | translate}}">
+                      <i class="bi bi-eye"></i>
+                    </span>
+                  </button>
+                  <button type="button" class="btn btn-secondary action-btn" *ngIf="!this.sharedPermissionServiceService.havePermission('Homework','Read')&&homework.status!='UnPublished'"
+                   translate>
+                  <span placement="top"  ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                    <i class="bi bi-eye"></i>
+                  </span>
+                </button>
+
+                  <button type="button" class="btn btn-secondary action-btn" translate
+                    (click)="publishHomework(homework.homeworkId)" *ngIf="this.sharedPermissionServiceService.havePermission('Homework','Create')&&!homework.isPublished &&  homework.status==='Unpublished'">
+
+                    <span placement="top" ngbTooltip="{{'PUBLISH' | translate}}">
+                      <i class="bi bi-box-arrow-up"></i>
+                    </span>
+                  </button> 
+                  <button type="button" class="btn btn-secondary action-btn btn-disabled" translate
+                   *ngIf="!this.sharedPermissionServiceService.havePermission('Homework','Create')&&!homework.isPublished &&  homework.status==='Unpublished'">
+
+                  <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                    <i class="bi bi-box-arrow-up"></i>
+                  </span>
+                </button> 
+
+                  <button type="button" class="btn btn-secondary action-btn" translate
+                    (click)="unPublishHomework(homework.homeworkId)" *ngIf="this.sharedPermissionServiceService.havePermission('Homework','Create')&&homework.isPublished && homework.status==='Published'">
+
+                    <span placement="top" ngbTooltip="{{'UNPUBLISH' | translate}}">
+                      <i class="bi bi-x-circle"></i>
+                    </span>
+                  </button>
+                  <button type="button" class="btn btn-secondary action-btn btn-disabled" translate
+                     *ngIf="!this.sharedPermissionServiceService.havePermission('Homework','Create')&&homework.isPublished && homework.status==='Published'">
+
+                    <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                      <i class="bi bi-x-circle"></i>
+                    </span>
+                  </button>
+
+
+                  <button type="button" *ngIf="this.sharedPermissionServiceService.havePermission('Homework','Update')"
+                    class="btn btn-secondary action-btn"
+                    (click)="editHomework(homework.homeworkId)">
+                    <span placement="top" ngbTooltip="{{ 'EDIT' | translate }}">
+                      <i class="bi bi-pencil"></i>
+                    </span>
+                  </button>
+                  <button type="button" *ngIf="!this.sharedPermissionServiceService.havePermission('Homework','Update')"
+                  class="btn btn-secondary action-btn btn-disabled">
+                  <span placement="top" 
+                  ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                    <i class="bi bi-pencil"></i>
+                  </span>
+                </button>
+
+                  <button type="button" *ngIf="this.sharedPermissionServiceService.havePermission('Homework','Delete')" 
+                    class="btn btn-danger action-btn"
+                    (click)="confirmHomeworkDelete(homework.homeworkId)">
+                    <span placement="top" 
+                    ngbTooltip="{{ 'DELETE' | translate }}">
+                      <i class="bi bi-trash"></i>
+                    </span>
+                  </button>
+                <button *ngIf="!this.sharedPermissionServiceService.havePermission('Homework','Delete')" 
+                  type="button"
+                  class="btn btn-secondary action-btn btn-disabled"
+                >
+                  <span
+                    placement="top"
+                    ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </span>
+                </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="homeworks?.length == 0">
+              <td colspan="12" class="no-data-available" translate>NO_RECORDS_FOUND</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,282 @@
+<div class="container-fluid">
+  <div class="d-flex align-items-center page-heading-wrapper">
+    <h3 class="page-heading" translate>TEACHER_TIME_TABLE</h3>
+  </div>
+  <form [formGroup]="searchTimeTableForm" (ngSubmit)="searchTimeTable()">
+    <div class="card">
+      <div class="card-body card-body-form pt-2">
+        <div class="row">
+          <div class="col-12 col-md-4">
+            <div class="form-group">
+              <label translate class="required">TEACHER <span>*</span></label>
+              <select
+                formControlName="teacherId"
+                class="form-control"
+                (change)="resetSelectList(f['teacherId'])"
+                [ngClass]="{
+                  'is-invalid': submitted && f['teacherId'].errors
+                }"
+              >
+                <option [value]="null">
+                  <span translate>SELECT_TEACHER</span>
+                </option>
+
+                <option
+                  *ngFor="let item of teacherDropdownData"
+                  [value]="item.teacherId"
+                >
+                  {{ item.teacherName }}
+                </option>
+              </select>
+              <div
+                *ngIf="submitted && f['teacherId'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['teacherId'].errors['required']">
+                  <span translate>TEACHER</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-4">
+            <div class="form-group">
+              <label translate class="required">CLASS </label>
+
+              <ng-select
+                [ngClass]="{
+                  'is-invalid': submitted && f['classId'].errors
+                }"
+                [items]="divisionGradeMapping"
+                [multiple]="true"
+                bindLabel="className"
+                [selectableGroup]="false"
+                [closeOnSelect]="false"
+                bindValue="schoolGradeDivisionMatrixId"
+                placeholder="{{'SELECT_CLASS'|translate}}"
+                formControlName="classId"
+                (clear)="checkSelectAllClass()"
+                (remove)="checkSelectAllClass()"
+              >
+                <ng-template
+                  ng-option-tmp
+                  let-item="item"
+                  let-item$="item$"
+                  let-index="index"
+                >
+                  <input
+                    id="item-{{ index }}"
+                    type="checkbox"
+                    [ngModelOptions]="{ standalone: true }"
+                    [ngModel]="item$.selected"
+                    (change)="checkSelectAllClass()"
+                  />
+                  {{ item.className }}
+                </ng-template>
+                <ng-template ng-header-tmp>
+                  <input
+                    type="checkbox"
+                    [id]="'select-all'"
+                    [ngModelOptions]="{ standalone: true }"
+                    (change)="selectAllOptionClass()"
+                    [(ngModel)]="selectAllClass"
+                  />
+                  <label [for]="'select-all'" translate>SELECT_ALL</label>
+                </ng-template>
+              </ng-select>
+              <div
+                *ngIf="submitted && f['classId'].errors"
+                class="invalid-feedback"
+              >
+                <div *ngIf="f['classId'].errors['required']">
+                  <span translate>CLASS</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm text-right">
+            <div class="form-group search-btns-mobile-margin mb-0">
+              <label for="city" class="d-none d-md-block">&nbsp;</label>
+              <button
+              type="button"
+              (click)="onReset()"
+              class="btn btn-light float-right"
+              translate
+            >
+              RESET
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              *ngIf="
+                this.sharedPermissionServiceService.havePermission(
+                  'Teacher Timetable',
+                  'Read'
+                )
+              "
+              translate
+            >
+              SEARCH_TIMETABLE
+            </button>
+            <button
+              type="button"
+              container="body"
+              ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+              class="btn btn-secondary btn-disabled"
+              *ngIf="
+                !this.sharedPermissionServiceService.havePermission(
+                  'Teacher Timetable',
+                  'Read'
+                )
+              "
+              translate
+            >
+              SEARCH
+            </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+  </form>
+
+  <div class="card mb-4">
+    <div class="card-body table-body time-calendar">
+      <div class="row cal-custom-header">
+        <div class="col-md-4">
+          <div class="btn-group">
+            <div
+              class="btn btn-outline-secondary"
+              mwlCalendarPreviousView
+              [view]="view"
+              [(viewDate)]="viewDate"
+              (viewDateChange)="closeOpenMonthViewDay()"
+
+            >
+              Previous
+            </div>
+            <div
+              class="btn btn-outline-secondary"
+              mwlCalendarToday
+              [(viewDate)]="viewDate"
+            >
+              Today
+            </div>
+            <div
+              class="btn btn-outline-secondary"
+              mwlCalendarNextView
+              [view]="view"
+              [(viewDate)]="viewDate"
+              (viewDateChange)="closeOpenMonthViewDay()"
+            >
+              Next
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 text-center">
+          <h3>{{ viewDate | calendarDate : view + "ViewTitle" : "en" }}</h3>
+        </div>
+        <div class="col-md-4 text-end">
+          <div class="btn-group">
+            <div
+              class="btn btn-outline-secondary"
+              (click)="setView(CalendarView.Month)"
+              [class.active]="view === CalendarView.Month"
+            >
+              Month
+            </div>
+            <div
+              class="btn btn-outline-secondary"
+              (click)="setView(CalendarView.Week)"
+              [class.active]="view === CalendarView.Week"
+            >
+              Week
+            </div>
+            <div
+              class="btn btn-outline-secondary"
+              (click)="setView(CalendarView.Day)"
+              [class.active]="view === CalendarView.Day"
+            >
+              Day
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <div [ngSwitch]="view">
+        <mwl-calendar-month-view
+          *ngSwitchCase="CalendarView.Month"
+          [viewDate]="viewDate"
+          [events]="events"
+          [refresh]="refresh"
+          (eventClicked)="handleEvent('Clicked', $event.event)"
+          (eventTimesChanged)="eventTimesChanged($event)"
+          [cellTemplate]="customCellTemplate"
+        >
+        </mwl-calendar-month-view>
+
+        <ng-template #customCellTemplate let-day="day" let-locale="locale">
+          <div class="cal-cell-top">
+            <span class="cal-day-badge" *ngIf="day.badgeTotal > 0">{{
+              day.badgeTotal
+            }}</span>
+            <span class="cal-day-number">{{
+              day.date | calendarDate : "monthViewDayNumber" : locale
+            }}</span>
+          </div>
+          <div *ngFor="let event of day.events; let i = index">
+            <button class="btn btn-primary w-100 m-1 day-pink" *ngIf="i < EVENT_LIMIT">
+              {{ event.title }}
+            </button>
+          </div>
+          <div *ngIf="day.events.length > EVENT_LIMIT">
+            <button class="btn btn-link" (click)="showMoreClicked(day.events)">
+              {{ day.events.length - EVENT_LIMIT }} Show More
+            </button>
+          </div>
+        </ng-template>
+        <mwl-calendar-week-view
+          *ngSwitchCase="CalendarView.Week"
+          [viewDate]="viewDate"
+          [events]="events"
+          [refresh]="refresh"
+          (eventClicked)="handleEvent('Clicked', $event.event)"
+          (eventTimesChanged)="eventTimesChanged($event)"
+        >
+        </mwl-calendar-week-view>
+        <mwl-calendar-day-view
+          *ngSwitchCase="CalendarView.Day"
+          [viewDate]="viewDate"
+          [events]="events"
+          [refresh]="refresh"
+          (eventClicked)="handleEvent('Clicked', $event.event)"
+          (eventTimesChanged)="eventTimesChanged($event)"
+        >
+        </mwl-calendar-day-view>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #showMoreModalContent let-close="close">
+    <div class="modal-header">
+      <h5 class="modal-title">Periods</h5>
+      <button type="button" class="close" (click)="close()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div *ngFor="let event of currentMoreEvents; let i = index">
+        <button class="btn btn-primary w-100 m-1">{{ event.title }}</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="close()">
+        Close
+      </button>
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,49 @@
+<div class="card">
+    <!-- <div class="card-header">
+        <h3 class="page-heading" translate>TEAMS_WORKLOAD</h3>
+    </div> -->
+
+    <div class="card-body card-height">
+        <form class="search-filter">
+            <div class="table-responsive" style="overflow-y: auto; max-height: 400px;"> 
+                <table class="table table-striped table-bordered custom-table">
+                    <thead *ngIf="teacherList && teacherList.length > 0" class="thead-dark">
+                        <tr>
+                            <th style="width: 30%;" translate>TEACHER_NAME</th>
+                            <th style="width: 15%;" translate>CAPACITY</th>
+                            <th style="width: 15%;" translate>ALLOCATION</th>
+                            <th style="width: 40%;" translate>%_ALLOCATION</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="teacherList && teacherList.length > 0">
+                        <tr *ngFor="let item of teacherList; index as i">
+                            <td [attr.data-title]="'TEACHER_NAME' | translate">{{ item.fullName }}</td>
+                            <td [attr.data-title]="'CAPACITY' | translate">{{ item.lecturePerWeek }}</td>
+                            <td [attr.data-title]="'ALLOCATION' | translate">{{ item.classTimeTableCount }}</td>
+                            <td [attr.data-title]="'%_ALLOCATION' | translate">
+                                <div class="d-flex align-items-center">
+                                    <div class="w-75 px-1">
+                                      <ngb-progressbar
+                                        type="success"
+                                        [value]="item.teacherPercentage" 
+                                        [striped]="true"
+                                        [animated]="true"
+                                        [showValue]="false"
+                                        class="w-100"
+                                      ></ngb-progressbar>
+                                    </div>
+                                    <span class="pl-2">{{ item.teacherPercentage }}%</span>
+                                </div>
+                            </td>
+                        </tr>
+                       
+                    </tbody>
+                    
+                </table>
+                <div *ngIf="!teacherList || teacherList.length === 0" class="redbg font16 px-3"><i class="bi bi-exclamation-triangle"></i>
+                    <span class="ms-2" translate>NO_TEAMS_WORKLOAD</span>
+                   </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+.no-data-available {
+    text-align: center;
+  }
+  
+  
+  ::ng-deep table.dataTable td.dataTables_empty {
+    display: none;
+  }
+
+  .day-wrap .label-title {
+    font-weight: 500;
+}
+
+.day-wrap .day-list {
+    display: flex;
+    column-gap: 30px;
+}
+
+.day-wrap .day-list .day {
+    display: flex;
+    align-items: center;
+    padding: 2px 7px;
+    background: #bdc6d178;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+  

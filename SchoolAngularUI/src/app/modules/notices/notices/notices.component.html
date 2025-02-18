@@ -1,0 +1,211 @@
+<div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>NOTICE</h3>
+      <div class="form-group mb-0 ms-5" *ngIf="roleId > 2">
+      <select 
+      class="form-control" (change)="rerender(true)"
+      [(ngModel)] = "noticeTypeTo"
+    >
+      <option value="1"translate>Sent</option>
+      <option value="2"translate>Received</option>
+    </select></div>
+      <button *ngIf="this.sharedPermissionServiceService.havePermission('Notice','Create')"
+        class="btn btn-with-icon with-text btn-primary ms-auto"
+        (click)="addNotice()"
+        translate
+      >
+        ADD_NOTICE
+      </button>
+      <button container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"  *ngIf="!this.sharedPermissionServiceService.havePermission('Notice','Create')"
+      class="btn btn-with-icon with-text btn-primary ms-auto btn-disabled"
+        
+        translate
+      >
+        ADD_NOTICE
+      </button>
+    </div>
+  
+  
+  
+    <div class="card mb-4">
+      <div class="card-body table-body">
+        <div id="no-more-tables">
+          <table
+            datatable
+            [dtOptions]="dtOptions"
+            [dtTrigger]="dtTrigger"
+            class="display table row-border hover"
+          >
+            <thead>
+              <tr>
+                <th translate>NOTICE_TITLE</th>
+                <th translate>NOTICE_TO</th>
+                <th translate>START_DATE</th>
+                <th translate>END_DATE</th>
+                <th translate>STATUS</th>
+                <th translate>CREATED_BY</th>
+                <th translate>CREATED_DATE</th>
+                <th translate>MODIFIED_BY</th>
+                <th translate>MODIFIED_DATE</th>
+                <th style="width: 12%" class="text-center" translate>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="notices?.length != 0">
+              <tr *ngFor="let notice of notices index as i">
+                <td [attr.data-title]="'NOTICE_TITLE' | translate">
+                  {{ notice.noticeTitle }}
+                </td>
+                <td [attr.data-title]="'NOTICE_TO_TYPE' | translate">
+                  {{ getNoticeTypeNameById(notice.noticeToType) }}
+                </td>
+                <td [attr.data-title]="'START_DATE' | translate">
+                  {{ notice.startDate | date : 'dd/MM/yyyy'}}
+                </td>
+                <td [attr.data-title]="'END_DATE' | translate">
+                  {{ notice.endDate | date : 'dd/MM/yyyy' }}
+                </td>
+                <td [attr.data-title]="'STATUS' | translate">
+                  {{ notice.status}}
+                </td>
+                <td [attr.data-title]="'CREATED_BY' | translate">
+                  {{ notice.createdBy}}
+                </td>
+                <td [attr.data-title]="'CREATED_DATE' | translate">
+                  {{ notice.createdDate | date : 'dd/MM/yyyy'}}
+                </td>
+                <td [attr.data-title]="'MODIFIED_BY' | translate">
+                  {{ notice.modifiedBy }}
+                </td>
+                <td [attr.data-title]="'MODIFIED_DATE' | translate">
+                  {{ notice.modifiedDate | date : 'dd/MM/yyyy'}}
+                </td>
+                <td [attr.data-title]=" 'ACTIONS' | translate" class="action text-center actions-td">
+                  <div class="d-flex flex-wrap justify-content-end">
+                    <!-- <button
+                      type="button"
+                      class="btn btn-secondary action-btn"
+                      *ngIf="this.sharedPermissionServiceService.havePermission('Notice','Read')&&notice.status!='UnPublished'"
+                      (click)="viewNoticeDescription(notice.noticeId)"
+                      translate
+                    >
+                    <span placement="top" ngbTooltip="{{'VIEW' | translate}}">
+                      <i class="bi bi-eye"></i>
+                    </span>                    
+                  </button>
+                  <button
+                  type="button"
+                  class="btn btn-secondary action-btn btn-disabled"
+                  *ngIf="!this.sharedPermissionServiceService.havePermission('Notice','Read')&&notice.status!='UnPublished'"
+                 
+                  translate
+                >
+                <span placement="top"ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                  <i class="bi bi-eye"></i>
+                </span>                    
+              </button> -->
+              <button type="button" *ngIf="this.sharedPermissionServiceService.havePermission('Notice','Read')"
+                    class="btn btn-secondary action-btn" (click)="viewNoticeDescription(notice.noticeId)"
+                    translate>
+                    <span placement="top" ngbTooltip="{{ 'VIEW' | translate }}">
+                      <i class="bi bi-eye"></i>
+                    </span>
+                  </button>
+                  <button type="button" class="btn btn-secondary action-btn btn-disabled"
+                    *ngIf="!this.sharedPermissionServiceService.havePermission('Events','Read')" translate>
+                    <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                      <i class="bi bi-eye"></i>
+                    </span>
+                  </button>
+
+                  <button type="button" class="btn btn-secondary action-btn" translate
+                  (click)="publishNotice(notice.noticeId)" *ngIf="this.sharedPermissionServiceService.havePermission('Notice','Create')&&!notice.isPublished &&  notice.status==='Unpublished' && noticeTypeTo == 1">
+
+                  <span placement="top" ngbTooltip="{{'PUBLISH' | translate}}">
+                    <i class="bi bi-box-arrow-up"></i>
+                  </span>
+                  </button> 
+                  <button type="button" class="btn btn-secondary action-btn btn-disabled" translate
+                   *ngIf="!this.sharedPermissionServiceService.havePermission('Notice','Create')&&!notice.isPublished &&  notice.status==='Unpublished' && noticeTypeTo == 1">
+
+                  <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                    <i class="bi bi-box-arrow-up"></i>
+                  </span>
+                  </button>
+
+                <button type="button" class="btn btn-secondary action-btn" translate
+                  (click)="unPublishNotice(notice.noticeId)" *ngIf="this.sharedPermissionServiceService.havePermission('Notice','Create')&&notice.isPublished && notice.status==='Published' && noticeTypeTo == 1">
+
+                  <span placement="top" ngbTooltip="{{'UNPUBLISH' | translate}}">
+                    <i class="bi bi-x-circle"></i>
+                  </span>
+                </button>
+
+                <button type="button" class="btn btn-secondary action-btn btn-disabled "translate
+                 *ngIf="!this.sharedPermissionServiceService.havePermission('Notice','Create')&&notice.isPublished && notice.status==='Published' && noticeTypeTo == 1">
+
+                <span placement="top"  ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                  <i class="bi bi-x-circle"></i>
+                </span>
+              </button>
+                    <button *ngIf="this.sharedPermissionServiceService.havePermission('Notice','Update') && noticeTypeTo == 1"
+                      type="button"
+                      class="btn btn-secondary action-btn"
+                      (click)="editNotice(notice.noticeId)"
+                    >
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'EDIT' | translate }}"
+                      >
+                        <i class="bi bi-pencil"></i>
+                      </span>
+                    </button>
+                    
+                    <button *ngIf="!this.sharedPermissionServiceService.havePermission('Notice','Update') && noticeTypeTo == 1"
+                    type="button"
+                    class="btn btn-secondary action-btn btn-disabled"
+                  >
+                    <span
+                      placement="top"
+                      ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                    >
+                      <i class="bi bi-pencil"></i>
+                    </span>
+                  </button>
+  
+                    <button *ngIf="this.sharedPermissionServiceService.havePermission('Notice','Delete') && noticeTypeTo == 1" 
+                      type="button"
+                      class="btn btn-danger action-btn"
+                      (click)="confirmNoticeDelete(notice.noticeId)"
+                    >
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'DELETE' | translate }}"
+                      >
+                        <i class="bi bi-trash"></i>
+                      </span>
+                    </button>
+                    <button *ngIf="!this.sharedPermissionServiceService.havePermission('Notice','Delete') && noticeTypeTo == 1" 
+                    type="button"
+                    class="btn btn-secondary action-btn btn-disabled"
+                  >
+                    <span
+                      placement="top"
+                      ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                    >
+                      <i class="bi bi-trash"></i>
+                    </span>
+                  </button>
+                    
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="notices?.length == 0">
+                <td colspan="12" class="no-data-available" translate>NO_RECORDS_FOUND</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  

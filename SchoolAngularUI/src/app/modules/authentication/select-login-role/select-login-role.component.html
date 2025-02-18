@@ -1,0 +1,56 @@
+
+    
+  <div class="d-flex align-items-center justify-content-center py-3">
+<div>
+      <div class="text-center logo position-relative" style="z-index:2">
+          <img src="./assets/img/newlogo.png" alt="Logo">
+        </div>
+  
+        <form class="form-signin login-with-width" [formGroup]="selectRoleForm"  (ngSubmit)="onSubmit()">
+          <p class="text-dark mt-3 text-center fw-bold"> Select Your Role</p>
+
+          <div class="row">
+              <div class="col-12">
+                <div class="form-group">
+                  <label translate class="required"
+                    >SELECT_ROLE <span>*</span></label
+                  >
+                  <select
+                    formControlName="roleId"
+                    class="form-control"
+                    [ngClass]="{
+                      'is-invalid': submitted && f['roleId'].errors
+                    }"
+                  >
+                  <option [value]="null" >
+                    <span translate>SELECT_ROLE</span>
+                  </option>
+                  <option *ngFor="let item of roles" [value]="item.roleId" >
+                    {{item.roleKey}}
+                  </option>
+                  </select>
+                  <div
+                    *ngIf="submitted && f['roleId'].errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f['roleId'].errors['required']">
+                      <span translate>Role</span>
+                      <span translate> IS_REQUIRED</span>
+                    </div>
+                  </div>
+                </div>
+            </div>
+              
+              
+          </div>
+         
+          <div class="row">
+              <div class="col-12"> <button class="btn btn-lg btn-primary w-100 mt-3" type="submit">Countiue</button></div>
+              <div class="col-12 d-flex justify-content-center">
+              <a class="forgot-password-link link-bold mt-3" (click)="login()" title="Login">Login</a>
+                </div>
+          </div>
+        </form>
+      </div>
+    </div>
+   

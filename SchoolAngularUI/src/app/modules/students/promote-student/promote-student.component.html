@@ -1,0 +1,155 @@
+<div class="container-fluid">
+  <div class="d-flex align-items-start page-heading-wrapper justify-content-between">
+        <h3 class="page-heading" translate>PROMOTE_STUDENTS</h3>
+    <form class="search-filter ms-auto" class="search-filter" [formGroup]="promoteForm" (ngSubmit)="searchPromote()">
+      <div class="row mb-0">
+        <div class="col-12 col-md-6">
+          <div class="form-group mb-0">
+            <!-- <label translate class="required">CLASS <span>*</span></label> -->
+            <select class="form-control" [ngClass]="{
+                'is-invalid': promoteSubmitted && f['classId'].errors
+              }" formControlName="classId">
+              <option [value]="null"><span translate>SELECT_CLASS</span></option>
+              <option *ngFor="let item of divisionGradeMapping" [value]="item.schoolGradeDivisionMatrixId">
+                {{ item.className }}
+              </option>
+            </select>
+            <div *ngIf="promoteSubmitted && f['classId'].errors" class="invalid-feedback">
+              <div *ngIf="f['classId'].errors['required']">
+                <span translate>CLASS</span>
+                <span translate> IS_REQUIRED</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6 text-right">
+          <div class="form-group search-btns-mobile-margin mb-0">
+            <label for="city" class="d-none">&nbsp;</label>
+            <button type="button" (click)="onReset()" class="btn btn-light" translate>
+              RESET
+            </button>
+            <button type="submit" class="btn btn-secondary" translate>
+              SEARCH
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+   <!--   <a (click)="promoteTo()" class="btn btn-with-icon with-text btn-primary" translate>PROMOTE</a>
+   <a ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"  *ngIf="!this.sharedPermissionServiceService.havePermission('Students','Create')"  class="btn btn-with-icon with-text btn-primary ms-auto btn-disabled" translate>ADD_STUDENT</a> -->
+  </div>
+
+  <div class="promot-student-header" *ngIf="promoteStudent && promoteStudent.length > 0">
+    <div class="card-wrap text-center">Students</div>
+    <div class="card-wrap p-btn"></div>
+    <div class="card-wrap text-center">Result</div>
+    <div class="card-wrap p-btn"></div>
+    <div class="card-wrap text-center">Promoted To</div>
+  </div>
+<div class="promot-student" *ngIf="promoteStudent && promoteStudent.length > 0">
+  <div class="card-wrap">
+    <div class="d-flex align-items-center pl-6">
+      <label for="isStudentSelectAll" class="custom-checkbox">
+      <input id="isStudentSelectAll" type="checkbox" [(ngModel)]="isStudentSelectAll" (change)="toggleStudentSelectAll()"> <span class="pl-9 text-b">Select All</span>
+       </label>
+    </div>
+<ul>
+  <li *ngFor="let promote of promoteStudent | mystudentfilter:0">
+    <label for="firstGridStudent{{promote.studentId}}" class="custom-checkbox">
+      <input id="firstGridStudent{{promote.studentId}}" type="checkbox" [(ngModel)]="promote.isChecked" (change)="isAllStudentSelected()"> <span>{{promote.fullName}}</span>
+    </label>                
+  </li>
+</ul>
+  </div>
+  <div class="card-wrap p-btn">
+    <button (click)="passEvent()" type="button" class="btn btn-primary" translate>
+      Pass <i class="bi bi-chevron-double-right"></i>
+    </button>
+    <button (click)="failEvent()" type="button" class="btn btn-danger" translate>
+      Fail <i class="bi bi-chevron-double-right"></i>
+    </button>
+  </div>
+  <div class="card-wrap pass-fail">
+    <div class="all-pass" *ngIf="isPassDivActive()">
+      <div class="d-flex align-items-center pl-6">
+        <label for="isPassSelectAll" class="custom-checkbox">
+          <input id="isPassSelectAll" type="checkbox" [(ngModel)]="isPassSelectAll" (change)="togglePassSelectAll()"> <span class="pl-9 text-w">Select All</span>
+        </label>
+    </div>
+      <ul>
+        <li *ngFor="let promote of promoteStudent | mystudentfilter:1"> 
+          <label for="secondGridPassStudent{{promote.studentId}}" class="custom-checkbox">
+            <input id="secondGridPassStudent{{promote.studentId}}" type="checkbox" [(ngModel)]="promote.isChecked" (change)="isAllPassSelected()"> <span>{{promote.fullName}}</span>
+          </label>               
+        </li>
+      </ul>
+    </div>
+    <div class="all-pass" *ngIf="!isPassDivActive()">
+      <div class="d-flex align-items-center pl-6">
+        <label for="isPassSelectAllDisabled" class="custom-checkbox">
+          <input id="isPassSelectAllDisabled" type="checkbox" disabled [ngModel]="isPassSelectAll"> <span class="pl-9 text-w">Select All</span>
+        </label>
+    </div>
+      <ul>
+        <li *ngFor="let promote of promoteStudent | mystudentfilter:1">       
+          <label for="secondGridPassStudentDisabled{{promote.studentId}}" class="custom-checkbox">
+            <input id="secondGridPassStudentDisabled{{promote.studentId}}" type="checkbox" disabled [ngModel]="promote.isChecked"> <span>{{promote.fullName}}</span>
+          </label>         
+        </li>
+      </ul>
+    </div>
+    <div class="all-fail" *ngIf="isFailDivActive()">
+      <div class="d-flex align-items-center pl-6">
+        <label for="isFailedSelectAll" class="custom-checkbox">
+          <input id="isFailedSelectAll" type="checkbox" [(ngModel)]="isFailedSelectAll" (change)="toggleFailedSelectAll()"> <span class="pl-9 text-w">Select All</span>
+        </label>
+      </div>
+      <ul>
+        <li *ngFor="let promote of promoteStudent | mystudentfilter:2"> 
+          <label for="secondGridFailedStudent{{promote.studentId}}" class="custom-checkbox">
+            <input id="secondGridFailedStudent{{promote.studentId}}" type="checkbox" [(ngModel)]="promote.isChecked" (change)="isAllFailedSelected()"> <span>{{promote.fullName}}</span>
+          </label>               
+        </li>
+      </ul>
+    </div>
+    <div class="all-fail" *ngIf="!isFailDivActive()">
+      <div class="d-flex align-items-center pl-6">
+        <label for="isFailedSelectAllDisabled" class="custom-checkbox">
+          <input id="isFailedSelectAllDisabled" type="checkbox" disabled [ngModel]="isFailedSelectAll"> <span class="pl-9 text-w">Select All</span>
+        </label>
+      </div>
+      <ul>
+        <li *ngFor="let promote of promoteStudent | mystudentfilter:2">
+          <label for="secondGridFailedStudentDisabled{{promote.studentId}}" class="custom-checkbox">
+            <input id="secondGridFailedStudentDisabled{{promote.studentId}}" type="checkbox" disabled [ngModel]="promote.isChecked"> <span>{{promote.fullName}}</span>
+          </label>                
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="card-wrap p-btn">
+    <button *ngIf="isPassDivActive()" (click)="promoteEvent(true)" type="button" class="btn btn-primary" translate>
+      Promote <i class="bi bi-chevron-double-right"></i>
+    </button>
+    <button *ngIf="isFailDivActive()" (click)="promoteEvent(false)" type="button" class="btn btn-danger" translate>
+      Promote <i class="bi bi-chevron-double-right"></i>
+    </button>
+  </div>
+  <div class="card-wrap">
+    <ul>
+      <li *ngFor="let promote of promoteStudent | mystudentfilter:3">                
+        <span class="badge bg-info text-dark m-0">{{getPromotedClass(promote.promotedGradeId, promote.promotedDivisionId)}}</span>
+        <span>{{promote.fullName}}</span>
+        <span class="badge bg-info text-dark m-0 ms-auto pass-b" *ngIf="promote.isPassed">Pass</span>
+        <span class="badge bg-info text-dark m-0 ms-auto fail-b" *ngIf="!promote.isPassed">Failed</span>
+      </li>
+    </ul>
+  </div>
+</div>
+ <div *ngIf="!promoteStudent || (promoteStudent && promoteStudent.length == 0)" class="text-center">
+  <span> No data found for selected grade and division</span>
+ </div>
+
+ 
+</div>

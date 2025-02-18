@@ -1,0 +1,44 @@
+<ion-header collapse="fade" [translucent]="true" class="modal-header">
+    <ion-toolbar>
+      <ion-title color="dark-color" style="font-weight: bold;">Student Info</ion-title>
+      <ion-buttons slot="end">
+        <!-- <ion-button color="primary" fill="solid" (click)="close()">
+          Close
+        </ion-button> -->
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+  <div class="out-border">
+    <div class="d-flex justify-content-between student-d">
+        <span class="bold-black-text">Student Name:  &nbsp;</span>
+        <span class="black-text" [innerHTML]="studentPopup.studentName"></span>
+    </div>
+    <div class="d-flex justify-content-between student-d">
+      <span class="bold-black-text">Class: &nbsp;</span>
+        <span class="black-text" [innerHTML]="studentPopup.className"></span>
+    </div>
+    <div class="d-flex justify-content-between student-d">
+      <span class="bold-black-text">Gender: &nbsp;</span>
+        <span class="black-text" [innerHTML]="studentPopup.gender"></span>
+    </div>
+    <div class="d-flex justify-content-between student-d mb-0">
+      <span class="bold-black-text">Contact Number: &nbsp;</span>
+        <span class="black-text" [innerHTML]="studentPopup.emergencyContactNumber"></span>
+    </div>
+  </div>
+      <div class="scan-details-btns">
+      <button class="confirm" fill="solid" (click)="confirm()">
+        Confirm
+      </button>
+      <button class="scan-more" fill="solid" (click)="ScanMore()">
+        Scan More
+      </button>
+      <button class="cancel" fill="solid" (click)="close()">
+        Cancel 
+      </button>
+    </div>
+    
+     
+      
+    </ion-content>  

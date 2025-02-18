@@ -1,0 +1,113 @@
+<ion-content class="light-content" [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div class="date-header mt-3">
+        <div class="form-control-wrapper d-flex align-items-center justify-content-between" style="gap: 1rem;">
+        <label for="classSelect" class="me-2 black-text"><strong>Select Month</strong></label>
+        <div class="custom-input-css without-label custom-width">
+          <ion-select class="custom-select-css" [(ngModel)]="selectedMonth" (ionChange)="onMonthChange($event)">
+            <ion-select-option *ngFor="let month of months" [value]="month.value">{{month.text}}</ion-select-option>
+          </ion-select>
+        </div>
+        <div class="custom-input-css without-label custom-width" style="flex: 1;">
+          <ion-select class="custom-select-css" placeholder="Sent/Received" [(ngModel)]="noticeTypeId"
+            (ionChange)="onSentReceiveChange($event)">
+            <ion-select-option value="1">Sent</ion-select-option>
+            <ion-select-option value="2">Received</ion-select-option>
+          </ion-select>
+        </div>
+      </div>
+    </div>
+  <ng-container *ngIf="!content_loaded">
+    <ion-list-header class="ion-list-header-small">
+      <ion-label><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></ion-label>
+      <ion-note color="tertiary" class="ion-note-small">
+        <ion-skeleton-text animated style="width: 40px"></ion-skeleton-text>
+      </ion-note>
+    </ion-list-header>
+
+    <ion-list class="list-custom animate__animated animate__fadeIn" lines="full">
+      <ion-item color="light" button detail="false" *ngFor="let i of [].constructor(12)">
+        <ion-avatar slot="start" class="ion-avatar-default-icon">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-avatar>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 75%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+        <ion-skeleton-text slot="end" animated style="width: 15%"></ion-skeleton-text>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+  <ng-container *ngIf="content_loaded">
+    <ion-card-header class="date-header mt-2">
+      <div class="form-control-wrapper">
+       
+      </div>
+
+    </ion-card-header>
+
+    <ion-card class="card-new-one" *ngFor="let notice of noticeList">
+      <ion-card-header>
+        <ion-card-subtitle class="class">{{noticeTypeId =='2'? teacherName: notice.noticeTo}}</ion-card-subtitle>
+      </ion-card-header>
+
+      
+      <div class="d-flex right-bg">
+        <ion-icon class="exclamation-icon" name="alert-circle" *ngIf="notice.isImportant"></ion-icon>
+        <p class="text-start"[ngClass]="{'green-color':notice.isPublished != true}">{{notice.noticeTitle}}</p>
+      </div>
+
+      <div class="new-actions" *ngIf="noticeTypeId =='1'">
+        <ion-fab>
+          <ion-fab-button>
+            <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+          </ion-fab-button>
+  
+          <ion-fab-list side="start">
+            <ion-fab-button>
+              <ion-icon name="eye-outline" (click)="openNoticeDetail(notice.noticeId)" ></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button>
+              <ion-icon name="create-sharp" (click)="editNotice($event,notice)"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button>
+              <ion-icon [name]="notice.isPublished ? 'notifications-outline' : 'notifications-off-outline'" (click)="Publish($event,notice)"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button *ngIf="!notice.isPublished">
+              <ion-icon name="trash-sharp" (click)="Delete($event, notice)"></ion-icon>
+            </ion-fab-button>            
+          </ion-fab-list>
+        </ion-fab>
+      </div>
+
+      <div class="new-actions" *ngIf="noticeTypeId == '2'">
+        <!-- For "Received" notices, show only the "View" button -->
+        <ion-fab>
+          <ion-fab-button>
+            <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-list side="start">
+            <ion-fab-button>
+              <ion-icon name="eye-outline" (click)="openNoticeDetail(notice.noticeId)"></ion-icon>
+            </ion-fab-button>
+          </ion-fab-list>
+        </ion-fab>
+      </div>
+    </ion-card>
+  </ng-container>
+
+
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button [disabled]="buttonDisabled" (click)="filter()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
+

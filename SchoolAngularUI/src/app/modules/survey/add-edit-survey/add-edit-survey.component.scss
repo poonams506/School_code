@@ -1,0 +1,147 @@
+.uploaded-file-text {
+    margin: 10px 0;
+    // background: #e0e8f8;
+    // padding: 2px 5px;
+    // padding-right: 25px;
+    font-size: 12px;
+    //position: relative;
+    border: 0;
+    display: flex;
+    .file-thumb {
+        width: 64px;
+        height: 64px;
+        border: 1px solid #ccc;
+        padding: 5px;
+        border-radius: 4px;
+        display: flex;
+        position: relative;
+        margin-right: 10px;
+        img {
+            width: 100%;
+        }
+        .delete-file {
+            position: absolute;
+            top:-3px;
+            right:-3px;
+            background-color: red;
+            width: 20px;
+            height: 20px;
+            border-radius: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            i {
+                color: #fff;
+                line-height: 1;
+            }
+    
+        }
+    }
+
+}
+
+.profile-dropzone-btn {
+    height: 40px !important;
+    min-width: 50px !important;
+    max-width: 150px !important;
+    overflow: hidden;
+    background-color: #dba13f !important;
+    border: 1px solid #dba13f !important;
+    color: #fff !important;
+    ngx-dropzone-label {
+margin: 0;
+    }
+    h5 {
+        font-size: 13px !important;
+        line-height: 1;
+        color: #fff !important;
+        opacity: 1;
+        span {
+            font-size: 13px !important;
+            line-height: 1;
+            color: #fff !important;
+        }
+    }
+}
+
+.sub-lable {
+    font-size: 12px;
+    font-style: italic;
+    margin-bottom: 0;
+    font-weight: normal;
+    line-height: 1;
+}
+
+.ck {
+    .ck-list {
+      margin-left: 0;
+      padding-left: 20px;
+    }
+  
+    .ck-list__item {
+      list-style-position: inside;
+    }
+  }
+
+  .ck-content {
+    height: 400px !important;
+  }
+
+ 
+.surveyText{
+    .surveyText-header {
+        display: flex;
+        column-gap: 50px;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        .heading {
+            flex: 0 0 24%;
+            font-weight: 600;
+        }
+    }
+    .surveyText-body {
+        display: flex;
+        column-gap: 50px;
+        margin-bottom: 10px;
+        .heading {
+            flex: 0 0 60%;
+            &.heading-btns {
+                display: flex;
+                column-gap: 5px;
+            }
+            .form-control {
+                height: 35px;
+            }
+            .btn.action-btn {
+                padding: 4px 12px;
+            }
+        }
+    }
+    .surveyText-content {
+        display: flex;
+        column-gap: 50px;
+        padding: 15px 0;
+        border-top: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
+        margin-top: 20px;
+
+    }
+}
+
+@media (max-width: 768px) {
+    .surveyText .surveyText-body {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 10px;
+    }
+  
+    .surveyText-content .heading-btns {
+      margin-top: 10px;
+    }
+  
+    .surveyText-content .heading-btns button {
+      margin-top: 5px;
+    }
+  }

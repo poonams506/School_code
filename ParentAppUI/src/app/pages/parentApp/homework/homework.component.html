@@ -1,0 +1,88 @@
+
+
+<ion-content [fullscreen]="true" class="new">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ng-container >
+    <ion-list-header class="ion-list-header-small">
+      <ion-label
+        ><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text
+      ></ion-label>
+      <ion-note color="tertiary" class="ion-note-small">
+        <ion-skeleton-text animated style="width: 40px"></ion-skeleton-text>
+      </ion-note>
+    </ion-list-header>
+
+    <!-- <ion-list
+      class="list-custom animate__animated animate__fadeIn"
+      lines="full"
+    >
+      <ion-item
+        color="light"
+        button
+        detail="false"
+        *ngFor="let i of [].constructor(12)"
+      >
+        <ion-avatar slot="start" class="ion-avatar-default-icon">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-avatar>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 75%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+        <ion-skeleton-text
+          slot="end"
+          animated
+          style="width: 15%"
+        ></ion-skeleton-text>
+      </ion-item>
+    </ion-list> -->
+  </ng-container>
+  <div class="date-header mt-3">
+    <div class="form-control-wrapper d-flex align-items-center">
+      <label for="classSelect" class="me-2 black-text"><strong>Select Month</strong></label>
+      <div class="custom-input-css without-label custom-width">
+        <ion-select class="custom-select-css" [(ngModel)]="selectedMonth" (ionChange)="onMonthChange($event)">
+          <ion-select-option *ngFor="let month of months" [value]="month.value">{{month.text}}</ion-select-option>
+        </ion-select>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="content_loaded">
+    <ion-card class="rounded-0 mt-0">
+      <ng-container *ngFor="let homeworkGroup of homeworkList">
+        <ion-list class="notice-card" >
+          <ion-card-header class="px-0">
+            <ion-card-subtitle color="dark">{{homeworkGroup[0].startDate.format('LL')}}</ion-card-subtitle>
+          </ion-card-header>
+  
+          <ion-item lines="none" *ngFor="let homework of homeworkGroup" class="admin align-items-center" (click)="openHomeworkDetail(homework)">
+            <ion-avatar slot="start">
+              <span>{{homework.homeworkTitle[0].toUpperCase()}}</span>
+            </ion-avatar>
+            <ion-label class="ms-2 black-text">
+              <span ><b>Homework Title : &nbsp;</b> </span> <span >{{homework.homeworkTitle}}</span>
+              <br>
+              <span ><b>Subject Name : &nbsp;</b> </span> <span >{{homework.subjectName}}</span>
+
+            </ion-label>
+          </ion-item>
+          
+       
+        </ion-list>
+      </ng-container>
+    
+    </ion-card>
+    <ion-card class="mt-0" *ngIf="homeworkList.length==0">
+      <ion-card-header class="nrf-header">
+        <ion-card-subtitle color="dark">No Homework Found</ion-card-subtitle>
+      </ion-card-header>
+    </ion-card>
+  </ng-container>
+
+</ion-content>

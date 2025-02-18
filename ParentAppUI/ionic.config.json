@@ -1,0 +1,8 @@
+{
+  "name": "Ionic Start Theme",
+  "integrations": {
+    "capacitor": {},
+    "cordova": {}
+  },
+  "type": "angular"
+}

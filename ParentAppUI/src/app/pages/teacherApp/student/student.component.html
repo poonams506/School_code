@@ -1,0 +1,79 @@
+<ion-content class="light-content" [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ng-container *ngIf="!content_loaded">
+    <ion-list-header class="ion-list-header-small">
+      <ion-label><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></ion-label>
+      <ion-note color="tertiary" class="ion-note-small">
+        <ion-skeleton-text animated style="width: 40px"></ion-skeleton-text>
+      </ion-note>
+    </ion-list-header>
+
+    <ion-list color="light" class="list-custom animate__animated animate__fadeIn" lines="full">
+      <ion-item color="light" button detail="false" *ngFor="let i of [].constructor(12)">
+        <ion-avatar slot="start" class="ion-avatar-default-icon">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-avatar>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 75%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+        <ion-skeleton-text slot="end" animated style="width: 15%"></ion-skeleton-text>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+
+    <ng-container *ngIf="content_loaded">
+      <div class="date-header mt-3">
+        <div class="form-control-wrapper d-flex align-items-center">
+          <label for="classSelect" class="me-2"><strong>Select Class</strong> </label>
+          <div class="custom-input-css without-label custom-width">
+            <ion-select class="custom-select-css" placeholder="Select Class" (ionChange)="onClassChange($event)"
+              [(ngModel)]="selectedClass" >
+              <ion-select-option *ngFor="let classTeacherGradeDivision of classTeacherGradeDivisionList"
+                [value]="classTeacherGradeDivision.divisionId+':'+classTeacherGradeDivision.gradeId">
+                 {{classTeacherGradeDivision.className}}
+              </ion-select-option>
+            </ion-select>
+          </div>  
+        </div>
+        
+
+      </div>
+
+      <ion-list class="list-custom animate__animated animate__fadeIn" lines="full">
+        <ion-item button routerLink="detail" detail="false" *ngFor="let student of studentList">
+          <div class="avatar-left ion-avatar-default-icon">
+            <ion-avatar slot="start">
+              <img alt="Silhouette of a person's head" src="{{student.profileImageURL?student.profileImageURL:'https://ionicframework.com/docs/img/demos/avatar.svg'}}" />
+            </ion-avatar>
+            <div class="roll">{{student.rollNumber}}</div>
+          </div>
+          <ion-label>
+            <div class="student-content">
+              <div class="title"><ion-icon name="person"></ion-icon></div>
+              <div class="value">{{student.studentName}}</div>
+            </div>
+            <div class="student-content">
+              <div class="title"><ion-icon name="people"></ion-icon></div>
+              <div class="value">{{student.gender =='M'?'Male':'Female'}}</div>
+            </div>
+            <div class="student-content">
+              <div class="title"><ion-icon name="call"></ion-icon></div>
+              <div class="value">{{student.emergencyContactNumber}}</div>
+            </div>
+          </ion-label>
+        </ion-item>
+        <div *ngIf="!studentList || studentList.length==0" class="text-center">No Student Found</div>
+
+      
+      </ion-list>
+
+    </ng-container>
+
+</ion-content>

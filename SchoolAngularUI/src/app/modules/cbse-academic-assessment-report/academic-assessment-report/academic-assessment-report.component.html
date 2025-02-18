@@ -1,0 +1,463 @@
+<div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>ACADEMIC_ASSESSMENT_REPORT</h3>
+    </div>
+
+    <div class="card mb-4 d-md-block">
+      <div class="card-body search-body">
+        <!--table search filter start-->
+        <form  [formGroup]="academicAssessmentForm" (ngSubmit)="onGenerateAcademicAssessmentReport()" class="search-filter">
+          <div class="row mb-2">
+            <div class="col-sm">
+              <div class="form-group">
+                <label translate class="required"
+                  >CLASS <span>*</span></label
+                >
+                <select (change)="resetSelectList(f,'classId')"
+                  formControlName="classId"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid': academicAssessmentSubmitted && f['classId'].errors
+                  }"
+                >
+                <option [value]="null">
+                  <span translate>SELECT_CLASS</span>
+                  </option>
+                <option *ngFor="let item of divisionGradeMapping" [value]="item.schoolGradeDivisionMatrixId" >
+                  {{item.className}}
+                </option>
+                </select>
+                <div
+                  *ngIf="academicAssessmentSubmitted && f['classId'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['classId'].errors['required']">
+                    <span translate>CLASS</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm">
+              <div class="form-group">
+                <label translate class="required"
+                  >STUDENT_NAME <span>*</span></label
+                ><select (change)="resetSelectList(f,'fullName')"
+                  formControlName="fullName"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid': academicAssessmentSubmitted && f['fullName'].errors
+                  }"
+                >
+                <option [value]="null">
+                  <span translate> SELECT_STUDENT_NAME</span>
+                  </option>
+                <option *ngFor="let item of studentDropdownList" [value]="item.studentId">
+                  {{item.fullName}}
+                </option>
+                </select>
+                <div
+                  *ngIf="academicAssessmentSubmitted && f['fullName'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['fullName'].errors['required']">
+                    <span translate>STUDENT_NAME</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-sm">
+              <div class="form-group">
+                <label translate class="required"
+                  >REPORT_CARD_TEMPLATE_NAME <span>*</span></label
+                ><select (change)="resetSelectList(f,'reportCardName')"
+                  formControlName="reportCardName"
+                  class="form-control"
+                  [ngClass]="{
+                    'is-invalid': academicAssessmentSubmitted && f['reportCardName'].errors
+                  }"
+                >
+                <option [value]="null">
+                  <span translate> SELECT_REPORT_CARD_TEMPLATE_NAME</span>
+                </option>
+                <option *ngFor="let item of reportCardTemplateDropdownList" [value]="item.examReportCardNameId">
+                  {{item.reportCardName}}
+                </option>
+                </select>
+                <div
+                  *ngIf="academicAssessmentSubmitted && f['reportCardName'].errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f['reportCardName'].errors['required']">
+                    <span translate>REPORT_CARD_TEMPLATE_NAME</span>
+                    <span translate> IS_REQUIRED</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+           
+            <div class="col-md-3 text-right">
+              <div class="form-group search-btns-mobile-margin">
+                <label for="city" class="d-none d-md-block">&nbsp;</label>
+                <button type="button" class="btn btn-light" translate (click)="onAcadenicAssessmentReportReset()">
+                  RESET
+                </button>
+                <button type="submit" class="btn btn-primary"  translate>
+                  GENERATE
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+<div *ngIf="(cBSE_AcademicAssessmentExamReportDto && cBSE_AcademicAssessmentExamReportDto.length > 0 )||( examResultListTerm2 && examResultListTerm2.length > 0)">
+  <div id="print-section" class="wrapper-width" style="border:2px solid gray; background-color: #fff;">
+    <app-print-common-header></app-print-common-header>
+    <ng-container *ngIf="objectList1 && objectList1.length > 0">
+      <div style="font-size:13px; padding:10px;">
+        <table class="table table-bordered">
+          <tbody class="text-center">
+          <tr>
+              <th translate style="background-color:#b8b4b4">{{ reporttemplateName }}</th>
+         </tr>
+        </tbody>
+      </table>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="cBSE_AcademicAssessmentReportDto">
+      <div style="font-size:13px; padding:10px;">
+      <table class="table table-bordered">
+    <tbody class="text-center">
+    <tr>
+      <th translate>STUDENT_NAME</th>
+      <td>{{cBSE_AcademicAssessmentReportDto.studentName}}</td>
+      <th translate>GENDER</th>
+      <td>{{cBSE_AcademicAssessmentReportDto.gender}}</td>
+    </tr>
+    <tr>
+      <th translate>CLASS</th>
+      <td>{{cBSE_AcademicAssessmentReportDto.gradeName}}-{{cBSE_AcademicAssessmentReportDto.divisionName}}</td>
+      <th translate>ROLL_NO</th>
+      <td>{{cBSE_AcademicAssessmentReportDto.rollNo}}</td>
+    </tr>
+    <tr>
+      <th translate>REGISTER_NUMBER</th>
+      <td colspan="3">{{cBSE_AcademicAssessmentReportDto.generalRegistrationNo}}</td>
+      
+    </tr>
+    <tr>
+      <th translate>FATHER_NAME</th>
+      <td>{{cBSE_AcademicAssessmentReportDto.fatherName}}</td>
+      <th translate>OCCUPATION</th>
+      <td>{{cBSE_AcademicAssessmentReportDto.fatherOccupation}}</td>
+      </tr>
+    <tr>
+      <th translate>MOTHER_NAME</th>
+      <td >{{cBSE_AcademicAssessmentReportDto.motherName}}</td>
+      <th translate>OCCUPATION</th>
+      <td>{{cBSE_AcademicAssessmentReportDto.motherOccupation}}</td>
+    </tr>
+    <tr>
+      <th translate>BIRTH_DATE</th>
+      <td colspan="3">{{cBSE_AcademicAssessmentReportDto.birthDate?.toDate() | date : 'dd/MM/yyyy'}}</td>
+    </tr>
+    <tr>
+      <th translate>ADDRESS</th>
+      <td colspan="3">{{cBSE_AcademicAssessmentReportDto.currentAddressLine1}}</td>
+    </tr>
+    <tr>
+      <th translate>CONTACT_NO</th>
+      <td colspan="3">{{cBSE_AcademicAssessmentReportDto.contactNo}}</td>
+    </tr>
+    <tr>
+      <th translate>HEALTH_INFO</th>
+      <th translate>HEIGHT<span>: {{cBSE_AcademicAssessmentReportDto.height}}</span></th>
+      <th translate>WEIGHT<span>:  {{cBSE_AcademicAssessmentReportDto.weight}}</span></th>
+      <th translate>BLOOD_GROUP<span>: {{cBSE_AcademicAssessmentReportDto.bloodGroup}}</span></th>
+    </tr>
+    </tbody>
+  </table>
+  </div>
+  </ng-container>
+  
+<ng-container *ngIf="objectList1 && objectList1.length > 0">
+  <div class="report-card" style="font-size: 13px; padding: 10px;">
+    <div style="background-color:#b8b4b4; padding:5px; border: 1px solid black; text-align: center; font-size:13px;font-weight: bold;"  translate>FIRST_TERM</div>
+    <table class="main-table" cellpadding="5" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+      <thead>
+        <tr>
+          <th rowspan="3" translate="">SR_NO</th>
+          <th rowspan="3" translate="">SUBJECT</th>
+          <!--<th [attr.colspan]="calculateReportTemplateColspan(uniqueObjects1,'uniqueObjects1')">{{ reporttemplateName }}</th>-->
+        </tr>
+        <tr>
+          <ng-container *ngFor="let group of uniqueObjects1">
+            <th [attr.colspan]="group.uniqueObjects1.length">{{ group.examName }}
+          </th>
+          </ng-container>
+          <th rowspan="2" translate="">TOTAL <span>({{ calculateTotalOutOfMarks(uniqueObjects1,'uniqueObjects1') }})</span></th>
+          <th rowspan="2" translate="">GRADE</th>
+        </tr>
+        <tr>
+          <ng-container *ngFor="let group of uniqueObjects1">
+            <ng-container *ngFor="let object of group.uniqueObjects1">
+              <th>{{ object.objectName }} ({{ object.outOfMarks }})</th>
+            </ng-container>
+          </ng-container>
+        </tr>
+        
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let report of subjectNamesList1; let i = index">
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td>{{ report }}</td>
+            <ng-container *ngFor="let group of uniqueObjects1">
+              <ng-container *ngFor="let object of group.uniqueObjects1">
+                <td>
+                  {{
+                    getMarksForSubjectAndObject(
+                      report,
+                      group.examName,
+                      object.objectName,
+                      objectList1
+                    ) || '0'
+                  }}
+                </td>
+              </ng-container>
+            </ng-container>
+            <td>{{ calculateSubjectTotalMarks(report,objectList1) }}</td>
+            <td>{{ calculateGrade(calculateSubjectTotalMarks(report,objectList1), calculateTotalOutOfMarks(uniqueObjects1,'uniqueObjects1')) }}</td>
+          </tr>
+        </ng-container>
+      </tbody>
+      
+    </table>
+  </div>
+</ng-container>
+<ng-container *ngIf="objectList1 && objectList1.length > 0">
+  <div style="font-size:13px; padding:10px;">
+    <table class="table table-bordered">
+      <tbody class="text-center">
+      <tr>
+          <th translate>OVERALL_MARKS</th>
+          <td>{{calculateTotalMarks(uniqueObjects1,objectList1,subjectNamesList1,'uniqueObjects1')}}/{{calculateSumOfOutOfMarks(uniqueObjects1,subjectNamesList1,'uniqueObjects1')}}</td>
+          <th translate>PERCENTAGE</th>
+          <td>{{calculatePercent(calculateTotalMarks(uniqueObjects1,objectList1,subjectNamesList1,'uniqueObjects1'),calculateSumOfOutOfMarks(uniqueObjects1,subjectNamesList1,'uniqueObjects1'))}}</td>
+          <th translate>FINAL_GRADE</th>
+          <td>{{calculateGrade(calculateTotalMarks(uniqueObjects1,objectList1,subjectNamesList1,'uniqueObjects1'),calculateSumOfOutOfMarks(uniqueObjects1,subjectNamesList1,'uniqueObjects1'))}}</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</ng-container>
+<ng-container *ngIf="co_subjectNamesList1 && co_subjectNamesList1.length > 0">
+  <div style="font-size:13px; padding:10px;">
+    <table class="table table-bordered">
+      <thead class="text-center">
+        <tr>
+          <th translate>CO_SCHOLASTIC_AREAS</th>
+          <th translate>GRADE</th>
+        </tr>
+      </thead>
+      <tbody class="text-center">
+        <tr *ngFor="let subject of co_subjectNamesList1">
+          <td>{{subject.subjectName}}
+          <td>{{subject.grade}}
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</ng-container>
+<ng-container *ngIf="objectList2 && objectList2.length > 0">
+  <div class="report-card" style="font-size: 13px; padding: 10px;">
+    <div style="background-color:#b8b4b4; padding:5px; border: 1px solid black; text-align: center; font-size:13px;font-weight: bold;" translate>SECOND_TERM</div>
+    <table class="main-table" cellpadding="5" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+      <thead>
+        <tr>
+          <th rowspan="3" translate="">SR_NO</th>
+          <th rowspan="3" translate="">SUBJECT</th>
+          <!-- <th [attr.colspan]="calculateReportTemplateColspan(uniqueObjects2,'uniqueObjects2')">{{ reporttemplateName }}</th> -->
+        </tr>
+        <tr>
+          <ng-container *ngFor="let group of uniqueObjects2">
+            <th [attr.colspan]="group.uniqueObjects2.length">{{ group.examName }}
+          </th>
+          </ng-container>
+          <th rowspan="2" translate>TOTAL <span>({{ calculateTotalOutOfMarks(uniqueObjects2,'uniqueObjects2') }})</span></th>
+          <th rowspan="2" translate>GRADE</th>
+        </tr>
+        <tr>
+          <ng-container *ngFor="let group of uniqueObjects2">
+            <ng-container *ngFor="let object of group.uniqueObjects2">
+              <th>{{ object.objectName }} ({{ object.outOfMarks }})</th>
+            </ng-container>
+          </ng-container>
+        </tr>
+        
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let report of subjectNamesList2; let i = index">
+          <tr>
+            <td>{{ i + 1 }}</td>
+            <td>{{ report }}</td>
+            <ng-container *ngFor="let group of uniqueObjects2">
+              <ng-container *ngFor="let object of group.uniqueObjects2">
+                <td>
+                  {{
+                    getMarksForSubjectAndObject(
+                      report,
+                      group.examName,
+                      object.objectName,
+                      objectList2
+                    ) || '0'
+                  }}
+                </td>
+              </ng-container>
+            </ng-container>
+            <td>{{ calculateSubjectTotalMarks(report,objectList2) }}</td>
+            <td>{{ calculateGrade(calculateSubjectTotalMarks(report,objectList2), calculateTotalOutOfMarks(uniqueObjects2,'uniqueObjects2')) }}</td>
+          </tr>
+        </ng-container>
+      </tbody>
+      
+    </table>
+  </div>
+</ng-container>
+
+
+<ng-container *ngIf="objectList2 && objectList2.length > 0">
+  <div style="font-size:13px; padding:10px;">
+    <table class="table table-bordered">
+      <tbody class="text-center">
+      <tr>
+          <th translate>OVERALL_MARKS</th>
+          <td>{{calculateTotalMarks(uniqueObjects2,objectList2,subjectNamesList2,'uniqueObjects2')}}/{{calculateSumOfOutOfMarks(uniqueObjects2,subjectNamesList2,'uniqueObjects2')}}</td>
+          <th translate>PERCENTAGE</th>
+          <td>{{calculatePercent(calculateTotalMarks(uniqueObjects2,objectList2,subjectNamesList2,'uniqueObjects2'),calculateSumOfOutOfMarks(uniqueObjects2,subjectNamesList2,'uniqueObjects2'))}}</td>
+          <th translate>FINAL_GRADE</th>
+          <td>{{calculateGrade(calculateTotalMarks(uniqueObjects2,objectList2,subjectNamesList2,'uniqueObjects2'),calculateSumOfOutOfMarks(uniqueObjects2,subjectNamesList2,'uniqueObjects2'))}}</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="co_subjectNamesList2 && co_subjectNamesList2.length > 0">
+  <div style="font-size:13px; padding:10px;">
+    <table class="table table-bordered">
+      <thead class="text-center">
+        <tr>
+          <th translate>CO_SCHOLASTIC_AREAS</th>
+          <th translate>GRADE</th>
+        </tr>
+      </thead>
+      <tbody class="text-center">
+      <tr *ngFor="let subject of co_subjectNamesList2">
+          <td>{{subject.subjectName}}
+          <td>{{subject.grade}}
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="studentMonthlyAttendanceList">
+  <div style="font-size:13px; padding:10px;">
+  <table class="table table-bordered">
+      <tbody class="text-center">
+      <tr class="custom-heading">
+        <th [attr.colspan]="studentMonthlyAttendanceList.length + 1" translate style="background-color:#b8b4b4">ATTENDANCE</th>
+      </tr>
+      <tr>
+        <th translate>MONTH</th>
+        <td *ngFor="let item of studentMonthlyAttendanceList "> {{item.monthName}}</td>
+      </tr>
+      <tr>
+        <th translate>WORKING_DAY</th>
+        <td *ngFor="let item of studentMonthlyAttendanceList "> {{item.totalWorkingDays}}</td>
+      </tr>
+      <tr>
+        <th translate>PRESENT_DAY</th>
+        <td *ngFor="let item of studentMonthlyAttendanceList "> {{item.presentDays}}</td>
+
+      </tbody>
+    </table>
+</div>
+</ng-container>
+
+  <ng-container *ngIf="cBSE_AcademicAssessmentReportDto">
+    <div style="font-size:13px; padding:10px;">
+    <table class="table table-bordered">
+  <tbody class="text-center">
+  <tr class="custom-heading">
+    <th [attr.colspan]="markGradeList.length+1" translate style="background-color:#b8b4b4">GRADE_DESCRIPTION</th>
+  </tr>
+  <tr>
+    <th translate>MARKS_RANGE</th>
+    <td *ngFor="let grade of markGradeList ">{{grade.minMark}}-{{grade.maxMark}}%</td>
+  </tr>
+  <tr>
+    <th translate>GRADE</th>
+    <td *ngFor="let grade of markGradeList ">{{grade.grade}}</td>
+  </tr> 
+  </tbody>
+</table>
+</div>
+</ng-container>
+<ng-container *ngIf="cBSE_AcademicAssessmentReportDto">
+<div class="sign-section">
+  <div class="sign-box">
+    <label for="date" translate>DATE  
+      <!-- <input type="date" id="calender" name="date"> -->
+    </label>
+    <input type="date" id="calender" name="date">
+  </div>
+  <div class="sign-box">
+    <label for="class-teacher" translate>CLASS_TEACHER</label>
+  </div>
+  <div class="sign-box">
+    <label for="parent-sign" translate>PARENT_SIGN</label>
+  </div>
+  <div class="sign-box">
+    <label for="principal" translate>PRINCIPAL</label>
+  </div>
+</div>
+</ng-container>      
+  </div>
+  </div>
+  
+  <div class="text-center" *ngIf="(objectList1 && objectList1.length > 0 )||( objectList2 && objectList2.length > 0)">
+    <br>
+    <!-- <label style="margin: 5px;" translate>
+        <input type="checkbox" [(ngModel)]="isPublished"  > 
+        IS_PUBLISHED
+      </label>
+        <input style="margin: 5px;"
+          type="date" 
+          id="calendar" 
+          [(ngModel)]="selectedDate" 
+        /> -->
+    <button type="button" class="btn btn-primary" *ngIf="this.sharedPermissionServiceService.havePermission('Character','Print')"
+    [useExistingCss]="true" ngxPrint printSectionId="print-section"
+    translate><i class="bi bi-printer"></i> PRINT</button>
+    <button type="button"  *ngIf="!this.sharedPermissionServiceService.havePermission('Character','Print')"
+      ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}" class=" btn btn-primary ms-auto btn-disabled bi bi-printer" translate> 
+      PRINT</button>  
+      <!-- <button 
+      type="button" class="btn btn-primary" 
+        translate
+      >
+       PUBLISH
+      </button>
+    </div> -->
+  
+  </div>
+  

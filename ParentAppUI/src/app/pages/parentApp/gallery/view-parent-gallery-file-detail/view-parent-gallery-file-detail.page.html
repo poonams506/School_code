@@ -1,0 +1,44 @@
+<ion-header collapse="fade" [translucent]="true" class="modal-header">
+  <ion-toolbar>
+    <ion-title color="dark-color" style="font-weight: bold;">Gallery Details</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" fill="solid" (click)="close()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-card-subtitle class="message-from">
+    <span class="bold-black-text">Gallery Title: &nbsp;</span>
+    <ion-text>{{currentGalleryOnPopup.galleryTitle}}</ion-text>
+  </ion-card-subtitle>
+  <br>
+  <ion-card-subtitle class="message-from">
+    <span class="bold-black-text">Date: &nbsp;</span>
+    <ion-text>{{currentGalleryOnPopup.startDate.format('DD-MMM-YYYY')}}</ion-text>
+  </ion-card-subtitle>
+  <br>
+  <ion-card-subtitle class="message-from inline">
+    <span class="bold-black-text">Gallery Description:&nbsp;</span>
+    <ion-text [innerHTML]="currentGalleryOnPopup.description"></ion-text>
+  </ion-card-subtitle>
+
+  <div class="download">
+    <div class="modal-body">
+      <swiper [config]="config">
+        <ng-template swiperSlide *ngFor="let item of galleryItems">
+          <h2 class="center" *ngIf="item.type === 'image'">Image</h2>
+          <h2 class="center" *ngIf="item.type === 'video'">video</h2>
+
+          <div class="media-wrapper">
+            <img *ngIf="item.type === 'image'" [src]="item.url" [alt]="item.title">
+            <iframe *ngIf="item.type === 'video'" [ngStyle]="{width: imageVideoSize.width, height: imageVideoSize.height}" [src]="sanitizeUrl(item.url)" 
+              frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+            </iframe>
+          </div>
+        </ng-template>
+        <div class="swiper-pagination" slot="pagination"></div>
+      </swiper>
+    </div>
+  </div>
+</ion-content>

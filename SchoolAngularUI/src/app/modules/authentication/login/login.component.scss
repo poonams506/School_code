@@ -1,0 +1,136 @@
+.title{  
+    color: var(--title-color);
+    font-weight: 900;
+    font-size: 30px;
+}
+.custom-button{
+    background-color: var(--button-bg-color);
+    border-color: var(--button-border-color);
+    color: var(--button-text-color);
+}
+.magic-box{
+    background-color: var(--magic-box-bg-color);
+    color: var(--magic-box-text-color);
+}
+
+.login-new-ui {
+    display: flex;
+    .left {
+        flex: 0 0 60%;
+        height: 100%;
+        background-color: #012E45;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+            width: 400px;
+        }
+    }
+    .right {
+        flex: 0 0 40%;
+        padding: 0 20px;
+        height: 100%;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .logo {
+            img {
+                width: 200px;
+            }
+        }
+    }
+}
+
+.input-group {
+    position: relative;
+    .input-icon {
+position: absolute;
+left: 6px;
+top:3px;
+z-index: 22;
+width: 24px;
+font-size: 16px;
+    }
+    .input-icon-right {
+        position: absolute;
+right: 6px;
+top:3px;
+z-index: 22;
+width: 24px;
+font-size: 16px;
+    }
+
+    input {
+        padding-left: 30px;
+        padding-right: 30px;
+        border-radius: 4px !important;
+    }
+}
+
+
+
+.modal-header {
+    padding: 8px;
+    
+}
+
+.modal-body {
+   
+    padding-top: 10px;
+    padding-bottom: 10px;
+    .btn {
+        padding: 7px 5px;
+        margin-top: 20px;
+    }
+    .icon-top {
+        line-height: 1;
+        padding-bottom: 20px;
+        i {
+            font-size: 40px;
+            color: #e37e31;
+        }
+    }
+    .btn-close {
+        position: absolute;
+        right: 10px;
+        top:10px;
+        &:focus {
+outline: 0;
+box-shadow: none;
+        }
+    }
+    .modal-title {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+  
+    span {
+        font-size: 14px;
+        line-height: 1.5;
+        font-weight: 400;
+        margin-left: 0px;
+        padding: 10px 0;
+        display: block;
+        text-align: center;
+    }
+}
+.forgot-p {
+    text-decoration: underline;
+font-size: 13px;
+color: #212529;
+}
+
+@media (max-width: 768px) {
+    .login-new-ui {
+        .left{
+            display: none;
+        }
+        .right {
+
+            flex: 0 0 100%;
+        }
+    }
+  }

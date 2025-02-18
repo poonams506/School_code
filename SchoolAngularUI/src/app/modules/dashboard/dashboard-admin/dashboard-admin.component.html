@@ -1,0 +1,197 @@
+<div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>DASHBOARD</h3>
+    </div>
+    <div class="dashboard-wrapper">
+      <div class="charts-widgets">
+        <div class="main-card">
+          <div class="card" *ngIf="feeCollectionPercentage">
+            <div class="card-header">
+              <h4 translate>FEES_COLLECTION</h4>
+            </div>
+            <div class="card-body">
+              <div class="text-count color1">
+                <span class="text" translate>TODAY'S_FEE_COLLECTION</span>
+                <span class="count">{{feeCollectionPercentage.todaysCollection | currency:"&#8377;"}}</span>
+              </div>
+  
+              <div class="text-count color2">
+                <span class="text" translate>FEE_COLLECTION_IN_CURRENT_MONTH</span>
+                <span class="count">{{feeCollectionPercentage.monthlyCollection | currency:"&#8377;"}}</span>
+              </div>
+  
+              <div class="text-count color3">
+                <span class="text" translate>FEE_COLLECTION_TILL_DATE_IN_AY</span>
+                <span class="count">{{feeCollectionPercentage.tillDateCollection | currency:"&#8377;"}}</span>
+              </div>
+            </div>
+          </div>
+  
+          <div class="card" *ngIf="attendancePercentage">
+            <div class="card-header">
+              <h4 translate>ATTENDANCE_%</h4>
+            </div>
+            <div class="card-body">
+              <div class="text-count p-0 mb-4">
+                <span class="text" translate>TODAY'S_ATTENDANCE</span>
+                <ngb-progressbar class="mb-3" [showValue]="true" type="success"
+                  [value]="attendancePercentage.todaysAttendance" [height]="height" />
+                 <span *ngIf="attendancePercentage.todaysAttendance == 0" class="zero-attendance">0%</span>
+              </div>
+  
+              <div class="text-count p-0 mb-4">
+                <span class="text" translate>CURRENT_MONTH_ATTENDANCE</span>
+                <ngb-progressbar class="mb-3" [showValue]="true" type="info"
+                  [value]="attendancePercentage.monthlyAttendance" [height]="height" />
+  
+              </div>
+  
+              <div class="text-count p-0">
+                <span class="text" translate>TILL_DATE_ATTENDANCE_IN_AY</span>
+                <ngb-progressbar class="mb-3" [showValue]="true" type="warning"
+                  [value]="attendancePercentage.tillDateAttendance" [height]="height" />
+  
+              </div>
+            </div>
+          </div>
+          <div class="card" *ngIf="addmissionCount">
+            <div class="card-header">
+              <h4 translate>ADDMISSION</h4>
+            </div>
+            <div class="card-body">
+              <div class="text-count p-0 mb-2">
+                <span class="text" translate>TODAY'S_NEW_ADDMISSION</span>
+                <span class="count color1"><i class="bi bi-journal-text"></i> &nbsp;&nbsp;
+                  {{addmissionCount.todaysAddmissions}}</span>
+  
+              </div>
+  
+              <div class="text-count p-0 mb-2">
+                <span class="text" translate>CURRENT_MONTHS_NEW_ADDMISION</span>
+                <span class="count color2"><i class="bi bi-journal-text"></i>
+                  &nbsp;&nbsp;{{addmissionCount.monthlyAddmissions}}</span>
+  
+              </div>
+  
+              <div class="text-count p-0">
+                <span class="text" translate>TILL_DATE_NEW_ADDMISSION_IN_AY</span>
+                <span class="count color3"><i class="bi bi-journal-text"></i>
+                  &nbsp;&nbsp;{{addmissionCount.tillDateAddmissions}}</span>
+  
+              </div>
+            </div>
+          </div>
+  
+          <div class="card" *ngIf="girlsBoysCount">
+            <div class="card-header">
+              <h4 translate>STUDENTS</h4>
+            </div>
+            <div class="card-body">
+              <div class="text-count p-0 mb-2">
+                <span class="text" translate>TOTAL_STUDENT_COUNTS</span>
+                <span class="count color6"><img src="../../../assets/img/users.svg" style="width:24px" />
+                  &nbsp;&nbsp;{{girlsBoysCount.totalCount}}</span>
+  
+              </div>
+  
+              <div class="text-count p-0 mb-2">
+                <span class="text" translate>TOTAL_BOYS_COUNT</span>
+                <span class="count color4"><img src="../../../assets/img/boy.svg" style="width:24px" />
+                  &nbsp;&nbsp;{{girlsBoysCount.boysCount}}</span>
+  
+              </div>
+  
+              <div class="text-count p-0">
+                <span class="text" translate>TOTAL_GIRLS_COUNT</span>
+                <span class="count color5"><img src="../../../assets/img/girl2.svg" style="width:24px" />
+                  &nbsp;&nbsp;{{girlsBoysCount.girlsCount}}</span>
+  
+              </div>
+            </div>
+          </div>
+        </div>
+  
+  
+        <div class="card">
+          <div class="card-header">
+            <h4 translate>TEACHER_AVAILABILITY</h4>
+          </div>
+          <div class="card-body p-0">
+            <div class="card-body p-0 attendance-height">
+              <app-teacher-availability></app-teacher-availability>
+              </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="charts-widgets charts-widgets2">
+  
+        <div class="card" *ngIf="schoolEventDto">
+          <div class="card-header">
+            <h4 translate>UPCOMING_EVENTS</h4>
+          </div>
+          <div class="card-body announcement">
+            
+            <div *ngIf="!schoolEventDto.schoolMonthEventList || schoolEventDto.schoolMonthEventList.length == 0" class="redbg font16 px-3"><i class="bi bi-exclamation-triangle"></i>
+              <span class="ms-2" translate>THERE_IS_NO_UPCOMING_EVENTS_IN_NEXT_30_DAYS</span>
+             </div>
+
+            <marquee onmouseover="this.stop();" onmouseout="this.start();" width="100%" direction="up" scrollamount="2" height="100%">
+              <ul>
+                <li *ngFor="let event of schoolEventDto.schoolMonthEventList">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="date">{{event.startDate?.toDate() | date:"dd MMM, yyyy"}}</span>
+                  </div>
+                  <div class="message-content color1">
+                    <div class="desc">
+                      <span class="event-name">{{event.eventTitle}}</span>                   
+                      <span class="time" *ngIf="event.startTime && event.endTime">{{ event.startTime?.toDate()| date:'shortTime'}} To {{ event.endTime?.toDate()| date:'shortTime'}}</span>
+                      <span class="time" *ngIf="event.startTime && !event.endTime">
+                        {{ event.startTime?.toDate()| date:'shortTime'}}  
+                    </span>
+                      <div [innerHTML]="event.eventDescription"></div>
+                      <div> <b> Location:</b> {{event.eventVenue}} </div>
+                      <div><b> Co-Ordinator:</b> {{event.eventCoordinator}}</div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </marquee>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h4 translate>TEAMS_WORKLOAD</h4>
+          </div>
+          <div class="card-body p-0">
+            <app-teaching-load-analyser-report></app-teaching-load-analyser-report>
+          </div>
+        </div>
+  
+      </div>
+  
+  
+  
+      <div class="charts-widgets charts-widgets2">
+  
+        <div class="card">
+          <div class="card-header">
+            <h4 translate>STAFFS</h4>
+          </div>
+          <div class="card-body p-0">
+            <app-teacher-count-per-subject-report></app-teacher-count-per-subject-report>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+             <h4 translate>MISSING_ATTENDANCE_REPORT</h4> 
+          </div> 
+          <div class="card-body p-0 attendance-height">
+            <app-class-attendance-misssing-report></app-class-attendance-misssing-report>
+          </div>
+        </div>
+  
+       
+      </div>
+    </div>
+  </div>

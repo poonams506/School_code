@@ -1,0 +1,96 @@
+
+<div class="container-fluid">
+  <div class="d-flex align-items-center page-heading-wrapper">
+    <h3 class="page-heading" translate>GRADE_MASTER</h3>
+    <button class="btn btn-with-icon with-text btn-primary ms-auto" (click)="addGrade()" *ngIf="this.sharedPermissionServiceService.havePermission('Grade','Create')"  class="btn btn-with-icon with-text btn-primary ms-auto" translate>ADD_GRADE</button>
+    <button container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"  *ngIf="!this.sharedPermissionServiceService.havePermission('Grade','Create')"  class="btn btn-with-icon with-text btn-primary ms-auto btn-disabled" translate>ADD_GRADE</button>
+    <button class="btn btn-with-icon  btn-primary">
+      <i class="bi bi-box-arrow-in-down"></i>
+    </button>
+   
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-body table-body">
+      <!--table listing statrt-->
+      <div id="no-more-tables">
+         
+        <table  datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="display table row-border hover">
+          <thead>
+            <tr> 
+              <!-- <th translate>GRADE_ID</th> -->
+              <th translate>GRADE_NAME</th>
+              <th style="width: 7%" class="text-end" translate>ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="grades?.length != 0">
+            <tr *ngFor="let grade of grades index as i">
+                <!-- <td [attr.data-title]=" 'GRADE_ID' | translate">{{ grade.gradeId }}</td> -->
+                <td [attr.data-title]=" 'GRADE_NAME' | translate">{{ grade.gradeName }}</td>
+
+                <td [attr.data-title]=" 'ACTIONS' | translate" class="action text-center actions-td">
+                  <div class="d-flex flex-wrap justify-content-end">
+                    <button *ngIf="this.sharedPermissionServiceService.havePermission('Grade','Update')" 
+                      type="button"
+                      class="btn btn-secondary action-btn"
+                      (click)="editGrade(grade)"
+                    >
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'VIEW_EDIT' | translate }}"
+                      >
+                        <i class="bi bi-pencil"></i>
+                      </span>
+                    </button>
+                    <button *ngIf="!this.sharedPermissionServiceService.havePermission('Grade','Update')" 
+                    type="button"
+                    class="btn btn-secondary action-btn btn-disabled"
+                  >
+                    <span
+                      placement="top"
+                      ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                    >
+                      <i class="bi bi-pencil"></i>
+                    </span>
+                  </button>
+  
+                    <button *ngIf="this.sharedPermissionServiceService.havePermission('Grade','Delete')" 
+                      type="button"
+                      class="btn btn-danger action-btn"
+                      (click)="confirmGradeDelete(grade)" 
+                    >
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'DELETE' | translate }}"
+                      >
+                        <i class="bi bi-trash"></i>
+                      </span>
+                    </button>
+                    <button *ngIf="!this.sharedPermissionServiceService.havePermission('Grade','Delete')" 
+                    type="button"
+                    class="btn btn-secondary action-btn btn-disabled"
+                  >
+                    <span
+                      placement="top"
+                      ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                    >
+                      <i class="bi bi-trash"></i>
+                    </span>
+                  </button>
+                  </div>
+                </td>
+
+            </tr>
+            <tr *ngIf="grades?.length == 0">
+              <td colspan="7" class="no-data-available" translate>NO_RECORDS_FOUND</td>
+            
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+    
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,130 @@
+
+  
+  <div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>CLERK</h3>
+      <button class="btn btn-with-icon with-text btn-primary ms-auto" (click)="addClerk()" *ngIf="this.sharedPermissionServiceService.havePermission('Clerk','Create')" translate>ADD_CLERK</button>
+      <button class="btn btn-with-icon with-text btn-primary ms-auto  btn-disabled" container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}" *ngIf="!this.sharedPermissionServiceService.havePermission('Clerk','Create')" translate>ADD_CLERK</button>
+      <!-- <button class="btn btn-with-icon  btn-primary">
+        <i class="bi bi-box-arrow-in-down"></i>
+      </button> -->
+  </div>
+
+  
+    <div class="card mb-4">
+      <div class="card-body table-body">
+        <!--table listing statrt-->
+        <div id="no-more-tables">
+        
+
+          <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="display table row-border hover">
+            <thead>
+              <tr>
+                <th style="width: 10%;" translate>FULL_NAME</th>
+                <th style="width: 10%;" translate>MOBILE_NUMBER</th>
+                <th style="width: 10%;" translate>ADDRESS</th>
+                <th style="width: 10%;" translate>EMAIL_ID</th>
+                <th style="width: 10%;" translate>APP_ACCESS_USER_ID</th>
+                <th style="width: 10%;" class="text-end" translate>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="clerks?.length != 0">
+              <tr *ngFor="let clerk of clerks index as i">
+                  <td [attr.data-title]=" 'FULL_NAME' | translate">{{ clerk.fullName }}</td>
+                  <td [attr.data-title]=" 'MOBILE_NUMBER' | translate">{{ clerk.mobileNumber }}</td>
+                  <td [attr.data-title]=" 'ADDRESS' | translate">{{ clerk.address }}</td>
+                  <td [attr.data-title]=" 'EMAIL_ID' | translate">{{ clerk.emailId }}</td>
+                  <td [attr.data-title]=" 'AppAccessUserId' | translate">{{ clerk.appAccessMobileNo }}</td>
+                  <td [attr.data-title]=" 'ACTIONS' | translate" class="action text-center actions-td">
+                    <div class="d-flex flex-wrap justify-content-end">
+                      <button  *ngIf="this.sharedPermissionServiceService.havePermission('Clerk','Update')"
+                        type="button"
+                        class="btn btn-secondary action-btn"
+                        (click)="editClerk(clerk)"
+                      >
+                        <span
+                          placement="top"
+                          ngbTooltip="{{ 'VIEW_EDIT' | translate }}"
+                        >
+                          <i class="bi bi-pencil"></i>
+                        </span>
+                      </button>
+                      <button  *ngIf="!this.sharedPermissionServiceService.havePermission('Clerk','Update')"
+                      type="button"
+                      class="btn btn-secondary action-btn btn-disabled"
+                    >
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+
+                      >
+                        <i class="bi bi-pencil"></i>
+                      </span>
+                    </button>
+    
+                    <button *ngIf="this.sharedPermissionServiceService.havePermission('Clerk','Update') && clerk.appAccessMobileNo" 
+                    type="button"
+                    class="btn btn-secondary action-btn"
+                    (click)="resetPassword(clerk)"
+                  >
+                    <span
+                      placement="top"
+                      ngbTooltip="{{ 'Reset Password' | translate }}"
+                    >
+                      <i class="bi bi-bootstrap-reboot"></i>
+                    </span>
+                  </button>
+                  <button *ngIf="!this.sharedPermissionServiceService.havePermission('Clerk','Update') && clerk.appAccessMobileNo" 
+                  type="button"
+                  class="btn btn-secondary action-btn btn-disabled"
+                >
+                  <span
+                    placement="top"
+                    ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                  >
+                    <i class="bi bi-bootstrap-reboot"></i>
+                  </span>
+                </button>
+
+                      <button *ngIf="this.sharedPermissionServiceService.havePermission('Clerk','Delete')"
+                        type="button"
+                        class="btn btn-danger action-btn"
+                        (click)="confirmClerkDelete(clerk)"
+                      >
+                        <span
+                          placement="top"
+                          ngbTooltip="{{ 'DELETE' | translate }}"
+                        >
+                          <i class="bi bi-trash"></i>
+                        </span>
+                      </button>
+                      <button  *ngIf="!this.sharedPermissionServiceService.havePermission('Clerk','Delete')"
+                      type="button"
+                      class="btn btn-secondary action-btn btn-disabled"
+                    >
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+
+                      >
+                        <i class="bi bi-trash"></i>
+                      </span>
+                    </button>
+
+                    
+                    </div>
+                  </td>
+              </tr>
+              <tr *ngIf="clerks?.length == 0">
+                <td colspan="7" class="no-data-available" translate>NO_RECORDS_FOUND</td>
+              </tr>
+            </tbody>
+  
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  

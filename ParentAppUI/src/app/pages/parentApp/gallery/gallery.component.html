@@ -1,0 +1,58 @@
+<ion-content [fullscreen]="true" class="new">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ng-container *ngIf="!content_loaded">
+    <ion-list-header class="ion-list-header-small">
+      <ion-label><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></ion-label>
+      <ion-note color="tertiary" class="ion-note-small">
+        <ion-skeleton-text animated style="width: 40px"></ion-skeleton-text>
+      </ion-note>
+    </ion-list-header>
+
+    <ion-list class="list-custom animate__animated animate__fadeIn" lines="full">
+      <ion-item color="light" button detail="false" *ngFor="let i of [].constructor(12)">
+        <ion-avatar slot="start" class="ion-avatar-default-icon">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-avatar>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 75%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+        <ion-skeleton-text slot="end" animated style="width: 15%"></ion-skeleton-text>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+  <ng-container *ngIf="content_loaded">
+    <ion-card class="rounded-0 mt-5" *ngIf="galleryList.length>0">
+      <ng-container *ngFor="let galleryGroup of galleryList">
+        <ion-list class="gallery-card">
+          <ion-card-header class="px-0">
+            <ion-card-subtitle color="dark">{{galleryGroup[0].startDate.format('LL')}}</ion-card-subtitle>
+          </ion-card-header>
+
+          <ion-item lines="none" *ngFor="let gallery of galleryGroup" class="admin align-items-center"
+            (click)="openGalleryDetail(gallery)">
+            <ion-avatar slot="start">
+              <span class="black-text">{{ gallery.galleryTitle[0].toUpperCase() }}</span>
+            </ion-avatar>
+            <ion-label class="ms-2 black-text">
+              <span ><b>Gallery Title : &nbsp;</b> </span> <span >{{gallery.galleryTitle}}</span>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ng-container>
+
+    </ion-card>
+    <ion-card class="mt-5" *ngIf="galleryList.length==0">
+      <ion-card-header class="nrf-header">
+        <ion-card-subtitle color="dark">No Gallery Found</ion-card-subtitle>
+      </ion-card-header>
+    </ion-card>
+  </ng-container>
+
+</ion-content>

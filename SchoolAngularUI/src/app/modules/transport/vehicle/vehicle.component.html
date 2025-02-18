@@ -1,0 +1,147 @@
+
+<div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>VEHICLE</h3>
+      <button class="btn btn-with-icon with-text btn-primary ms-auto" (click)="addVehicle()" *ngIf="this.sharedPermissionServiceService.havePermission('Vehicle Management','Create')"  class="btn btn-with-icon with-text btn-primary ms-auto" translate>ADD_VEHICLE</button>
+      <button container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"  *ngIf="!this.sharedPermissionServiceService.havePermission('Vehicle Management','Create')"  class="btn btn-with-icon with-text btn-primary ms-auto btn-disabled" translate>ADD_VEHICLE</button>
+    </div>
+    
+  
+    <div class="card mb-4">
+      <div class="card-body table-body">
+        <!--table listing statrt-->
+        <div id="no-more-tables">
+           
+          <table  datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="display table row-border hover">
+            <thead>
+              <tr> 
+                <th  style="width: 15%;" translate>REGISTRATION_NO</th>
+                <th  style="width: 10%;" translate>VEHICLE_NO</th>
+                <th  style="width: 10%;" translate>TOTAL_SEATS</th>
+                <th  style="width: 20%;" translate>CAB_DRIVER</th>
+                <th  style="width: 20%;" translate>PROVIDER_NAME</th>
+                <th  style="width: 10%;" translate>STATUS</th>
+                <th  style="width: 15%" class="text-end" translate>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="vehicleList?.length != 0">
+              <tr *ngFor="let vehicle of vehicleList index as i">
+                  <td [attr.data-title]=" 'REGISTRATION_NUMBER' | translate">{{ vehicle.ragistrationNumber }}</td>
+                  <td [attr.data-title]=" 'VEHICLE_NUMBER' | translate">{{ vehicle.vehicleNumber }}</td>
+                  <td [attr.data-title]=" 'TOTAL_SEATS' | translate">{{ vehicle.totalSeats}}</td>
+                  <td [attr.data-title]=" 'CAB_DRIVER' | translate">{{ vehicle.cabDriverName }}</td>
+                  <td [attr.data-title]=" 'PROVIDER_NAME' | translate">{{vehicle.providerName }}</td>
+                  <td [attr.data-title]="'STATUS' | translate"> {{ vehicle.status }} </td>
+                  <td [attr.data-title]=" 'ACTIONS' | translate" class="action text-center actions-td">
+                    
+                    <div class="d-flex flex-wrap justify-content-end">
+                      <button type="button" *ngIf="this.sharedPermissionServiceService.havePermission('Vehicle Management','Read')"
+                      class="btn btn-secondary action-btn" 
+                      (click)="viewSchoolEventDescription(vehicle)"
+                      translate>
+                      <span placement="top" ngbTooltip="{{ 'VIEW' | translate }}">
+                        <i class="bi bi-eye"></i>
+                      </span>
+                    </button>
+                    <button type="button" class="btn btn-secondary action-btn btn-disabled"
+                      *ngIf="!this.sharedPermissionServiceService.havePermission('Vehicle Management','Read')" translate>
+                      <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                        <i class="bi bi-eye"></i>
+                      </span>
+                    </button>
+                      <!-- <button type="button" class="btn btn-secondary action-btn" translate
+                      (click)="vehicle.vehicleId && activeVehicle(vehicle.vehicleId)"
+                      *ngIf="this.sharedPermissionServiceService.havePermission('Events','Create')&& vehicle.status === 'InActive'">
+                      <span placement="top" ngbTooltip="{{ 'ACTIVE' | translate }}">
+                        <i class="bi bi-box-arrow-up"></i>
+                      </span>
+                    </button>
+                    
+                    <button type="button" class="btn btn-secondary action-btn btn-disabled" translate
+                      *ngIf="!this.sharedPermissionServiceService.havePermission('Events','Create')&&vehicle.status === 'InActive'">
+  
+                      <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                        <i class="bi bi-box-arrow-up"></i>
+                      </span>
+                    </button>
+  
+  
+                    <button type="button" class="btn btn-secondary action-btn" translate
+                    (click)="vehicle.vehicleId && inActiveVehicle(vehicle.vehicleId)"
+                      *ngIf="this.sharedPermissionServiceService.havePermission('Events','Create')&& vehicle.status === 'Active'">
+                      <span placement="top" ngbTooltip="{{ 'INACTIVE' | translate }}">
+                        <i class="bi bi-x-circle"></i>
+                      </span>
+                    </button>
+                    <button type="button" class="btn btn-secondary action-btn btn-disabled " translate
+                      *ngIf="!this.sharedPermissionServiceService.havePermission('Events','Create')&&vehicle.status === 'Active'">
+  
+                      <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                        <i class="bi bi-x-circle"></i>
+                      </span>
+                    </button> -->
+                      <button *ngIf="this.sharedPermissionServiceService.havePermission('Vehicle Management','Update')" 
+                        type="button"
+                        class="btn btn-secondary action-btn"
+                        (click)="editVehicle(vehicle)"
+                      >
+                        <span
+                          placement="top"
+                          ngbTooltip="{{ 'VIEW_EDIT' | translate }}"
+                        >
+                          <i class="bi bi-pencil"></i>
+                        </span>
+                      </button>
+                      <button *ngIf="!this.sharedPermissionServiceService.havePermission('Vehicle Management','Update')" 
+                      type="button"
+                      class="btn btn-secondary action-btn btn-disabled"
+                    >
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                      >
+                        <i class="bi bi-pencil"></i>
+                      </span>
+                    </button>
+    
+                      <button *ngIf="this.sharedPermissionServiceService.havePermission('Vehicle Management','Delete')" 
+                        type="button"
+                        class="btn btn-danger action-btn"
+                        (click)="confirmVehicleDelete(vehicle)" 
+                      >
+                        <span
+                          placement="top"
+                          ngbTooltip="{{ 'DELETE' | translate }}"
+                        >
+                          <i class="bi bi-trash"></i>
+                        </span>
+                      </button>
+                      <button *ngIf="!this.sharedPermissionServiceService.havePermission('Vehicle Management','Delete')" 
+                      type="button"
+                      class="btn btn-secondary action-btn btn-disabled"
+                    >
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                      >
+                        <i class="bi bi-trash"></i>
+                      </span>
+                    </button>
+                    </div>
+                  </td>
+  
+              </tr>
+              <tr *ngIf="vehicleList?.length == 0">
+                <td colspan="7" class="no-data-available" translate>NO_RECORDS_FOUND</td>
+              
+              </tr>
+            </tbody>
+  
+          </table>
+        </div>
+      
+      </div>
+    </div>
+  </div>
+  
+  

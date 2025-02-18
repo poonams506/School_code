@@ -1,0 +1,189 @@
+<div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>GALLERY</h3>
+      <div class="form-group mb-0 ms-5" *ngIf="roleId > 2">
+      <select 
+      class="form-control" (change)="rerender(true)"
+      [(ngModel)] = "galleryTypeTo"
+    >
+      <option value="1"translate>Sent</option>
+      <option value="2"translate>Received</option>
+    </select></div>
+      <button *ngIf="this.sharedPermissionServiceService.havePermission('Notice','Create')"
+        class="btn btn-with-icon with-text btn-primary ms-auto"
+        (click)="addGallery()"
+        translate
+      >
+        ADD_GALLERY
+      </button>
+      <button container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"  *ngIf="!this.sharedPermissionServiceService.havePermission('Notice','Create')"
+      class="btn btn-with-icon with-text btn-primary ms-auto btn-disabled"
+        
+        translate
+      >
+        ADD_GALLERY
+      </button>
+    </div>
+  
+  
+  
+    <div class="card mb-4">
+      <div class="card-body table-body">
+        <div id="no-more-tables">
+          <table
+            datatable
+            [dtOptions]="dtOptions"
+            [dtTrigger]="dtTrigger"
+            class="display table row-border hover"
+          >
+            <thead>
+              <tr>
+                <th translate>GALLERY_TITLE</th>
+                <th translate>GALLERY_TO</th>
+                <th translate>START_DATE</th>
+                <th translate>STATUS</th>
+                <th translate>CREATED_BY</th>
+                <th translate>CREATED_DATE</th>
+                <th translate>MODIFIED_BY</th>
+                <th translate>MODIFIED_DATE</th>
+                <th style="width: 12%" class="text-center" translate>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="gallerys ?.length != 0">
+              <tr *ngFor="let gallery of gallerys">
+                <td [attr.data-title]="'GALLERY_TITLE' | translate">
+                  {{ gallery.galleryTitle }}
+                </td>
+                <td [attr.data-title]="'GALLERY_TO_TYPE' | translate">
+                  {{ getGalleryTypeNameById(gallery.galleryToType) }}
+                </td>
+                <td [attr.data-title]="'START_DATE' | translate">
+                  {{ gallery.startDate | date : 'dd/MM/yyyy'}}
+                </td>
+                <!-- <td [attr.data-title]="'END_DATE' | translate">
+                  {{ notice.endDate | date : 'dd/MM/yyyy' }}
+                </td> -->
+                <td [attr.data-title]="'STATUS' | translate">
+                  {{ gallery.status}}
+                </td>
+                <td [attr.data-title]="'CREATED_BY' | translate">
+                  {{ gallery.createdBy}}
+                </td>
+                <td [attr.data-title]="'CREATED_DATE' | translate">
+                  {{ gallery.createdDate | date : 'dd/MM/yyyy'}}
+                </td>
+                <td [attr.data-title]="'MODIFIED_BY' | translate">
+                  {{ gallery.modifiedBy }}
+                </td>
+                <td [attr.data-title]="'MODIFIED_DATE' | translate">
+                  {{ gallery.modifiedDate | date : 'dd/MM/yyyy'}}
+                </td>
+                <td [attr.data-title]=" 'ACTIONS' | translate" class="action text-center actions-td">
+                  <div class="d-flex flex-wrap justify-content-end">
+                    
+              <button type="button" *ngIf="this.sharedPermissionServiceService.havePermission('Notice','Read')"
+                    class="btn btn-secondary action-btn" (click)="viewGalleryDescription(gallery.galleryId)"
+                    translate>
+                    <span placement="top" ngbTooltip="{{ 'VIEW' | translate }}">
+                      <i class="bi bi-eye"></i>
+                    </span>
+                  </button>
+                  <button type="button" class="btn btn-secondary action-btn btn-disabled"
+                    *ngIf="!this.sharedPermissionServiceService.havePermission('Notice','Read')" translate>
+                    <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                      <i class="bi bi-eye"></i>
+                    </span>
+                  </button>
+
+                  <button type="button" class="btn btn-secondary action-btn" translate
+                  (click)="publishGallery(gallery.galleryId)" *ngIf="this.sharedPermissionServiceService.havePermission('Notice','Create')&&!gallery.isPublished &&  gallery.status==='Unpublished' && galleryTypeTo == 1">
+
+                  <span placement="top" ngbTooltip="{{'PUBLISH' | translate}}">
+                    <i class="bi bi-box-arrow-up"></i>
+                  </span>
+                  </button> 
+                  <button type="button" class="btn btn-secondary action-btn btn-disabled" translate
+                   *ngIf="!this.sharedPermissionServiceService.havePermission('Notice','Create')&&!gallery.isPublished &&  gallery.status==='Unpublished' && galleryTypeTo == 1">
+
+                  <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                    <i class="bi bi-box-arrow-up"></i>
+                  </span>
+                  </button>
+
+                <button type="button" class="btn btn-secondary action-btn" translate
+                  (click)="unPublishGallery(gallery.galleryId)" *ngIf="this.sharedPermissionServiceService.havePermission('Notice','Create')&&gallery.isPublished && gallery.status==='Published' && galleryTypeTo == 1">
+
+                  <span placement="top" ngbTooltip="{{'UNPUBLISH' | translate}}">
+                    <i class="bi bi-x-circle"></i>
+                  </span>
+                </button>
+
+                <button type="button" class="btn btn-secondary action-btn btn-disabled "translate
+                 *ngIf="!this.sharedPermissionServiceService.havePermission('Notice','Create')&&gallery.isPublished && gallery.status==='Published' && galleryTypeTo == 1">
+
+                <span placement="top"  ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                  <i class="bi bi-x-circle"></i>
+                </span>
+              </button>
+                    <button *ngIf="this.sharedPermissionServiceService.havePermission('Notice','Update') && galleryTypeTo == 1"
+                      type="button"
+                      class="btn btn-secondary action-btn"
+                      (click)="editGallery(gallery.galleryId)"
+                    >
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'EDIT' | translate }}"
+                      >
+                        <i class="bi bi-pencil"></i>
+                      </span>
+                    </button>
+                    
+                    <button *ngIf="!this.sharedPermissionServiceService.havePermission('Notice','Update') && galleryTypeTo == 1"
+                    type="button"
+                    class="btn btn-secondary action-btn btn-disabled"
+                  >
+                    <span
+                      placement="top"
+                      ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                    >
+                      <i class="bi bi-pencil"></i>
+                    </span>
+                  </button>
+  
+                    <button *ngIf="this.sharedPermissionServiceService.havePermission('Notice','Delete') && galleryTypeTo == 1" 
+                      type="button"
+                      class="btn btn-danger action-btn"
+                      (click)="confirmGalleryDelete(gallery.galleryId)"
+                    >
+                      <span
+                        placement="top"
+                        ngbTooltip="{{ 'DELETE' | translate }}"
+                      >
+                        <i class="bi bi-trash"></i>
+                      </span>
+                    </button>
+                    <button *ngIf="!this.sharedPermissionServiceService.havePermission('Notice','Delete') && galleryTypeTo == 1" 
+                    type="button"
+                    class="btn btn-secondary action-btn btn-disabled"
+                  >
+                    <span
+                      placement="top"
+                      ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"
+                    >
+                      <i class="bi bi-trash"></i>
+                    </span>
+                  </button>
+                    
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="gallerys?.length == 0">
+                <td colspan="12" class="no-data-available" translate>NO_RECORDS_FOUND</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  

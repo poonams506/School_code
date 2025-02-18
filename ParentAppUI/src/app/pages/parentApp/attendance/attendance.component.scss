@@ -1,0 +1,48 @@
+:host {
+    ion-item {
+        --min-height:35px;
+    }
+    .header-md {
+        box-shadow: none;
+    }
+    ion-card {
+        border-radius: 0;
+    }
+}
+highcharts-chart {
+    overflow: hidden;
+    width: 100% !important;
+    display: flex;
+    margin: 0 auto;
+    height: 300px !important;
+}
+
+.font18 {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+ion-list {
+    background-color: #d0d1eb;
+    padding: 0px;
+
+    ion-badge {
+        font-weight: normal;
+    }
+}
+
+.box-wrapper {
+    
+    .box {
+        flex: 1;
+        font-size: 12px;
+        color: var(--dark-color);
+        icon-badge {
+            font-weight: normal;
+        }
+        }
+&.header {
+    --background: #dee2e6;
+}
+        
+}

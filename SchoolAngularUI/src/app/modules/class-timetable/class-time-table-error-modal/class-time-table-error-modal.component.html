@@ -1,0 +1,53 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title" 
+    ngbAutofocus translate>FAILED_TO_ACTIVE</h4>
+  
+    
+</div>
+<div class="modal-body">
+     <div class="error-message">
+        <span *ngIf="errorMessage" class="text-danger font16" translate>{{ errorMessage }}</span>
+      </div>
+    <div class="card mb-4">
+        <div class="card-body table-body">
+          <div id="no-more-tables">
+          
+            
+
+            <table class="display table row-border hover">
+              <thead>
+                <tr>
+                  <th style="width: 10%;" translate>SR_NO</th>
+                  <th style="width: 10%;" translate>TEACHER_NAME</th>
+                  <th style="width: 10%;" translate>DAY</th>
+                  <th style="width: 10%;" translate>TIME</th>
+                  <th style="width: 10%;" translate>SUBJECT_NAME</th>
+                  <th style="width: 10%;" translate>EXISTING_CLASS</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="errors?.length != 0">
+                <tr *ngFor="let timeTable of errors index as i">
+                    <td [attr.data-title]="'Sr_No'">{{ i+1 }}</td>
+                    <td [attr.data-title]=" 'TEACHER_NAME' | translate">{{ timeTable.teacherName }}</td>
+                    <td [attr.data-title]=" 'DAY' | translate">{{ getDayNameById(timeTable.day) }}</td>
+                    <td [attr.data-title]=" 'DAY_PERIOD' | translate"> {{getFormattedMinute(timeTable.startingHour,timeTable.startingMinute)}} - {{getFormattedMinute(timeTable.endingHour,timeTable.endingMinute)}}</td>
+                    <td [attr.data-title]=" 'DAY' | translate">{{ timeTable.existingSubjectName }}</td>
+                    <td [attr.data-title]=" 'EXISTING_CLASS' | translate">{{timeTable.className}}</td>
+                </tr>
+             
+              </tbody>
+    
+            </table>
+  
+          </div>
+        </div>
+      </div>
+</div>
+<div class="modal-footer">
+  <div class="form-group mb-0 pb-0 sticky-buttons">
+    <button class="btn btn-secondary" (click)="close()" translate
+    >CANCEL</button>
+
+  </div>
+  
+</div>

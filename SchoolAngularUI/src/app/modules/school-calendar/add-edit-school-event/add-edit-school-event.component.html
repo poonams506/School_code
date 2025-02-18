@@ -1,0 +1,436 @@
+<div class="modal-header">
+  <h4
+    class="modal-title"
+    id="modal-basic-title"
+    *ngIf="f['schoolEventId']?.value == 0 && !isViewMode"
+    ngbAutofocus
+    translate
+  >
+    ADD_SCHOOL_EVENT
+  </h4>
+  <h4
+    class="modal-title"
+    id="modal-basic-title"
+    *ngIf="f['schoolEventId']?.value > 0 && !isViewMode"
+    ngbAutofocus
+    translate
+  >
+    UPDATE_SCHOOL_EVENT
+  </h4>
+  <h4
+    class="modal-title"
+    id="modal-basic-title"
+    *ngIf="isViewMode"
+    ngbAutofocus
+    translate
+  >
+    VIEW_SCHOOL_EVENT
+  </h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="close()"
+  ></button>
+</div>
+<div class="modal-body">
+  <form class="search-filter" [formGroup]="schoolEventForm">
+    <div class="row">
+      <div class="col-12 col-sm-10 col-md-10 col-lg-10">
+        <div class="form-group">
+          <label translate class="required">CLASS <span>*</span></label>
+
+          <ng-select
+            [ngClass]="{
+              'is-invalid': submitted && f['classId'].errors
+            }"
+            [items]="divisionGradeMapping"
+            [multiple]="true"
+            bindLabel="className"
+            [selectableGroup]="false"
+            [closeOnSelect]="false"
+            bindValue="schoolGradeDivisionMatrixId"
+            placeholder="{{ 'SELECT_CLASS' | translate }}"
+            formControlName="classId"
+            (clear)="checkSelectAll()"
+            (remove)="checkSelectAll()"
+            (change)="resetSelectList(f, 'classId')"
+          >
+            <ng-template
+              ng-option-tmp
+              let-item="item"
+              let-item$="item$"
+              let-index="index"
+            >
+              <input
+                id="item-{{ index }}"
+                type="checkbox"
+                [ngModelOptions]="{ standalone: true }"
+                [ngModel]="item$.selected"
+                (change)="checkSelectAll()"
+              />
+              {{ item.className }}
+            </ng-template>
+            <ng-template ng-header-tmp>
+              <input
+                type="checkbox"
+                [id]="'select-all'"
+                [ngModelOptions]="{ standalone: true }"
+                (change)="selectAllOption()"
+                [(ngModel)]="selectAll"
+              />
+              <label [for]="'select-all'" translate>SELECT_ALL</label>
+            </ng-template>
+          </ng-select>
+          <div
+            *ngIf="submitted && f['classId'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['classId'].errors['required']">
+              <span translate>CLASS</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-10 col-md-10 col-lg-10">
+        <div class="form-group">
+          <label for="eventTitle" class="required" translate
+            >EVENT_TITLE <span>*</span></label
+          >
+          <input
+            (change)="resetSelectList(f, 'eventTitle')"
+            id="eventTitle"
+            type="text"
+            formControlName="eventTitle"
+            class="form-control"
+            placeholder="{{ 'EVENT_TITLE' | translate }}"
+            [ngClass]="{
+              'is-invalid': submitted && f['eventTitle'].errors
+            }"
+            maxlength="1000"
+            [disabled]="isViewMode"
+          />
+          <div
+            *ngIf="submitted && f['eventTitle'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['eventTitle'].errors['required']">
+              <span translate>EVENT_TITLE</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="form-group event-editor">
+          <label class="required" translate>EVENT_DESCRIPTION <span>*</span></label>
+          <ckeditor
+            (change)="resetSelectList(f, 'eventDescription')"
+            [editor]="Editor"
+            formControlName="eventDescription"
+            [config]="editorConfig"
+            [ngClass]="{'is-invalid': submitted && f['eventDescription'].errors}"
+          ></ckeditor>
+          <div *ngIf="submitted && f['eventDescription'].errors" class="invalid-feedback">
+            <div *ngIf="f['eventDescription'].errors['required']">
+              <span translate>EVENT_DESCRIPTION</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+      <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+        <div class="form-group">
+            <label for="eventFess" class="required" translate>EVENT_FEES<span>*</span></label>
+            <div class="input-group">
+                <span class="input-group-text">₹</span>
+                <input 
+                    id="eventFess"
+                    type="text"
+                    (input)="onAmountInput($event)"
+                    [class.is-invalid]="f['eventFess'].invalid && f['eventFess'].touched"
+                    formControlName="eventFess"
+                    class="form-control"
+                    placeholder="{{ 'EVENT_FEES' | translate }}"
+                    maxlength="7"
+                    inputmode="numeric"
+                    [ngClass]="{
+                        'is-invalid': submitted && f['eventFess'].errors
+                    }"
+                    appTwoDigitDecimalPositiveNumber
+                   />
+            </div>
+            <div *ngIf="submitted && f['eventFess'].errors" class="invalid-feedback">
+                <div *ngIf="f['eventFess'].errors['pattern']">
+                    <span translate>AMOUNT_SHOULD_BE_VALID_NUMBER</span>
+                </div>
+                <div *ngIf="f['eventFess'].errors['required']">
+                  <span translate>EVENT_FEES</span>
+                  <span translate> IS_REQUIRED</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+      <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+        <div class="form-group">
+          <label for="eventVenue" class="required" translate
+            >EVENT_VENUE <span>*</span></label
+          >
+          <input
+            id="eventVenue"
+            type="text"
+            formControlName="eventVenue"
+            class="form-control"
+            placeholder="{{ 'EVENT_VENUE' | translate }}"
+            [ngClass]="{
+              'is-invalid': submitted && f['eventVenue'].errors
+            }"
+            maxlength="1000"
+          />
+          <div
+            *ngIf="submitted && f['eventVenue'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['eventVenue'].errors['required']">
+              <span translate>EVENT_VENUE</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+        <div class="form-group">
+          <label for="eventCoordinator" class="required" translate
+            >EVENT_COORDINATOR <span>*</span></label
+          >
+          <select
+            (change)="resetSelectList(f, 'eventCoordinator')"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid': submitted && f['eventCoordinator'].errors
+            }"
+            formControlName="eventCoordinator"
+          >
+            <option [value]="null">
+              <span translate>EVENT_COORDINATOR</span>
+            </option>
+            <option
+              *ngFor="
+                let item of dashBoardStaffDetailsDto.dashBoardStaffDetails
+              "
+            >
+              {{ item.staffName }}
+            </option>
+          </select>
+          <div
+            *ngIf="submitted && f['eventCoordinator'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['eventCoordinator'].errors['required']">
+              <span translate>EVENT_COORDINATOR</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+        <div class="form-group datepicker">
+          <label class="required" translate>START_DATE<span>*</span></label>
+
+          <input
+            (change)="resetSelectList(f, 'ngbStartDate')"
+            type="text"
+            formControlName="ngbStartDate"
+            class="form-control"
+            placeholder="{{ 'START_DATE' | translate }}"
+            [ngClass]="{ 'is-invalid': submitted && f['ngbStartDate'].errors }"
+            ngbDatepicker
+            [minDate]="minDate"
+            [maxDate]="maxDate"
+            [readonly]="true"
+            #startDateDatepicker="ngbDatepicker"
+            (click)="startDateDatepicker.toggle()"
+          />
+          <div class="calendar" (click)="startDateDatepicker.toggle()">
+            <i class="bi bi-calendar3"></i>
+          </div>
+
+          <div
+            *ngIf="submitted && f['ngbStartDate'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['ngbStartDate'].errors['required']">
+              <span translate>START_DATE</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+        <div class="form-group datepicker">
+          <label class="required" translate>END_DATE<span>*</span></label>
+
+          <input
+            (change)="resetSelectList(f, 'ngbEndDate')"
+            type="text"
+            formControlName="ngbEndDate"
+            class="form-control"
+            placeholder="{{ 'END_DATE' | translate }}"
+            [ngClass]="{ 'is-invalid': submitted && f['ngbEndDate'].errors }"
+            ngbDatepicker
+            [minDate]="minDate"
+            [maxDate]="maxDate"
+            [readonly]="true"
+            #endDateDatepicker="ngbDatepicker"
+            (click)="endDateDatepicker.toggle()"
+          />
+          <div class="calendar" (click)="endDateDatepicker.toggle()">
+            <i class="bi bi-calendar3"></i>
+          </div>
+
+          <div
+            *ngIf="submitted && f['ngbEndDate'].errors"
+            class="invalid-feedback"
+          >
+            <div *ngIf="f['ngbEndDate'].errors['required']">
+              <span translate>END_DATE</span>
+              <span translate> IS_REQUIRED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label translate>START_TIME </label>
+            <ngb-timepicker
+              [meridian]="true"
+              formControlName="ngbStartTime"
+            ></ngb-timepicker>
+          </div>
+        </div>
+        <div class="col-sm-4 col-md-4 col-lg-4">
+          <div class="form-group">
+            <label translate>END_TIME </label>
+            <ngb-timepicker
+              [meridian]="true"
+              formControlName="ngbEndTime"
+            ></ngb-timepicker>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+        <div class="form-group">
+          <label for="isCompulsory" translate>IS_COMPULSORY</label>
+          <div class="custom-control custom-checkbox d-flex align-items-center">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="isCompulsory"
+              formControlName="isCompulsory"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-4 col-md-4 col-lg-4">
+        <div class="form-group">
+          <label for="isPublished" translate>IS_PUBLISHED</label>
+          <div class="custom-control custom-checkbox d-flex align-items-center">
+            <input
+              type="checkbox"
+              class="custom-control-input"
+              id="isPublished"
+              formControlName="isPublished"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 col-sm-8 col-md-8 col-lg-8">
+        <div class="form-group">
+          <label for="fileNameList" translate>
+            EVENT_ATTACHMENT
+          </label>
+          <span
+          placement="top"
+          ngbTooltip="{{ 'USE_THIS_FILE_FORMATE_ONLY'| translate }}" 
+          style="margin-left: 5px;"
+        >
+        <i class="bi bi-info-circle"></i>
+        </span>
+          <div
+            class="profile-dropzone profile-dropzone-btn"
+            ngx-dropzone
+            [accept]="allowedFileFormats.join('')"
+            [multiple]="true"
+            (change)="onTextFileSelect($event)"
+            [disabled]="isViewMode"
+            [compress]="true"
+          >
+            <ngx-dropzone-label>
+              <h5><span translate>ADD_ATTACHMENT</span></h5>
+            </ngx-dropzone-label>
+          </div>
+
+          <div *ngIf="invalidFileFormatError" class="text-danger">
+            {{ invalidFileFormatError }}
+          </div>
+          <div class="form-control uploaded-file-text">
+            <span class="file-thumb" *ngFor="let f of textfiles; let i = index">
+              <img *ngIf="getFileExtension(f.name) === 'png'" src="../../../../assets/img/img.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'jpeg'" src="../../../../assets/img/img.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'jpg'" src="../../../../assets/img/img.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'pdf'" src="../../../../assets/img/pdf.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'docx'" src="../../../../assets/img/docx-file.png"
+                (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'xls'" src="../../../../assets/img/xlsx.png.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'pptx'" src="../../../../assets/img/ppt.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'txt'" src="../../../../assets/img/txt.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'svg'" src="../../../../assets/img/img.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'csv'" src="../../../../assets/img/csv.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'bmp'" src="../../../../assets/img/bmp.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'xlsx'" src="../../../../assets/img/xlsx.png" (click)="showFile(f)" />
+              <img *ngIf="getFileExtension(f.name) === 'doc'" src="../../../../assets/img/doc.png"
+                (click)="showFile(f)" />
+
+              <!-- Add similar conditions for other file types -->
+              <span
+                class="delete-file"
+                *ngIf="!isViewMode" 
+                (click)="onTextFileRemove(i)"
+                ngbTooltip="{{ 'DELETE' | translate }}"
+              >
+                <i class="bi bi-trash"></i>
+              </span>
+            </span>
+            <span ngbTooltip="{{ 'png' | translate }}"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+  <div class="form-group mb-0 pb-0 sticky-buttons padding-right">
+    <button
+      type="button"
+      class="btn btn-primary"
+      *ngIf="!isViewMode"
+      (click)="saveSchoolEventData()"
+      translate
+    >
+      SAVE
+    </button>
+    <button class="btn btn-light" (click)="close()" translate>
+      CANCEL
+    </button>
+  </div>

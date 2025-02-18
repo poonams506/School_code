@@ -1,0 +1,69 @@
+<ion-content class="light-content" [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ng-container>
+    <div class="date-header mt-3">
+      <div class="form-control-wrapper d-flex align-items-center">
+        <label for="classSelect" class="me-2 black-text"><strong>Select Month</strong></label>
+        <div class="custom-input-css without-label custom-width">
+          <ion-select class="custom-select-css" [(ngModel)]="selectedMonth" (ionChange)="onMonthChange($event)">
+            <ion-select-option *ngFor="let month of months" [value]="month.value">{{month.text}}</ion-select-option>
+          </ion-select>
+        </div>
+      </div>
+    </div>
+    <ion-card class="card-new-one"  *ngFor="let homework of homeworkList">
+      <ion-card-header>
+        <ion-card-subtitle [ngClass]="{'green-color':homework.isPublished != true}">{{homework.subjectName}}</ion-card-subtitle>
+        <ion-card-subtitle class="class"[ngClass]="{'green-color':homework.isPublished != true}">{{homework.gradeName}}<sup>th</sup>
+          {{homework.divisionName}}</ion-card-subtitle>
+      </ion-card-header>
+
+      <div class="d-flex right-bg">
+        <p class="text-start"[ngClass]="{'green-color':homework.isPublished != true}">{{homework.homeworkTitle}}</p>
+      </div>
+      <div class="new-actions">
+      <ion-fab>
+        <ion-fab-button>
+          <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+        </ion-fab-button>
+
+        <ion-fab-list side="start">
+          <ion-fab-button>
+            <ion-icon name="eye-outline" (click)="openHomeworkDetail(homework)"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button>
+            <ion-icon name="create-sharp" (click)="editHomework($event,homework)"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button>
+            <ion-icon [name]="homework.isPublished ? 'notifications-outline' : 'notifications-off-outline'" (click)="Publish($event,homework)"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button *ngIf="!homework.isPublished">
+            <ion-icon 
+              name="trash-sharp" 
+              (click)="Delete($event, homework)">
+            </ion-icon>
+          </ion-fab-button>          
+        </ion-fab-list>
+      </ion-fab>
+    </div>
+    </ion-card>
+
+  </ng-container>
+
+ 
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button [disabled]="buttonDisabled" (click)="addHomeworkDialog()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+
+    <!-- <ion-button color="light" (click)="openHomeworkDialog(null)">
+      <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+    </ion-button> -->
+  </ion-fab>
+</ion-content>
+
+
+<ion-alert trigger="present-alert" header="Are you sure to delete homework?" [buttons]="alertButtons"></ion-alert>

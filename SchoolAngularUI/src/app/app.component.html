@@ -1,0 +1,113 @@
+<!--layout start-->
+<!-- <app-toaster #toastr></app-toaster> -->
+
+
+<div class="layout">
+
+  
+  <!--top header and side navigation start here-->
+  <app-header *ngIf="userService.isAuthenticated()"></app-header> 
+  <div class="side-nav expand-lg" *ngIf="userService.isAuthenticated()">
+    <app-sidebar></app-sidebar>
+    <!-- <app-parent-menu></app-parent-menu> -->
+  </div>
+
+  <!--top header and side navigation end here-->
+
+  <!--page main content div start here-->
+  <div class="page-container">
+      <div class="main-content">
+        <!-- <button class="btn btn-with-icon theme-setting-btn  btn-primary"  (click)="openThemeSettingModal(themeSettingModal)" translate><i class="bi bi-gear rotate"></i></button> -->
+
+          <router-outlet></router-outlet>
+      </div>
+  </div>
+  <!--page main content div end here-->
+
+</div>
+
+<!--layout end-->
+
+
+<!-- for language -->
+
+
+<!-- <h1 translate>Title</h1>
+
+<div translate>WelcomeMessage</div>
+<button (click)="switchLanguage('en')">English</button>
+<button (click)="switchLanguage('hn')">German</button>
+
+<select #langSelect (change)="translateService.use(langSelect.value)">
+  <option *ngFor="let lang of translateService.getLangs()" [value]="lang" [selected]="lang === translateService.currentLang">{{ lang }}</option>
+</select> -->
+
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>
+
+
+
+
+
+<ng-template #themeSettingModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" translate>Pick your style</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <h5>Background Color</h5>
+    <div class="mb-4 btns-wrap">
+      <button class="btn theme-1" (click)="theme1()" translate></button> 
+      <button class="btn theme-2" (click)="theme2()" translate></button> 
+      <button class="btn theme-3" (click)="theme2()" translate></button> 
+      <button class="btn theme-4" (click)="theme2()" translate></button> 
+      <button class="btn theme-5" (click)="theme2()" translate></button> 
+      <button class="btn theme-6" (click)="theme2()" translate></button> 
+      <button class="btn theme-7" (click)="theme2()" translate></button> 
+      <button class="btn theme-8" (click)="theme2()" translate></button> 
+      <button class="btn theme-9" (click)="theme2()" translate></button> 
+    </div>
+   
+    <h5>Primary Color</h5>
+    <div class="mb-4 btns-wrap">
+      <button class="btn theme-1" (click)="theme1()" translate></button> 
+      <button class="btn theme-2" (click)="theme2()" translate></button> 
+      <button class="btn theme-3" (click)="theme2()" translate></button> 
+      <button class="btn theme-4" (click)="theme2()" translate></button> 
+      <button class="btn theme-5" (click)="theme2()" translate></button> 
+      <button class="btn theme-6" (click)="theme2()" translate></button> 
+      <button class="btn theme-7" (click)="theme2()" translate></button> 
+      <button class="btn theme-8" (click)="theme2()" translate></button> 
+      <button class="btn theme-9" (click)="theme2()" translate></button> 
+    </div>
+
+    <h5>Header Color</h5>
+    <div class="mb-4 btns-wrap">
+      <button class="btn theme-1" (click)="theme1()" translate></button> 
+      <button class="btn theme-2" (click)="theme2()" translate></button> 
+      <button class="btn theme-3" (click)="theme2()" translate></button> 
+      <button class="btn theme-4" (click)="theme2()" translate></button> 
+      <button class="btn theme-5" (click)="theme2()" translate></button> 
+      <button class="btn theme-6" (click)="theme2()" translate></button> 
+      <button class="btn theme-7" (click)="theme2()" translate></button> 
+      <button class="btn theme-8" (click)="theme2()" translate></button> 
+      <button class="btn theme-9" (click)="theme2()" translate></button> 
+    </div>
+
+  </div>
+  <!-- <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="modal.close('Close click')"
+      translate>
+      CLOSE
+    </button>
+    <button type="submit" class="btn btn-primary" translate>ADD</button>
+  </div> -->
+</ng-template> 
+

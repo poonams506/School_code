@@ -1,0 +1,223 @@
+
+
+
+<div class="container-fluid">
+    <div class="d-flex align-items-center page-heading-wrapper">
+      <h3 class="page-heading" translate>Student_Kit_Fee_Structure</h3>
+      <a routerLink="/fee-management/create-student-kit-fee-structure" class="btn btn-with-icon with-text btn-primary ms-auto" *ngIf="this.sharedPermissionServiceService.havePermission('Student Kit Fee Structure','Create')" translate>CREATE_FEE_STRUCTURE</a>
+      <a container="body" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}"  class="btn btn-with-icon with-text btn-primary ms-auto btn-disabled" *ngIf="!this.sharedPermissionServiceService.havePermission('Student Kit Fee Structure','Create')" translate>CREATE_FEE_STRUCTURE</a>
+
+
+    </div>
+
+    
+
+    <div class="card mb-4">
+      <div class="card-body table-body">
+        <div id="no-more-tables">
+          <table  datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"  class="display table row-border hover">
+            <thead>
+              <tr>
+                <th translate>CLASS</th>
+                <th translate>STATUS</th>
+                <th style="width: 25%" translate>
+                  ACTIONS
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of feeStructures index as i">
+                <td [attr.data-title]="'GRADE' | translate">{{item.gradeName}}</td>
+                <td [attr.data-title]="'STATUS' | translate">{{item.status}}</td>
+                <td [attr.data-title]=" 'ACTIONS' | translate" class="action actions-td">
+                  
+                  <div class="d-flex flex-wrap cg7">
+                    <button *ngIf="this.sharedPermissionServiceService.havePermission('Student Kit Fee Structure','Read') && item.status!='Not-Created'"
+                      type="button"
+                      class="btn btn-secondary action-btn"
+                      (click)="viewFeeStructure(item.classId,item.status)"
+                      translate
+                    >
+                    <span placement="top" ngbTooltip="{{'VIEW' | translate}}">
+                      <i class="bi bi-eye"></i>
+                    </span>                    
+                  </button>
+                  <button *ngIf="!this.sharedPermissionServiceService.havePermission('Student Kit Fee Structure','Read') && item.status!='Not-Created'"
+                  type="button"
+                  class="btn btn-secondary action-btn btn-disabled"
+                  translate
+                >
+                <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}" >
+                  <i class="bi bi-eye"></i>
+                </span>            
+              </button>
+                    <button 
+                    type="button"
+                    *ngIf="this.sharedPermissionServiceService.havePermission('Student Kit Fee Structure','Create') && !item.isFeePaymentAlreadyDone && item.status == 'Not-Created'"
+                    class="btn btn-secondary action-btn"
+                    (click)="editFeeStructure(item.classId,item.status,'Create')"
+                    translate
+                  >
+                  <span placement="top" ngbTooltip="{{'CREATE' | translate}}">
+                    <i class="bi bi-pencil"></i>
+                  </span>  
+                  </button>
+
+                  <button 
+                    type="button"
+                    *ngIf="!this.sharedPermissionServiceService.havePermission('Student Kit Fee Structure','Create') && !item.isFeePaymentAlreadyDone && item.status == 'Not-Created'"
+                    class="btn btn-secondary action-btn btn-disabled"
+                    translate
+                  >
+                  <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                    <i class="bi bi-pencil"></i>
+                  </span>  
+                  </button>
+
+                  <button *ngIf="this.sharedPermissionServiceService.havePermission('Student Kit Fee Structure','Update')&& item.isFeePaymentAlreadyDone == false && item.status != 'Not-Created'"
+                  type="button"
+                  class="btn btn-secondary action-btn"
+                  (click)="editFeeStructure(item.classId,item.status, 'Edit')"
+                  translate
+                >
+                <span placement="top" ngbTooltip="{{'EDIT' | translate}}">
+                  <i class="bi bi-pencil"></i>
+                </span>  
+                </button>
+                <button *ngIf="!this.sharedPermissionServiceService.havePermission('Student Kit Fee Structure','Update')&& item.isFeePaymentAlreadyDone == false && item.status != 'Not-Created'"
+                  type="button"
+                  class="btn btn-secondary action-btn btn-disabled"
+                  
+                  translate
+                >
+                <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}" >
+                  <i class="bi bi-pencil"></i>
+                </span>  
+                </button>
+                    <button
+                      type="button"
+                      class="btn btn-secondary action-btn"
+                      translate
+                      (click)="publishFeeParticular(item.gradeId,item.divisionId)"
+                      *ngIf="this.sharedPermissionServiceService.havePermission('Student Kit Fee Structure','Create')&&item.isFeePaymentAlreadyDone==false && item.status=='Created'"
+                    >
+                      
+                      <span placement="top" ngbTooltip="{{'PUBLISH' | translate}}">
+                        <i class="bi bi-box-arrow-up"></i>                     
+                       </span>  
+                    </button>
+
+                    <button
+                      type="button"
+                      class="btn btn-secondary action-btn btn-disabled"
+                      translate
+             
+                      *ngIf="!this.sharedPermissionServiceService.havePermission('Student Kit Fee Structure','Create')&&item.isFeePaymentAlreadyDone==false && item.status=='Created'"
+                    >
+                      
+                      <span placement="top"ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                        <i class="bi bi-box-arrow-up"></i>                     
+                       </span>  
+                    </button>
+
+
+                    <button
+                    type="button"
+                    class="btn btn-secondary action-btn"
+                    translate
+                    (click)="unPublishFeeParticular(item.gradeId,item.divisionId)"
+                    *ngIf="this.sharedPermissionServiceService.havePermission('Student Kit Fee Structure','Create')&&item.isFeePaymentAlreadyDone==false && item.status=='Published'"
+                  >
+                    
+                    <span placement="top" ngbTooltip="{{'UNPUBLISH' | translate}}">
+                      <i class="bi bi-x-circle"></i>
+                    </span>  
+                  </button>
+                  <button
+                  type="button"
+                  class="btn btn-secondary action-btn btn-disabled"
+                  translate
+                  *ngIf="!this.sharedPermissionServiceService.havePermission('Student Kit Fee Structure','Create')&&item.isFeePaymentAlreadyDone==false && item.status=='Published'"
+                >
+                  
+                  <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                    <i class="bi bi-x-circle"></i>
+                  </span>  
+                </button>
+
+
+                    <button
+                    type="button"
+                    class="btn btn-secondary action-btn"
+                    (click)="copyFeeParticularsFromLastAY(item.gradeId,item.divisionId)"
+                    *ngIf="this.sharedPermissionServiceService.havePermission('Student Kit Fee Structure','Create')&&item.status!='Published' && item.status!='Created'"
+                  >
+                  <span placement="top" ngbTooltip="{{'COPY_FROM_LAST_AY' | translate}}">
+                    <i class="bi bi-clipboard-check"></i>
+                  </span>
+
+                  </button>
+                  <button
+                  type="button"
+                  class="btn btn-secondary action-btn btn-disabled"
+                  *ngIf="!this.sharedPermissionServiceService.havePermission('Student Kit Fee Structure','Create')&&item.status!='Published' && item.status!='Created'"
+                >
+                <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                  <i class="bi bi-clipboard-check"></i>
+                </span>
+
+                </button>
+                    <button
+                    type="button"
+                    *ngIf="this.sharedPermissionServiceService.havePermission('Student Kit Fee Structure','Create')&&item.status!='Not-Created'"
+                    (click)="cloneFeeParticular(item)"
+                    class="btn btn-secondary action-btn2"
+                    translate
+                  >
+                  <span placement="top" ngbTooltip="{{'CLONE' | translate}}">
+                    <i class="bi bi-copy"></i>
+                  </span>
+                  </button>
+
+                  <button
+                  type="button"
+                  *ngIf="!this.sharedPermissionServiceService.havePermission('Student Kit Fee Structure','Create')&&item.status!='Not-Created'"
+                  class="btn btn-secondary action-btn2 btn-disabled"
+                  translate
+                >
+                <span placement="top"  ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                  <i class="bi bi-copy"></i>
+                </span>
+                </button>
+                  
+                    <button *ngIf="this.sharedPermissionServiceService.havePermission('Student Kit Fee Structure','Delete')&& item.isFeePaymentAlreadyDone === false && item.status !== 'Not-Created'"
+                      type="button"
+                      class="btn btn-danger action-btn2"
+                      translate
+                      (click)="confirmFeeParticularDelete(item.gradeId,item.divisionId)"
+                    >
+                    <span placement="top" ngbTooltip="{{'DELETE' | translate}}">
+                      <i class="bi bi-trash"></i>
+                    </span>                    
+                  </button>
+
+                  <button *ngIf="!this.sharedPermissionServiceService.havePermission('Student Kit Fee Structure','Delete')&& item.isFeePaymentAlreadyDone === false && item.status !== 'Not-Created'"
+                  type="button"
+                  class="btn btn-secondary action-btn btn-disabled"
+                  translate
+                >
+                <span placement="top" ngbTooltip="{{ 'YOU_DO_NOT_HAVE_PERMISSION' | translate }}">
+                  <i class="bi bi-trash"></i>
+                </span>                    
+              </button>
+                   
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+

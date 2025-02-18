@@ -1,0 +1,82 @@
+<!-- sidebar should be hide on role base -->
+
+<!-- header start -->
+<header class="header">
+  <div class="header-container d-flex align-items-center">
+   
+    <div class="nav-logo">
+      <a class="sidenav-fold-toggler" (click)="sidebarToggle()" href="javascript:void(0);">
+        <i class="bi bi-text-left"></i>
+      </a>
+      <!-- <a class="logo" href="javascript:void(0)" title="Logo">
+        <img src="./assets/img/logo-full.png" alt="Logo">
+      </a> -->
+                <!-- <marquee class="school-name-header" width="100%" direction="left">
+      {{schoolName}}
+      </marquee> -->
+     <span class="school-name-header">{{schoolName}}</span> 
+
+    </div>
+    <div class="ms-auto d-flex align-items-center">
+      <!-- <select #langSelect (change)="translate.use(langSelect.value)">
+        <option *ngFor="let lang of translate.getLangs()" [value]="lang" [selected]="lang === translate.currentLang">{{ lang }}</option>
+      </select> -->
+      
+      <span class="ay-notify">{{showPreviousAcademicYearSelectedMessage}}</span> &nbsp;&nbsp;
+      <select
+        [(ngModel)]="academicYearId"
+        (ngModelChange)="onAcademicYearChange($event)"
+      >
+        <option *ngFor="let item of academicYearDropdownList" [value]="item.academicYearId" >
+          {{item.academicYearName}}
+        </option>
+      </select>
+      <!-- &nbsp;&nbsp;&nbsp;&nbsp;
+      <select #langSelect (change)="changeLang(langSelect.value)">
+        <option *ngFor="let lang of translate.getLangs()" [value]="lang"
+            [selected]="lang === translate.currentLang">{{ lang }}
+        </option>
+    </select> -->
+   
+      <ul class="nav-right">
+     
+        <!-- profile dropdown-menu here -->
+        <li class="user-profile" ngbDropdown>
+          <span class="user-name">{{userName}}({{userRoleName}})</span>
+          <a href="javascript:void(0)" class="dropdown-toggle sidenav-fold-toggler-profile" id="userDropdown" ngbDropdownToggle title="User Profile"
+            placement="left" ngbTooltip="User Profile">
+            <i class="bi bi-person-circle"></i>
+          </a>
+          
+          <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="userDropdown">
+
+           
+            <li class="user-name-device">
+              <!-- <img class="profile-img img-fluid" src="./assets/imgs/avatar/avatar.jpg" alt="User Profile Photograph"> -->
+              <div class="user-info">
+                <a href="javascript:void(0)" ngbDropdownItem title="User Name"> {{userName}} </a>
+                <!-- <div class="user-role">System Admin</div> -->
+              </div>
+            </li>
+            <li *ngIf="!isSuperAdmin"><a href="javascript:void(0)" (click)="redirectToProfile()" ngbDropdownItem> <i class="icon-profile"></i> Profile</a></li>
+            <li><a href="javascript:void(0)" routerLink="/school-settings" ngbDropdownItem> <i class="icon-setting"></i> Setting</a>
+            </li>
+            <!-- <li><a href="javascript:void(0)" routerLink="/open-tickets" ngbDropdownItem> <i class="icon-setting"></i> Open Tickets</a>
+            </li> -->
+            <li class="d-md-none"><a href="javascript:void(0)" ngbDropdownItem> <i class="icon-question-mark"></i>
+                Help</a></li>
+            <li><a href="javascript:void(0)" (click)="DoLogout()" ><i class="icon-logout"></i> Logout</a>
+            </li>
+          </ul>
+        </li>
+        <!-- <li class="menu-toggle-li">
+          <a class="sidenav-fold-toggler" (click)="sidebarToggle()" href="javascript:void(0);">
+            <i class="bi bi-justify"></i>
+          </a>
+        </li> -->
+      </ul>
+    </div>
+    
+  </div>
+</header>
+<!-- header end -->
